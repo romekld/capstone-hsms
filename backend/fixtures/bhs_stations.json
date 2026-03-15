@@ -1,0 +1,11 @@
+[
+  {
+    "_comment": "TODO: Replace with real 32-station data before or during Plan 03 execution. Fields: name, psgc_code (full ADM4_PCODE e.g. PH0402106021), lat, lng, contact_number, address.",
+    "name": "PLACEHOLDER - Barangay X Health Station",
+    "psgc_code": "PH0402106001",
+    "lat": 14.3294,
+    "lng": 120.9367,
+    "contact_number": null,
+    "address": "Placeholder address"
+  }
+]
