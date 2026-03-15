@@ -95,7 +95,7 @@ Requirements for the 4-month capstone build. Each maps to a roadmap phase.
 
 - [ ] **SURV-01**: Nurse/midwife can record a Category I notifiable disease case (AFP, Cholera, Meningococcemia, Neonatal Tetanus, SARS, Unusual Events including rabies death)
 - [ ] **SURV-02**: On save of a Category I case, system immediately inserts a row in `disease_alerts` AND broadcasts a WebSocket payload to all connected `city_health_officer` and `disease_surveillance_officer` sessions
-- [ ] **SURV-03**: `disease_alerts` table stores unread state per user — DSO and CHO who are offline when an alert fires see all unread alerts on next login
+- [ ] **SURV-03**: `disease_alerts` table stores unread state per user — DSO and CHO who are offline when an alert fire see all unread alerts on next login
 - [ ] **SURV-04**: DSO can validate a Category I case classification (records `validated_at`); the gap between `created_at` and `validated_at` is the RA 11332 compliance metric
 - [ ] **SURV-05**: Nurse/midwife can record a Category II notifiable disease case (Dengue/DHF, ARI, Diarrhea/AGE, ILI, Chickenpox, Measles, Hepatitis A, Leptospirosis, HFMD, Typhoid, Pneumonia)
 - [ ] **SURV-06**: DSO can export Category II disease cases as a weekly batch report (PDF and Excel) every Friday
@@ -212,31 +212,31 @@ Explicitly excluded. Documented to prevent scope creep.
 
 ## Traceability
 
-Which phases cover which requirements. Updated during roadmap creation.
+Which phases cover which requirements. Updated during roadmap revision.
 
-| Requirement | Phase | Status |
-|-------------|-------|--------|
-| INFRA-01 to INFRA-04 | Phase 1 | Pending |
-| AUTH-01 to AUTH-10 | Phase 1 | Pending |
-| ITR-01 to ITR-06 | Phase 1 | Pending |
-| PRNT-01 to PRNT-06 | Phase 2 | Pending |
-| PNPL-01 to PNPL-04 | Phase 2 | Pending |
-| EPI-01 to EPI-07 | Phase 2 | Pending |
-| NUTR-01 to NUTR-05 | Phase 2 | Pending |
-| TB-01 to TB-07 | Phase 2 | Pending |
-| NCD-01 to NCD-06 | Phase 2 | Pending |
-| SURV-01 to SURV-08 | Phase 3 | Pending |
-| GIS-01 to GIS-05 | Phase 3 | Pending |
-| ML-01 to ML-06 | Phase 4 | Pending |
-| FHSIS-01 to FHSIS-08 | Phase 4 | Pending |
-| INV-01 to INV-05 | Phase 5 | Pending |
-| SYNC-01 to SYNC-09 | Phase 5 | Pending |
+| Requirement | Phase | Phase Name | Status |
+|-------------|-------|------------|--------|
+| INFRA-01 to INFRA-04 (4) | Phase 1 | Infrastructure + DevOps | Pending |
+| AUTH-01 to AUTH-10 (10) | Phase 2 | Authentication + RBAC + User Management | Pending |
+| ITR-01 to ITR-06 (6) | Phase 3 | Patient ITR + Core Data Model | Pending |
+| PRNT-01 to PRNT-06 (6) | Phase 4 | Maternal + Child Health Programs | Pending |
+| PNPL-01 to PNPL-04 (4) | Phase 4 | Maternal + Child Health Programs | Pending |
+| EPI-01 to EPI-07 (7) | Phase 4 | Maternal + Child Health Programs | Pending |
+| NUTR-01 to NUTR-05 (5) | Phase 4 | Maternal + Child Health Programs | Pending |
+| TB-01 to TB-07 (7) | Phase 5 | TB-DOTS + NCD Programs | Pending |
+| NCD-01 to NCD-06 (6) | Phase 5 | TB-DOTS + NCD Programs | Pending |
+| SURV-01 to SURV-08 (8) | Phase 6 | Disease Surveillance + Real-Time Alerts | Pending |
+| GIS-01 to GIS-05 (5) | Phase 7 | GIS Disease Mapping | Pending |
+| ML-01 to ML-06 (6) | Phase 8 | ML Analytics + FHSIS Reporting | Pending |
+| FHSIS-01 to FHSIS-08 (8) | Phase 8 | ML Analytics + FHSIS Reporting | Pending |
+| SYNC-01 to SYNC-09 (9) | Phase 9 | Offline PWA + Inventory + CHO Dashboards | Pending |
+| INV-01 to INV-05 (5) | Phase 9 | Offline PWA + Inventory + CHO Dashboards | Pending |
 
 **Coverage:**
-- v1 requirements: 88 total
-- Mapped to phases: 88
-- Unmapped: 0 ✓
+- v1 requirements: 96 total (4+10+6+22+13+8+5+14+14)
+- Mapped to phases: 96
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-15*
-*Last updated: 2026-03-15 after initial definition*
+*Last updated: 2026-03-15 after roadmap revision (5 phases -> 9 phases)*
