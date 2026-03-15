@@ -1,9 +1,13 @@
-import pytest
-import sqlalchemy as sa
+from app.core.base import TimestampMixin, SoftDeleteMixin
+
+
+def test_timestamp_mixin_has_created_at():
+    assert hasattr(TimestampMixin, "created_at")
+
+
+def test_timestamp_mixin_has_updated_at():
+    assert hasattr(TimestampMixin, "updated_at")
 
 
 def test_soft_delete_column():
-    """INFRA-02: SoftDeleteMixin adds deleted_at TIMESTAMPTZ column."""
-    SoftDeleteMixin = pytest.importorskip("app.core.base").SoftDeleteMixin
-    # Verify the mixin defines deleted_at as a mapped column
-    assert hasattr(SoftDeleteMixin, "deleted_at"), "SoftDeleteMixin must declare deleted_at"
+    assert hasattr(SoftDeleteMixin, "deleted_at")
