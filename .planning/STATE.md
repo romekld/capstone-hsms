@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-infrastructure-devops/01-01-PLAN.md
-last_updated: "2026-03-15T17:58:16.903Z"
-last_activity: 2026-03-15 — Roadmap revised (5 phases expanded to 9 phases, 96 requirements remapped)
+stopped_at: Completed 01-infrastructure-devops/01-02-PLAN.md
+last_updated: "2026-03-15T18:03:30Z"
+last_activity: 2026-03-15 — Plan 01-02 complete (SQLAlchemy base, ORM models, Alembic migrations)
 progress:
   total_phases: 9
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
   percent: 0
 ---
 
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 ## Current Position
 
 Phase: 1 of 9 (Infrastructure + DevOps)
-Plan: 0 of 2 in current phase
-Status: Ready to plan
-Last activity: 2026-03-15 — Roadmap revised (5 phases expanded to 9 phases, 96 requirements remapped)
+Plan: 2 of 3 in current phase
+Status: Executing
+Last activity: 2026-03-15 — Plan 01-02 complete (SQLAlchemy base, ORM models, Alembic migrations)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█░░░░░░░░░] 7%
 
 ## Performance Metrics
 
@@ -66,6 +66,10 @@ Recent decisions affecting current work:
 - [Phase 01]: Single docker-compose.yml — no base+override split; simplifies solo dev workflow (locked in CONTEXT.md)
 - [Phase 01]: WebSocket nginx location pre-wired in Phase 1 to avoid nginx rebuild when Phase 6 adds real-time alerts
 - [Phase 01]: conftest.py HAS_BASE import guard — pytest collects cleanly before Plan 02 ships app.core.base
+- [Plan 01-02]: do_orm_execute registered on Session (not AsyncSession) — async sessions wrap sync sessions, event fires correctly per SQLAlchemy 2.0 docs
+- [Plan 01-02]: audit_logs table uses BIGSERIAL PK + raw op.execute() SQL — JSONB and BIGSERIAL simpler in raw DDL
+- [Plan 01-02]: downgrade() does NOT drop PostGIS extension — dropping it would break other spatial tables
+- [Plan 01-02]: alembic.ini has placeholder URL; runtime reads DATABASE_URL from os.environ["DATABASE_URL"] in env.py
 
 ### Pending Todos
 
@@ -80,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-15T17:58:16.896Z
-Stopped at: Completed 01-infrastructure-devops/01-01-PLAN.md
+Last session: 2026-03-15T18:03:30Z
+Stopped at: Completed 01-infrastructure-devops/01-02-PLAN.md
 Resume file: None

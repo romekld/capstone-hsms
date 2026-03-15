@@ -36,8 +36,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Docker Compose stack, FastAPI app factory, pytest harness and test stubs (INFRA-01)
-- [ ] 01-02-PLAN.md — Async SQLAlchemy base patterns, ORM models, Alembic async migrations, audit_logs (INFRA-02, INFRA-03)
+- [x] 01-01-PLAN.md — Docker Compose stack, FastAPI app factory, pytest harness and test stubs (INFRA-01)
+- [x] 01-02-PLAN.md — Async SQLAlchemy base patterns, ORM models, Alembic async migrations, audit_logs (INFRA-02, INFRA-03)
 - [ ] 01-03-PLAN.md — GIS seed data migration: barangay boundaries + BHS station points (INFRA-04)
 
 ### Phase 2: Authentication + RBAC + User Management
@@ -175,7 +175,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Infrastructure + DevOps | 0/3 | Planned | - |
+| 1. Infrastructure + DevOps | 2/3 | In Progress | - |
 | 2. Authentication + RBAC + User Management | 0/3 | Not started | - |
 | 3. Patient ITR + Core Data Model | 0/2 | Not started | - |
 | 4. Maternal + Child Health Programs | 0/3 | Not started | - |
