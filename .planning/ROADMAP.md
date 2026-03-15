@@ -33,11 +33,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. PostGIS contains barangay boundary polygons (SRID 4326) and health station point geometry for all 32 Dasmarinas City BHS, queryable via `ST_AsGeoJSON()`
   3. SQLAlchemy base model includes TimestampMixin, SoftDeleteMixin with `deleted_at TIMESTAMPTZ`, a global `do_orm_execute` hook that auto-injects `WHERE deleted_at IS NULL`, and `lazy="raise"` enforced on all relationships
   4. Alembic async migration can create tables with GeoAlchemy2 spatial columns and the `audit_logs` append-only table exists in the schema
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01-PLAN.md — Docker Compose stack, FastAPI app factory, pytest harness and test stubs (INFRA-01)
+- [ ] 01-02-PLAN.md — Async SQLAlchemy base patterns, ORM models, Alembic async migrations, audit_logs (INFRA-02, INFRA-03)
+- [ ] 01-03-PLAN.md — GIS seed data migration: barangay boundaries + BHS station points (INFRA-04)
 
 ### Phase 2: Authentication + RBAC + User Management
 **Goal**: A real user can log in with email/password, receive JWT tokens (PyJWT), stay logged in across sessions, and log out with token revocation; system_admin can manage users and roles; all API endpoints enforce RBAC; barangay isolation enforced at repository layer; audit logging active
@@ -174,7 +175,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Infrastructure + DevOps | 0/2 | Not started | - |
+| 1. Infrastructure + DevOps | 0/3 | Planned | - |
 | 2. Authentication + RBAC + User Management | 0/3 | Not started | - |
 | 3. Patient ITR + Core Data Model | 0/2 | Not started | - |
 | 4. Maternal + Child Health Programs | 0/3 | Not started | - |
