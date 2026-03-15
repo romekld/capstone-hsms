@@ -11,7 +11,7 @@ Requirements for the 4-month capstone build. Each maps to a roadmap phase.
 
 ### Infrastructure (INFRA)
 
-- [ ] **INFRA-01**: System runs in Docker Compose with 6 services: FastAPI backend, PostgreSQL + PostGIS, Redis, Celery worker, Celery Beat (separate container), nginx reverse proxy
+- [x] **INFRA-01**: System runs in Docker Compose with 6 services: FastAPI backend, PostgreSQL + PostGIS, Redis, Celery worker, Celery Beat (separate container), nginx reverse proxy
 - [ ] **INFRA-02**: All clinical database tables use soft deletes (`deleted_at TIMESTAMPTZ`); hard DELETE is never issued on patient data (RA 10173)
 - [ ] **INFRA-03**: Append-only `audit_logs` table records all create/update/soft-delete operations; no patient PII appears in server logs or error messages
 - [ ] **INFRA-04**: Barangay health station boundary and point geometry data is seeded into PostGIS (SRID 4326) from Dasmariñas City shapefile (HDX source)

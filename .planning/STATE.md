@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 1 context gathered
-last_updated: "2026-03-15T17:19:40.140Z"
+stopped_at: Completed 01-infrastructure-devops/01-01-PLAN.md
+last_updated: "2026-03-15T17:58:16.903Z"
 last_activity: 2026-03-15 — Roadmap revised (5 phases expanded to 9 phases, 96 requirements remapped)
 progress:
   total_phases: 9
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 3
+  completed_plans: 1
   percent: 0
 ---
 
@@ -50,6 +50,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 01 P01 | 3 | 3 tasks | 17 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,9 @@ Recent decisions affecting current work:
 - [Roadmap]: Separated infrastructure (Phase 1) from auth/RBAC (Phase 2) and patient ITR (Phase 3) for focused execution — previously combined in one mega-phase
 - [Roadmap]: Research recommends replacing python-jose with PyJWT (abandoned, CVEs) — resolve during Phase 2 planning
 - [Roadmap]: Phase 4 and 5 can execute in parallel after Phase 3 (both depend on ITR, not on each other) — but sequential is safer for a solo build
+- [Phase 01]: Single docker-compose.yml — no base+override split; simplifies solo dev workflow (locked in CONTEXT.md)
+- [Phase 01]: WebSocket nginx location pre-wired in Phase 1 to avoid nginx rebuild when Phase 6 adds real-time alerts
+- [Phase 01]: conftest.py HAS_BASE import guard — pytest collects cleanly before Plan 02 ships app.core.base
 
 ### Pending Todos
 
@@ -76,6 +80,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-15T17:19:40.109Z
-Stopped at: Phase 1 context gathered
-Resume file: .planning/phases/01-infrastructure-devops/01-CONTEXT.md
+Last session: 2026-03-15T17:58:16.896Z
+Stopped at: Completed 01-infrastructure-devops/01-01-PLAN.md
+Resume file: None
