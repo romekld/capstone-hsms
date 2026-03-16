@@ -33,12 +33,12 @@ created: 2026-03-16
 
 This phase produces exactly four UI surfaces:
 
-| Surface | Route | Primary User |
-|---------|-------|--------------|
-| Login page | `/login` | All roles |
-| Dashboard placeholder | `/dashboard` | All non-admin roles (post-login landing) |
-| Admin — User list | `/admin/users` | system_admin only |
-| Admin — Activity log | `/admin/activity` | system_admin only |
+| Surface | Route | Primary User | Primary Visual Anchor |
+|---------|-------|--------------|----------------------|
+| Login page | `/login` | All roles | "Sign In" button in `--primary` accent color |
+| Dashboard placeholder | `/dashboard` | All non-admin roles (post-login landing) | Role label in page heading confirming identity |
+| Admin — User list | `/admin/users` | system_admin only | "Create User" button in `--primary` accent color |
+| Admin — Activity log | `/admin/activity` | system_admin only | Timestamp column (leftmost) anchoring the log timeline |
 
 Create/Edit user and Deactivate confirmation are modal overlays on the user list, not separate routes.
 
@@ -177,6 +177,8 @@ Block selection between `login-01` and `login-02`: executor chooses whichever is
 
 ### Login Page
 
+Primary visual anchor: "Sign In" button in `--primary` accent color.
+
 | State | Visual Treatment |
 |-------|-----------------|
 | Default | Email + password inputs, "Sign In" primary button, full-width |
@@ -188,6 +190,8 @@ Block selection between `login-01` and `login-02`: executor chooses whichever is
 | Success | Full-page redirect — no flash; router push to `/admin/users` (system_admin) or `/dashboard` (all others) |
 
 ### User List Table
+
+Primary visual anchor: "Create User" button in `--primary` accent color, top-right of page header.
 
 | State | Visual Treatment |
 |-------|-----------------|
@@ -206,6 +210,8 @@ Role(s) cell: badges, one per role, using `Badge variant="secondary"`. Maximum 2
 BHS Assignment cell: station name string; "—" (em-dash) for roles that are not BHS-scoped (system_admin, city_health_officer, phis_coordinator when health_station_id is NULL).
 
 ### Create/Edit User Modal
+
+Primary visual anchor: "Save User" / "Save Changes" button in `--primary` accent color, modal footer.
 
 | State | Visual Treatment |
 |-------|-----------------|
@@ -244,12 +250,14 @@ Use `AlertDialog` (not `Dialog`) — destructive action requires explicit confir
 
 Dialog title: "Deactivate {Full Name}?"
 Dialog body: "This will immediately sign {Full Name} out and revoke their access. Their role: {Role(s)}. This action can be reversed."
-Confirm button: "Deactivate" — `variant="destructive"`
-Cancel button: "Cancel" — `variant="outline"`
+Confirm button: "Deactivate User" — `variant="destructive"`
+Cancel button: "Keep User" — `variant="outline"`
 
 Reactivation: no confirmation dialog. Reactivate action is non-destructive — execute immediately on click, show toast "User reactivated".
 
 ### Activity Log Tab
+
+Primary visual anchor: Timestamp column (leftmost), anchoring the log timeline.
 
 | State | Visual Treatment |
 |-------|-----------------|
@@ -292,7 +300,8 @@ Action copy examples (exact strings):
 | Generic save error toast | "Something went wrong. Try again." |
 | Deactivation dialog title | "Deactivate {Full Name}?" |
 | Deactivation dialog body | "This will immediately sign {Full Name} out and revoke their access. Their role: {Role(s)}. This action can be reversed." |
-| Deactivation confirm button | "Deactivate" |
+| Deactivation confirm button | "Deactivate User" |
+| Deactivation cancel button | "Keep User" |
 | system_admin role conflict error | "system_admin cannot be combined with other roles." |
 | Email duplicate error | "This email is already in use." |
 | Loading button label — login | "Signing in..." |
@@ -311,6 +320,8 @@ Field nurses and staff use tablets (768px–1024px). All surfaces must be tablet
 | Desktop (> 1024px) | Login: centered card 440px wide. Sidebar: expanded with labels by default. Table: full columns, no scroll. Modal: centered Dialog 540px. |
 
 Touch targets: all interactive controls (buttons, checkboxes, combobox items) minimum 44px height at tablet and mobile breakpoints.
+
+**Sidebar icon-only accessibility:** When the sidebar collapses to icon-only on tablet/mobile, every nav item icon element must carry `aria-label` matching the nav item's full label text (e.g., `aria-label="Users"`, `aria-label="Activity Log"`). The Lucide icon receives the `aria-label` directly; the surrounding link/button receives `title` with the same string.
 
 ---
 
