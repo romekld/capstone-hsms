@@ -50,12 +50,16 @@ Plans:
   3. Every API endpoint enforces RBAC via `require_role()` — a BHW cannot access admin routes, a nurse cannot access another BHS's data, and unauthenticated requests receive 401
   4. BaseRepository auto-applies `health_station_id` filter on all clinical queries; city_health_officer and phis_coordinator bypass isolation for read-only cross-BHS access; DSO has PIDSR CRUD plus read-only cross-BHS access
   5. Every create/update/soft-delete operation writes to the append-only `audit_logs` table with no patient PII in log payloads
-**Plans**: TBD
+**Plans**: 7 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
-- [ ] 02-03: TBD
+- [ ] 02-01-PLAN.md — python-jose removal, PyJWT + pwdlib security.py, User + UserSession models, 0003 migration (AUTH-01, AUTH-02, AUTH-03, AUTH-05)
+- [ ] 02-02-PLAN.md — Wave 0 test scaffold: test_auth/ and test_admin/ stubs for all 12 test cases (AUTH-01 through AUTH-10)
+- [ ] 02-03-PLAN.md — Auth service + auth router (/auth/login, /refresh, /logout) + require_role() + CurrentUser + BaseRepository (AUTH-01, AUTH-02, AUTH-03, AUTH-05, AUTH-07, AUTH-08, AUTH-09, AUTH-10)
+- [ ] 02-04-PLAN.md — AdminService + admin router (/admin/users CRUD) + system_admin exclusivity enforcement (AUTH-04, AUTH-06)
+- [ ] 02-05-PLAN.md — Frontend scaffold: Vite+React+TS, shadcn init, design tokens, Axios 401 interceptor, AuthContext, ProtectedRoute (AUTH-01, AUTH-02, AUTH-07)
+- [ ] 02-06-PLAN.md — Login page (all UI-SPEC states) + Dashboard placeholder with logout (AUTH-01, AUTH-02, AUTH-03)
+- [ ] 02-07-PLAN.md — Admin panel UI: user list table, Create/Edit modal, Deactivation AlertDialog, Activity Log tab (AUTH-04, AUTH-06)
 
 ### Phase 3: Patient ITR + Core Data Model
 **Goal**: Nurse can register patients with a unified Individual Treatment Record, search within own BHS, get duplicate warnings, and record general consultation visits; CHO and PHIS Coordinator can search patients across all 32 BHS
@@ -176,7 +180,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Infrastructure + DevOps | 3/3 | Complete   | 2026-03-15 |
-| 2. Authentication + RBAC + User Management | 0/3 | Not started | - |
+| 2. Authentication + RBAC + User Management | 0/7 | Not started | - |
 | 3. Patient ITR + Core Data Model | 0/2 | Not started | - |
 | 4. Maternal + Child Health Programs | 0/3 | Not started | - |
 | 5. TB-DOTS + NCD Programs | 0/3 | Not started | - |
