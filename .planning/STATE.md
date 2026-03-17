@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-03b-PLAN.md — auth HTTP layer (auth router, CORS middleware, admin stub, 9 test stubs converted)
-last_updated: "2026-03-17T06:00:45.870Z"
-last_activity: 2026-03-17 — Plan 02-03a complete (Pydantic schemas, BaseRepository/CROSS_BHS_ROLES, UserRepository, AuthService, require_role dependency factory)
+stopped_at: Completed 02-04-PLAN.md — AdminService, admin router (/api/admin/users + /api/admin/audit-logs), full test suite green
+last_updated: "2026-03-17T06:27:50Z"
+last_activity: 2026-03-17 — Plan 02-04 complete (AdminService, admin router, 7 admin tests pass, 57 total tests pass)
 progress:
   total_phases: 9
   completed_phases: 1
   total_plans: 12
-  completed_plans: 7
-  percent: 16
+  completed_plans: 8
+  percent: 18
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 ## Current Position
 
 Phase: 2 of 9 (Authentication + RBAC + User Management)
-Plan: 3a of 9 in current phase
-Status: In progress — Plan 02-03a complete, proceeding to 02-03b
-Last activity: 2026-03-17 — Plan 02-03a complete (Pydantic schemas, BaseRepository/CROSS_BHS_ROLES, UserRepository, AuthService, require_role dependency factory)
+Plan: 4 of 9 in current phase
+Status: In progress — Plan 02-04 complete, proceeding to 02-05
+Last activity: 2026-03-17 — Plan 02-04 complete (AdminService, admin router, /api/admin/audit-logs, 7 admin tests pass)
 
-Progress: [█░░░░░░░░░] 16% (Phase 2, Plan 3a/9)
+Progress: [██░░░░░░░░] 18% (Phase 2, Plan 4/9)
 
 ## Performance Metrics
 
@@ -55,6 +55,7 @@ Progress: [█░░░░░░░░░] 16% (Phase 2, Plan 3a/9)
 | Phase 02 P02 | 2min | 3 tasks | 8 files |
 | Phase 02 P03a | 7min | 2 tasks | 10 files |
 | Phase 02 P03b | 3 | 2 tasks | 10 files |
+| Phase 02 P04 | 25min | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -90,6 +91,9 @@ Recent decisions affecting current work:
 - [Plan 02-03a]: HTTPBearer(auto_error=False) ensures missing Authorization header returns 401, not FastAPI's default 403
 - [Plan 02-03a]: require_role() returns Depends(_guard) — the Depends() wrapping lets FastAPI inject CurrentUser into the guard automatically, making RBAC declarative at the router layer
 - [Phase 02]: Admin router stub (GET/POST /admin/users) created in 02-03b to unblock RBAC and auth-guard tests — full implementation deferred to Plan 02-04
+- [Plan 02-04]: require_role() returns Depends(_guard) — passed directly to router-level dependencies, not double-wrapped in Depends()
+- [Plan 02-04]: conftest overrides get_async_session per test so ASGITransport tests use test DB — prevents main DB contamination
+- [Plan 02-04]: audit_logs created in conftest with append-only RULEs — test DB has same append-only constraints as production
 
 ### Pending Todos
 
@@ -104,6 +108,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-17T06:00:45.865Z
-Stopped at: Completed 02-03b-PLAN.md — auth HTTP layer (auth router, CORS middleware, admin stub, 9 test stubs converted)
+Last session: 2026-03-17T06:27:50Z
+Stopped at: Completed 02-04-PLAN.md — AdminService, admin router (/api/admin/users + /api/admin/audit-logs), full test suite green (57 passed)
 Resume file: None
