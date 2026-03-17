@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Completed 02-02-PLAN.md — Wave 0 test scaffold, 12 auth+RBAC test stubs
-last_updated: "2026-03-17T05:41:29Z"
-last_activity: "2026-03-17 — Plan 02-02 complete (test_auth and test_admin packages, 12 pytest stubs for Wave 2 plans)"
+stopped_at: Completed 02-03a-PLAN.md — auth dependency layer (schemas, repositories, service, FastAPI dependencies)
+last_updated: "2026-03-17T05:51:20Z"
+last_activity: "2026-03-17 — Plan 02-03a complete (Pydantic schemas, BaseRepository with CROSS_BHS_ROLES isolation, UserRepository, AuthService, require_role)"
 progress:
   total_phases: 9
   completed_phases: 1
   total_plans: 9
-  completed_plans: 2
-  percent: 13
+  completed_plans: 3
+  percent: 16
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 ## Current Position
 
 Phase: 2 of 9 (Authentication + RBAC + User Management)
-Plan: 2 of 9 in current phase
-Status: In progress — Plan 02-02 complete, proceeding to 02-03
-Last activity: 2026-03-17 — Plan 02-02 complete (test_auth and test_admin packages, 12 pytest stubs for Wave 2 plans)
+Plan: 3a of 9 in current phase
+Status: In progress — Plan 02-03a complete, proceeding to 02-03b
+Last activity: 2026-03-17 — Plan 02-03a complete (Pydantic schemas, BaseRepository/CROSS_BHS_ROLES, UserRepository, AuthService, require_role dependency factory)
 
-Progress: [█░░░░░░░░░] 13% (Phase 2, Plan 2/9)
+Progress: [█░░░░░░░░░] 16% (Phase 2, Plan 3a/9)
 
 ## Performance Metrics
 
@@ -43,16 +43,17 @@ Progress: [█░░░░░░░░░] 13% (Phase 2, Plan 2/9)
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| Phase 02 | 2 | ~22 min | ~11 min |
+| Phase 02 | 3 | ~29 min | ~10 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (~20 min)
+- Last 5 plans: 02-01 (~20 min), 02-02 (~2 min), 02-03a (~7 min)
 - Trend: -
 
 *Updated after each plan completion*
 | Phase 01 P01 | 3 | 3 tasks | 17 files |
 | Phase 02 P01 | 20min | 3 tasks | 9 files |
 | Phase 02 P02 | 2min | 3 tasks | 8 files |
+| Phase 02 P03a | 7min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -82,6 +83,11 @@ Recent decisions affecting current work:
 - [Plan 02-01]: roles column is PostgreSQL ARRAY(TEXT) — avoids JOIN table for RBAC checks, supports array containment operators
 - [Plan 02-02]: pytest.skip() chosen over pytest.mark.xfail for stubs — skip is explicit declared intent; xfail implies expected failure that might accidentally pass
 - [Plan 02-02]: test_base_repository.py uses synchronous def (not async def) — BaseRepository unit tests exercise pure Python logic without HTTP/DB context
+- [Plan 02-03a]: UserRepository does NOT inherit BaseRepository — user management is cross-BHS; admin sees all users regardless of BHS assignment
+- [Plan 02-03a]: CROSS_BHS_ROLES is a named frozenset constant at module level — downstream Phase 3-9 repos import it rather than duplicate the set
+- [Plan 02-03a]: get_current_user builds UserSchema from JWT payload only (sub, roles, health_station_id); email/full_name are empty strings — full DB fetch only when admin operations need them
+- [Plan 02-03a]: HTTPBearer(auto_error=False) ensures missing Authorization header returns 401, not FastAPI's default 403
+- [Plan 02-03a]: require_role() returns Depends(_guard) — the Depends() wrapping lets FastAPI inject CurrentUser into the guard automatically, making RBAC declarative at the router layer
 
 ### Pending Todos
 
@@ -96,6 +102,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-17T05:41:29Z
-Stopped at: Completed 02-02-PLAN.md — Wave 0 test scaffold (12 auth+RBAC pytest stubs)
-Resume file: .planning/phases/02-authentication-rbac-user-management/02-03-PLAN.md
+Last session: 2026-03-17T05:51:20Z
+Stopped at: Completed 02-03a-PLAN.md — auth dependency layer (schemas, repositories, service, FastAPI dependencies)
+Resume file: .planning/phases/02-authentication-rbac-user-management/02-03b-PLAN.md
