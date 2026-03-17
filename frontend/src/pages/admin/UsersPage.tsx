@@ -346,7 +346,6 @@ function ActivityLogTab() {
   const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
-    setLoadError(false);
     listAuditLogs()
       .then(setLogs)
       .catch(() => setLoadError(true))

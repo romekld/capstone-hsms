@@ -20,4 +20,16 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  // shadcn/ui components and context files intentionally export non-component
+  // values (variants, hooks, context objects) alongside components — suppress
+  // the fast-refresh false-positive for these known patterns.
+  {
+    files: [
+      'src/components/ui/**/*.{ts,tsx}',
+      'src/contexts/**/*.{ts,tsx}',
+    ],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
 ])

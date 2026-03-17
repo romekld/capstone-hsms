@@ -1,18 +1,35 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AppShell } from "@/layouts/AppShell";
 import { LoginPage } from "@/pages/LoginPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { UsersPage } from "@/pages/admin/UsersPage";
-const UnauthorizedPage = () => (
-  <div className="min-h-screen flex items-center justify-center bg-background">
-    <div className="text-center">
-      <h1 className="text-[28px] font-semibold text-foreground mb-2">Unauthorized</h1>
-      <p className="text-sm text-muted-foreground">You don&apos;t have permission to access this page.</p>
+import { Button } from "@/components/ui/button";
+import { ShieldX, ArrowLeft } from "lucide-react";
+
+const UnauthorizedPage = () => {
+  const navigate = useNavigate();
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="text-center space-y-5 max-w-sm">
+        <div className="size-14 rounded-2xl bg-destructive/10 flex items-center justify-center mx-auto">
+          <ShieldX className="size-7 text-destructive" />
+        </div>
+        <div className="space-y-2">
+          <h1 className="text-xl font-semibold text-foreground">Access Restricted</h1>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            You don&apos;t have permission to view this page. Contact your system administrator if you believe this is an error.
+          </p>
+        </div>
+        <Button variant="outline" size="sm" onClick={() => navigate(-1)} className="gap-2">
+          <ArrowLeft className="size-4" data-icon="inline-start" />
+          Go Back
+        </Button>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default function App() {
   return (
