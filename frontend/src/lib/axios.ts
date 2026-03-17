@@ -55,7 +55,8 @@ api.interceptors.response.use(
     if (
       axiosError.response?.status === 401 &&
       originalRequest &&
-      !originalRequest._retry
+      !originalRequest._retry &&
+      originalRequest.url !== "/auth/login"
     ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
