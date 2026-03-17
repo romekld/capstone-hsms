@@ -1,4 +1,6 @@
-from app.models.barangay import Barangay
-from app.models.health_station import HealthStation
+from app.models.barangay import Barangay  # noqa: F401
+from app.models.health_station import HealthStation  # noqa: F401
+from app.models.user import User  # noqa: F401
+from app.models.user_session import UserSession  # noqa: F401
 
-__all__ = ["Barangay", "HealthStation"]
+__all__ = ["Barangay", "HealthStation", "User", "UserSession"]
