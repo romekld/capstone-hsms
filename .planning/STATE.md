@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Phase 2 plans complete — uncommitted revision needs commit before execution
-last_updated: "2026-03-17T00:00:00.000Z"
-last_activity: "2026-03-16 — Plan 01-03 complete (GIS seed data: 32 barangay boundaries + 32 BHS station points)"
+status: in_progress
+stopped_at: Completed 02-01-PLAN.md — JWT security primitives and User/UserSession models
+last_updated: "2026-03-17T05:35:05Z"
+last_activity: "2026-03-17 — Plan 02-01 complete (PyJWT security.py, User/UserSession ORM models, Alembic migration 0003)"
 progress:
   total_phases: 9
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
-  percent: 100
+  total_plans: 9
+  completed_plans: 1
+  percent: 11
 ---
 
 # Project State
@@ -21,36 +21,37 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-15)
 
 **Core value:** City Health Officer and DSO can detect a Category I disease outbreak and respond within the RA 11332 24-hour window
-**Current focus:** Phase 1 - Infrastructure + DevOps
+**Current focus:** Phase 2 - Authentication + RBAC + User Management
 
 ## Current Position
 
-Phase: 1 of 9 (Infrastructure + DevOps)
-Plan: 3 of 3 in current phase (PHASE COMPLETE)
-Status: Phase 1 complete — ready for Phase 2 (Auth + RBAC)
-Last activity: 2026-03-16 — Plan 01-03 complete (GIS seed data: 32 barangay boundaries + 32 BHS station points)
+Phase: 2 of 9 (Authentication + RBAC + User Management)
+Plan: 1 of 9 in current phase
+Status: In progress — Plan 02-01 complete, proceeding to 02-02
+Last activity: 2026-03-17 — Plan 02-01 complete (PyJWT security.py, User/UserSession ORM models, Alembic migration 0003)
 
-Progress: [██████████] 100% (Phase 1)
+Progress: [█░░░░░░░░░] 11% (Phase 2, Plan 1/9)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: -
-- Total execution time: 0 hours
+- Total plans completed: 1
+- Average duration: ~20 min
+- Total execution time: 0.33 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| Phase 02 | 1 | ~20 min | ~20 min |
 
 **Recent Trend:**
-- Last 5 plans: -
+- Last 5 plans: 02-01 (~20 min)
 - Trend: -
 
 *Updated after each plan completion*
 | Phase 01 P01 | 3 | 3 tasks | 17 files |
+| Phase 02 P01 | 20min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -73,6 +74,11 @@ Recent decisions affecting current work:
 - [Plan 01-03]: BHS station coordinates derived from barangay polygon centroids (shapely centroid) — spatially accurate, within Philippines range; real GPS can be updated by developer
 - [Plan 01-03]: decode(:boundary, 'hex') required because wkb.desc returns hex string; ST_GeomFromEWKB expects binary input
 - [Plan 01-03]: Point(lng, lat) axis order follows GeoJSON/WGS-84 convention (longitude first)
+- [Plan 02-01]: Replaced python-jose (abandoned, CVEs) with PyJWT 2.12 + pwdlib[argon2] — active maintenance, no cryptography dependency
+- [Plan 02-01]: User model uses is_active Boolean instead of SoftDeleteMixin — deactivation is not deletion; admin tools need to query inactive users
+- [Plan 02-01]: Refresh tokens stored as SHA-256 hash in user_sessions — DB breach cannot yield valid tokens
+- [Plan 02-01]: JWT sub field is str(user_id) — RFC 7519 requires string subject; callers cast back to int
+- [Plan 02-01]: roles column is PostgreSQL ARRAY(TEXT) — avoids JOIN table for RBAC checks, supports array containment operators
 
 ### Pending Todos
 
@@ -87,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-16T02:03:49.942Z
-Stopped at: Phase 2 UI-SPEC approved
-Resume file: .planning/phases/02-authentication-rbac-user-management/02-UI-SPEC.md
+Last session: 2026-03-17T05:35:05Z
+Stopped at: Completed 02-01-PLAN.md — JWT security primitives, User/UserSession models, migration 0003
+Resume file: .planning/phases/02-authentication-rbac-user-management/02-02-PLAN.md

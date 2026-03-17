@@ -18,11 +18,11 @@ Requirements for the 4-month capstone build. Each maps to a roadmap phase.
 
 ### Authentication & Authorization (AUTH)
 
-- [ ] **AUTH-01**: User can log in with email and password; session persists via JWT access + refresh token pair
-- [ ] **AUTH-02**: User can log out; refresh token is revoked server-side via `user_sessions` table
-- [ ] **AUTH-03**: System enforces 7 RBAC roles: `system_admin`, `city_health_officer`, `physician`, `phis_coordinator`, `disease_surveillance_officer`, `nurse`/`midwife`, `bhw`
+- [x] **AUTH-01**: User can log in with email and password; session persists via JWT access + refresh token pair
+- [x] **AUTH-02**: User can log out; refresh token is revoked server-side via `user_sessions` table
+- [x] **AUTH-03**: System enforces 7 RBAC roles: `system_admin`, `city_health_officer`, `physician`, `phis_coordinator`, `disease_surveillance_officer`, `nurse`/`midwife`, `bhw`
 - [ ] **AUTH-04**: `system_admin` role is exclusive — no combination with any clinical role is permitted
-- [ ] **AUTH-05**: A user may hold `nurse` + `disease_surveillance_officer` simultaneously (BHS Surveillance Focal Person)
+- [x] **AUTH-05**: A user may hold `nurse` + `disease_surveillance_officer` simultaneously (BHS Surveillance Focal Person)
 - [ ] **AUTH-06**: `system_admin` can create user accounts, assign roles, and assign users to a barangay health station
 - [ ] **AUTH-07**: All API endpoints enforce RBAC via `require_role()` FastAPI dependency at the router layer
 - [ ] **AUTH-08**: All clinical data queries are filtered by the requesting user's `health_station_id` at the repository layer (barangay isolation)
