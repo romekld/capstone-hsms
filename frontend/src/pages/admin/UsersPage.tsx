@@ -6,13 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -28,8 +21,31 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -57,15 +73,15 @@ import {
   type UserListItem,
 } from "@/features/admin/types";
 
-// --- Create/Edit User Modal ---
-interface UserModalProps {
+// --- Create/Edit User Sheet ---
+interface UserSheetProps {
   open: boolean;
   editTarget: UserListItem | null; // null = create mode
   onClose: () => void;
   onSuccess: () => void;
 }
 
-function UserModal({ open, editTarget, onClose, onSuccess }: UserModalProps) {
+function UserSheet({ open, editTarget, onClose, onSuccess }: UserSheetProps) {
   const isEdit = !!editTarget;
   const [fullName, setFullName] = useState(editTarget?.full_name ?? "");
   const [email, setEmail] = useState(editTarget?.email ?? "");
@@ -78,7 +94,7 @@ function UserModal({ open, editTarget, onClose, onSuccess }: UserModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [fieldError, setFieldError] = useState<string | null>(null);
 
-  // Reset form when modal opens/closes
+  // Reset form when sheet opens/closes
   useEffect(() => {
     if (open) {
       setFullName(editTarget?.full_name ?? "");
@@ -148,82 +164,86 @@ function UserModal({ open, editTarget, onClose, onSuccess }: UserModalProps) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-[540px]">
-        <DialogHeader>
-          <DialogTitle>
+    <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
+      <SheetContent side="right" className="w-full sm:max-w-[480px] overflow-y-auto flex flex-col">
+        <SheetHeader className="px-6 pt-6 pb-2">
+          <SheetTitle>
             {isEdit ? `Edit User — ${editTarget?.full_name}` : "Create User"}
-          </DialogTitle>
-        </DialogHeader>
+          </SheetTitle>
+        </SheetHeader>
 
-        <div className="space-y-4 py-2">
-          {/* Full Name */}
-          <div className="space-y-2">
-            <Label htmlFor="full-name" className="text-sm font-semibold">
-              Full Name
-            </Label>
-            <Input
-              id="full-name"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-              className="h-11"
-            />
-          </div>
-
-          {/* Email — only editable on create */}
-          {!isEdit && (
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-semibold">
-                Email
-              </Label>
-              {fieldError?.includes("email") ? (
-                <p className="text-xs text-destructive">{fieldError}</p>
-              ) : null}
+        <div className="flex-1 overflow-y-auto px-6 pb-4">
+          <FieldGroup>
+            {/* Full Name */}
+            <Field>
+              <FieldLabel htmlFor="full-name">Full Name</FieldLabel>
               <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="full-name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
                 required
                 className="h-11"
               />
-            </div>
-          )}
+            </Field>
 
-          {/* Password */}
-          <div className="space-y-2">
-            <Label htmlFor="password" className="text-sm font-semibold">
-              Password
-            </Label>
-            <div className="relative">
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder={isEdit ? "Leave blank to keep current password" : undefined}
-                required={!isEdit}
-                className="h-11 pr-10"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((s) => !s)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </button>
-            </div>
-          </div>
+            {/* Email — only editable on create */}
+            {!isEdit && (
+              <Field data-invalid={fieldError?.includes("email") ? true : undefined}>
+                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="h-11"
+                  aria-invalid={fieldError?.includes("email") ? true : undefined}
+                />
+                {fieldError?.includes("email") && (
+                  <FieldError>{fieldError}</FieldError>
+                )}
+              </Field>
+            )}
+
+            {/* Password */}
+            <Field>
+              <FieldLabel htmlFor="password">
+                Password
+                {isEdit && (
+                  <span className="ml-1 text-xs font-normal text-muted-foreground">
+                    (leave blank to keep current)
+                  </span>
+                )}
+              </FieldLabel>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder={isEdit ? "Leave blank to keep current password" : undefined}
+                  required={!isEdit}
+                  className="h-11 pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((s) => !s)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff data-icon /> : <Eye data-icon />}
+                </button>
+              </div>
+            </Field>
+          </FieldGroup>
 
           {/* Roles */}
-          <div className="space-y-2">
-            <Label className="text-sm font-semibold">Roles</Label>
+          <FieldSet className="mt-5">
+            <FieldLegend variant="label">Roles</FieldLegend>
             {fieldError?.includes("system_admin") && (
-              <p className="text-xs text-destructive">{fieldError}</p>
+              <FieldError className="-mt-2">{fieldError}</FieldError>
             )}
-            <div className="space-y-1">
+            <div className="flex flex-col gap-1">
               {ROLE_OPTIONS.map(({ value, label }) => (
                 <div key={value} className="flex items-center gap-3 min-h-[40px]">
                   <Checkbox
@@ -244,38 +264,38 @@ function UserModal({ open, editTarget, onClose, onSuccess }: UserModalProps) {
                 </div>
               ))}
             </div>
-          </div>
+          </FieldSet>
 
           {/* BHS Assignment — hidden when system_admin selected */}
           {!isSystemAdmin && (
-            <div className="space-y-2">
-              <Label htmlFor="bhs" className="text-sm font-semibold">
-                BHS Assignment
-              </Label>
-              <select
-                id="bhs"
-                value={healthStationId ?? ""}
-                onChange={(e) =>
-                  setHealthStationId(e.target.value ? Number(e.target.value) : null)
-                }
-                className="w-full h-11 border border-input rounded-md px-3 text-sm bg-background"
-              >
-                <option value="">— No BHS assignment —</option>
-                {HEALTH_STATIONS.map((hs) => (
-                  <option key={hs.id} value={hs.id}>
-                    {hs.name}
-                  </option>
-                ))}
-              </select>
-              <p className="text-xs text-muted-foreground">
-                Required for Nurse, Midwife, Physician, and BHW roles.
-              </p>
-            </div>
+            <FieldGroup className="mt-5">
+              <Field>
+                <FieldLabel>BHS Assignment</FieldLabel>
+                <Select
+                  value={healthStationId != null ? String(healthStationId) : null}
+                  onValueChange={(v) => setHealthStationId(v ? Number(v) : null)}
+                >
+                  <SelectTrigger className="h-11 w-full">
+                    <SelectValue placeholder="— No BHS assignment —" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {HEALTH_STATIONS.map((hs) => (
+                      <SelectItem key={hs.id} value={String(hs.id)}>
+                        {hs.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FieldDescription>
+                  Required for Nurse, Midwife, Physician, and BHW roles.
+                </FieldDescription>
+              </Field>
+            </FieldGroup>
           )}
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose} disabled={isLoading}>
+        <SheetFooter className="flex-row gap-2 px-6 py-4 border-t">
+          <Button variant="outline" onClick={onClose} disabled={isLoading} className="flex-1">
             Cancel
           </Button>
           <Button
@@ -283,7 +303,7 @@ function UserModal({ open, editTarget, onClose, onSuccess }: UserModalProps) {
             disabled={
               isLoading || !fullName || (!isEdit && !email) || selectedRoles.length === 0
             }
-            className="bg-primary hover:bg-primary/90"
+            className="flex-1 bg-primary hover:bg-primary/90"
           >
             {isLoading ? (
               <span className="flex items-center gap-2">
@@ -296,9 +316,9 @@ function UserModal({ open, editTarget, onClose, onSuccess }: UserModalProps) {
               "Save User"
             )}
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 }
 
@@ -438,7 +458,7 @@ export function UsersPage() {
   const [users, setUsers] = useState<UserListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<UserListItem | null>(null);
   const [deactivateTarget, setDeactivateTarget] = useState<UserListItem | null>(null);
   const [sortKey, setSortKey] = useState<keyof UserListItem>("full_name");
@@ -528,7 +548,7 @@ export function UsersPage() {
               <Button
                 onClick={() => {
                   setEditTarget(null);
-                  setModalOpen(true);
+                  setSheetOpen(true);
                 }}
                 className="bg-primary hover:bg-primary/90"
               >
@@ -560,7 +580,7 @@ export function UsersPage() {
                   className="mt-4 bg-primary hover:bg-primary/90"
                   onClick={() => {
                     setEditTarget(null);
-                    setModalOpen(true);
+                    setSheetOpen(true);
                   }}
                 >
                   Create User
@@ -665,7 +685,7 @@ export function UsersPage() {
                             <DropdownMenuItem
                               onClick={() => {
                                 setEditTarget(user);
-                                setModalOpen(true);
+                                setSheetOpen(true);
                               }}
                             >
                               Edit
@@ -697,11 +717,11 @@ export function UsersPage() {
           </TabsContent>
         </Tabs>
 
-        <UserModal
-          open={modalOpen}
+        <UserSheet
+          open={sheetOpen}
           editTarget={editTarget}
           onClose={() => {
-            setModalOpen(false);
+            setSheetOpen(false);
             setEditTarget(null);
           }}
           onSuccess={loadUsers}
