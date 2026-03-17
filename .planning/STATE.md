@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-05b-PLAN.md — Axios 401 interceptor, AuthContext, ProtectedRoute, AppShell sidebar-07 with role-filtered nav
-last_updated: "2026-03-17T06:59:41.901Z"
+stopped_at: Completed 02-06-PLAN.md — LoginPage with error states + role routing; DashboardPage placeholder; App.tsx wired to real pages
+last_updated: "2026-03-17T07:06:55.295Z"
 last_activity: 2026-03-17 — Plan 02-04 complete (AdminService, admin router, /api/admin/audit-logs, 7 admin tests pass)
 progress:
   total_phases: 9
   completed_phases: 1
   total_plans: 12
-  completed_plans: 10
+  completed_plans: 11
   percent: 18
 ---
 
@@ -58,6 +58,7 @@ Progress: [██░░░░░░░░] 18% (Phase 2, Plan 4/9)
 | Phase 02 P04 | 25min | 2 tasks | 9 files |
 | Phase 02 P05 | 13 | 2 tasks | 55 files |
 | Phase 02 P05b | 7min | 3 tasks | 10 files |
+| Phase 02 P06 | 3 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -102,6 +103,8 @@ Recent decisions affecting current work:
 - [Phase 02-05]: shadcn base-nova style with OKLCH tokens; globals.css overwrites preset with UI-SPEC CHO 2 brand palette including --status-*, --bhs-tier, --cho-tier
 - [Phase 02-05b]: SidebarMenuButton uses base-ui render prop (not asChild) — shadcn installation uses @base-ui/react, not Radix
 - [Phase 02-05b]: Axios RetryableConfig extends InternalAxiosRequestConfig with _retry flag — avoids TypeScript strict mode casting errors
+- [Phase 02-06]: Post-login navigation via useEffect watching user state — navigate() NOT called in handleSubmit success path to avoid stale state after setState
+- [Phase 02-06]: AuthError discriminated union (wrong_credentials | inactive | server_error) enables typed error rendering
 
 ### Pending Todos
 
@@ -116,6 +119,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-17T06:59:41.896Z
-Stopped at: Completed 02-05b-PLAN.md — Axios 401 interceptor, AuthContext, ProtectedRoute, AppShell sidebar-07 with role-filtered nav
+Last session: 2026-03-17T07:06:55.277Z
+Stopped at: Completed 02-06-PLAN.md — LoginPage with error states + role routing; DashboardPage placeholder; App.tsx wired to real pages
 Resume file: None
