@@ -15,6 +15,7 @@ files_modified:
   - frontend/src/features/auth/api.ts
   - frontend/src/App.tsx
   - frontend/src/main.tsx
+  - frontend/src/layouts/AppShell.tsx
 autonomous: true
 requirements:
   - AUTH-01
@@ -30,6 +31,7 @@ must_haves:
     - "ProtectedRoute redirects users without required roles to /unauthorized"
     - "App.tsx has router skeleton with /login, /dashboard, /admin/users routes"
     - "main.tsx wraps App in AuthProvider"
+    - "AppShell renders a shadcn sidebar-07 layout with role-filtered nav links; protected pages render inside it"
     - "npm run typecheck exits 0"
   artifacts:
     - path: "frontend/src/lib/axios.ts"
@@ -44,6 +46,9 @@ must_haves:
     - path: "frontend/src/components/ProtectedRoute.tsx"
       provides: "Route guard component"
       contains: "ProtectedRoute"
+    - path: "frontend/src/layouts/AppShell.tsx"
+      provides: "Sidebar navigation shell with role-filtered links"
+      contains: "AppShell"
   key_links:
     - from: "frontend/src/lib/axios.ts"
       to: "POST /api/auth/refresh"
@@ -57,13 +62,17 @@ must_haves:
       to: "frontend/src/contexts/AuthContext.tsx"
       via: "AuthProvider wrapper"
       pattern: "AuthProvider"
+    - from: "frontend/src/App.tsx"
+      to: "frontend/src/layouts/AppShell.tsx"
+      via: "ProtectedRoute Outlet renders inside AppShell"
+      pattern: "AppShell"
 ---
 
 <objective>
-Build the auth infrastructure layer on top of the scaffold created in Plan 02-05: Axios client with 401 refresh interceptor, token storage helpers, AuthContext with login/logout/isLoading, useAuth hook, ProtectedRoute, auth types, auth API module, and the App router skeleton.
+Build the auth infrastructure layer on top of the scaffold created in Plan 02-05: Axios client with 401 refresh interceptor, token storage helpers, AuthContext with login/logout/isLoading, useAuth hook, ProtectedRoute, auth types, auth API module, the App router skeleton, and the AppShell sidebar navigation layout.
 
-Purpose: Plans 02-06 and 02-07 depend on AuthContext, Axios, and ProtectedRoute existing. This plan delivers all the contracts that login and admin UI pages consume.
-Output: Typed auth client; AuthContext with login/logout; ProtectedRoute guard; router skeleton in App.tsx.
+Purpose: Plans 02-06 and 02-07 depend on AuthContext, Axios, ProtectedRoute, and AppShell existing. This plan delivers all the contracts that login and admin UI pages consume.
+Output: Typed auth client; AuthContext with login/logout; ProtectedRoute guard; AppShell with role-filtered sidebar nav; router skeleton in App.tsx.
 </objective>
 
 <execution_context>
@@ -76,7 +85,7 @@ Output: Typed auth client; AuthContext with login/logout; ProtectedRoute guard; 
 @.planning/phases/02-authentication-rbac-user-management/02-RESEARCH.md
 
 <interfaces>
-Backend auth endpoints (from Plan 02-03):
+Backend auth endpoints (from Plan 02-03b):
 - POST /api/auth/login   body: {email, password}           → {access_token, refresh_token, token_type}
 - POST /api/auth/refresh body: {refresh_token}             → {access_token, refresh_token, token_type}
 - POST /api/auth/logout  body: {refresh_token}             → 204 No Content
@@ -91,6 +100,13 @@ From Plan 02-05 SUMMARY (scaffold now complete):
 - frontend/src/styles/globals.css has OKLCH tokens
 - frontend/src/main.tsx has font imports and globals.css import
 - All shadcn components installed (button, dialog, etc.)
+- sidebar-07 block installed (from Plan 02-05 Task 1 step 6)
+
+CONTEXT.md locked decision on navigation:
+- "sidebar navigation with role-filtered links built with shadcn sidebar-* blocks"
+- system_admin nav: Users link (/admin/users) + Activity Log link
+- All roles: Dashboard link (/dashboard)
+- ProtectedRoute outlets render INSIDE AppShell (not alongside it)
 </interfaces>
 </context>
 
@@ -305,9 +321,10 @@ From Plan 02-05 SUMMARY (scaffold now complete):
      useState,
      type ReactNode,
    } from "react";
+   import { jwtDecode } from "jwt-decode";
    import { loginApi, logoutApi } from "@/features/auth/api";
    import { getRefreshToken, clearTokens } from "@/lib/auth";
-   import { setAccessToken } from "@/lib/axios";
+   import api, { setAccessToken } from "@/lib/axios";
    import type { LoginRequest, UserSchema } from "@/features/auth/types";
 
    interface AuthContextValue {
@@ -323,40 +340,38 @@ From Plan 02-05 SUMMARY (scaffold now complete):
      const [user, setUser] = useState<UserSchema | null>(null);
      const [isLoading, setIsLoading] = useState(true);
 
-     // On app mount: attempt silent token refresh if refresh token exists
+     // On app mount: attempt silent token refresh if refresh token exists.
+     // Uses a top-level async function to avoid .then() race conditions with the 401 interceptor.
      useEffect(() => {
-       const refreshToken = getRefreshToken();
-       if (!refreshToken) {
-         setIsLoading(false);
-         return;
-       }
-       // Try to restore session via refresh
-       import("@/lib/axios").then(({ default: api }) => {
-         api
-           .post("/auth/refresh", { refresh_token: refreshToken })
-           .then(({ data }) => {
-             setAccessToken(data.access_token);
-             import("jwt-decode").then(({ jwtDecode }) => {
-               const payload = jwtDecode<{
-                 sub: string;
-                 roles: string[];
-                 health_station_id: number | null;
-               }>(data.access_token);
-               setUser({
-                 id: parseInt(payload.sub, 10),
-                 email: "",
-                 full_name: "",
-                 roles: payload.roles,
-                 health_station_id: payload.health_station_id,
-                 is_active: true,
-               });
-             });
-           })
-           .catch(() => {
-             clearTokens();
-           })
-           .finally(() => setIsLoading(false));
-       });
+       const restoreSession = async () => {
+         const refreshToken = getRefreshToken();
+         if (!refreshToken) {
+           setIsLoading(false);
+           return;
+         }
+         try {
+           const { data } = await api.post("/auth/refresh", { refresh_token: refreshToken });
+           setAccessToken(data.access_token);
+           const payload = jwtDecode<{
+             sub: string;
+             roles: string[];
+             health_station_id: number | null;
+           }>(data.access_token);
+           setUser({
+             id: parseInt(payload.sub, 10),
+             email: "",
+             full_name: "",
+             roles: payload.roles,
+             health_station_id: payload.health_station_id,
+             is_active: true,
+           });
+         } catch {
+           clearTokens();
+         } finally {
+           setIsLoading(false);
+         }
+       };
+       restoreSession();
      }, []);
 
      const login = useCallback(async (body: LoginRequest) => {
@@ -431,6 +446,7 @@ From Plan 02-05 SUMMARY (scaffold now complete):
    import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
    import { Toaster } from "@/components/ui/sonner";
    import { ProtectedRoute } from "@/components/ProtectedRoute";
+   import { AppShell } from "@/layouts/AppShell";
 
    // Pages — will be created in Plans 02-06 and 02-07
    // Using lazy placeholders so the app compiles now
@@ -447,14 +463,18 @@ From Plan 02-05 SUMMARY (scaffold now complete):
            <Route path="/login" element={<LoginPage />} />
            <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
-           {/* Protected — all roles */}
+           {/* Protected — all roles — wrapped in AppShell sidebar layout */}
            <Route element={<ProtectedRoute />}>
-             <Route path="/dashboard" element={<DashboardPage />} />
+             <Route element={<AppShell />}>
+               <Route path="/dashboard" element={<DashboardPage />} />
+             </Route>
            </Route>
 
-           {/* Protected — system_admin only */}
+           {/* Protected — system_admin only — also wrapped in AppShell */}
            <Route element={<ProtectedRoute allowedRoles={["system_admin"]} />}>
-             <Route path="/admin/users" element={<UsersPage />} />
+             <Route element={<AppShell />}>
+               <Route path="/admin/users" element={<UsersPage />} />
+             </Route>
            </Route>
 
            {/* Default redirect */}
@@ -493,18 +513,187 @@ From Plan 02-05 SUMMARY (scaffold now complete):
   </verify>
   <acceptance_criteria>
     - frontend/src/contexts/AuthContext.tsx contains "AuthProvider"
-    - frontend/src/contexts/AuthContext.tsx contains "login"
-    - frontend/src/contexts/AuthContext.tsx contains "logout"
+    - frontend/src/contexts/AuthContext.tsx contains "restoreSession"
+    - frontend/src/contexts/AuthContext.tsx does NOT contain ".then(" (no chained .then — uses async/await)
+    - frontend/src/contexts/AuthContext.tsx contains "import api," (static import, not dynamic import())
+    - frontend/src/contexts/AuthContext.tsx contains "jwtDecode" (static import)
     - frontend/src/hooks/useAuth.ts contains "useAuth"
     - frontend/src/components/ProtectedRoute.tsx contains "ProtectedRoute"
     - frontend/src/components/ProtectedRoute.tsx contains "Navigate to=\"/login\""
     - frontend/src/App.tsx contains "ProtectedRoute"
+    - frontend/src/App.tsx contains "AppShell"
     - frontend/src/App.tsx contains "/admin/users"
     - frontend/src/main.tsx contains "AuthProvider"
     - cd /d/capstone-hsms/frontend && npm run typecheck exits 0
     - cd /d/capstone-hsms/frontend && npm run build exits 0
   </acceptance_criteria>
-  <done>AuthContext, useAuth, ProtectedRoute, App router skeleton, and AuthProvider wrap all in place; TypeScript and build both pass.</done>
+  <done>AuthContext (async/await useEffect), useAuth, ProtectedRoute, App router skeleton with AppShell wiring, and AuthProvider wrap all in place; TypeScript and build both pass.</done>
+</task>
+
+<task type="auto">
+  <name>Task 3: AppShell layout with shadcn sidebar-07 and role-filtered navigation</name>
+  <read_first>
+    - frontend/src/components/ui/sidebar.tsx (generated by shadcn sidebar-07 — confirm component exports: Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, etc.)
+    - frontend/src/hooks/useAuth.ts (useAuth — provides user.roles for filtering nav items)
+    - .planning/phases/02-authentication-rbac-user-management/02-UI-SPEC.md (sidebar navigation spec)
+    - frontend/src/App.tsx (current content — AppShell is already imported here after Task 2)
+  </read_first>
+  <action>
+Create frontend/src/layouts/AppShell.tsx using the shadcn sidebar-07 block pattern.
+The sidebar must show role-filtered navigation links:
+
+Role filtering rules (from CONTEXT.md locked decision):
+- All authenticated roles: show "Dashboard" link → /dashboard
+- system_admin only: show "Users" link → /admin/users AND "Activity Log" link (within /admin/users tabs)
+- system_admin does NOT see "Dashboard" (they go to /admin/users post-login)
+
+```typescript
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { LayoutDashboard, Users, LogOut } from "lucide-react";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+
+interface NavItem {
+  label: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  roles: string[];  // empty array = all authenticated roles
+}
+
+const NAV_ITEMS: NavItem[] = [
+  {
+    label: "Dashboard",
+    href: "/dashboard",
+    icon: LayoutDashboard,
+    roles: ["city_health_officer", "physician", "phis_coordinator",
+            "disease_surveillance_officer", "nurse", "bhw"],
+  },
+  {
+    label: "Users",
+    href: "/admin/users",
+    icon: Users,
+    roles: ["system_admin"],
+  },
+];
+
+export function AppShell() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const visibleItems = NAV_ITEMS.filter(
+    (item) =>
+      item.roles.length === 0 ||
+      item.roles.some((r) => user?.roles.includes(r))
+  );
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login", { replace: true });
+  };
+
+  return (
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full">
+        <Sidebar>
+          <SidebarHeader className="px-4 py-3 border-b border-border">
+            <span className="text-base font-semibold text-foreground">LINK</span>
+            <span className="text-xs text-muted-foreground block">CHO 2 Dasmariñas</span>
+          </SidebarHeader>
+
+          <SidebarContent>
+            <SidebarGroup>
+              <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {visibleItems.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton asChild>
+                        <NavLink
+                          to={item.href}
+                          className={({ isActive }) =>
+                            isActive ? "text-primary font-medium" : ""
+                          }
+                        >
+                          <item.icon className="h-4 w-4" />
+                          <span>{item.label}</span>
+                        </NavLink>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarContent>
+
+          <SidebarFooter className="px-3 py-3 border-t border-border">
+            {user && (
+              <div className="mb-2 px-1">
+                <p className="text-xs font-medium text-foreground truncate">{user.email || "Signed in"}</p>
+                <p className="text-xs text-muted-foreground truncate">
+                  {user.roles[0]?.replace(/_/g, " ")}
+                </p>
+              </div>
+            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLogout}
+              className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground"
+            >
+              <LogOut className="h-4 w-4" />
+              Sign Out
+            </Button>
+          </SidebarFooter>
+        </Sidebar>
+
+        {/* Main content area */}
+        <div className="flex flex-1 flex-col">
+          <header className="flex h-12 items-center gap-2 border-b border-border px-4 md:hidden">
+            <SidebarTrigger />
+          </header>
+          <main className="flex-1 overflow-y-auto">
+            <Outlet />
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
+  );
+}
+```
+
+Note: The exact Sidebar component exports depend on which shadcn sidebar variant was installed. Read `frontend/src/components/ui/sidebar.tsx` first to confirm available exports. If any import names differ, adjust accordingly. The key structure is: SidebarProvider wraps everything, Sidebar contains header/content/footer, main content renders as Outlet.
+  </action>
+  <verify>
+    <automated>cd /d/capstone-hsms/frontend && npm run typecheck && npm run build</automated>
+  </verify>
+  <acceptance_criteria>
+    - frontend/src/layouts/AppShell.tsx exists
+    - frontend/src/layouts/AppShell.tsx contains "AppShell"
+    - frontend/src/layouts/AppShell.tsx contains "SidebarProvider"
+    - frontend/src/layouts/AppShell.tsx contains "Outlet"
+    - frontend/src/layouts/AppShell.tsx contains "/dashboard"
+    - frontend/src/layouts/AppShell.tsx contains "/admin/users"
+    - frontend/src/layouts/AppShell.tsx contains "system_admin"
+    - frontend/src/layouts/AppShell.tsx contains "logout"
+    - frontend/src/App.tsx contains "AppShell"
+    - cd /d/capstone-hsms/frontend && npm run typecheck exits 0
+    - cd /d/capstone-hsms/frontend && npm run build exits 0
+  </acceptance_criteria>
+  <done>AppShell renders shadcn sidebar-07 with role-filtered nav; protected pages render inside it via Outlet; system_admin sees Users link; all other roles see Dashboard link; Sign Out in sidebar footer.</done>
 </task>
 
 </tasks>
@@ -521,11 +710,18 @@ npm run typecheck
 npm run build
 
 # Key files exist
-ls src/lib/axios.ts src/lib/auth.ts src/contexts/AuthContext.tsx src/hooks/useAuth.ts src/components/ProtectedRoute.tsx src/features/auth/types.ts src/features/auth/api.ts
+ls src/lib/axios.ts src/lib/auth.ts src/contexts/AuthContext.tsx src/hooks/useAuth.ts src/components/ProtectedRoute.tsx src/features/auth/types.ts src/features/auth/api.ts src/layouts/AppShell.tsx
 
 # Axios interceptor wired
 grep "isRefreshing" src/lib/axios.ts
 grep "AuthProvider" src/main.tsx
+
+# AuthContext uses async/await (no chained .then)
+grep "restoreSession" src/contexts/AuthContext.tsx
+grep -v ".then(" src/contexts/AuthContext.tsx | grep "restoreSession" && echo "async pattern OK"
+
+# AppShell wired in App.tsx
+grep "AppShell" src/App.tsx
 ```
 </verification>
 
@@ -533,8 +729,11 @@ grep "AuthProvider" src/main.tsx
 - npm run typecheck exits 0
 - npm run build exits 0
 - Axios client sends Bearer token; 401 interceptor retries with refreshed token
+- AuthContext useEffect uses async/await pattern (no .then() chains); jwtDecode is a static import
 - AuthContext provides user, login(), logout(), isLoading
 - ProtectedRoute redirects to /login when unauthenticated; to /unauthorized when wrong role
+- AppShell renders sidebar-07 with Dashboard link (all non-admin roles) and Users link (system_admin only)
+- Protected routes in App.tsx render inside AppShell via Outlet
 - App.tsx has router skeleton with /login, /dashboard, /admin/users routes
 - main.tsx wraps App in AuthProvider
 </success_criteria>
