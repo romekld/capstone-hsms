@@ -5,7 +5,7 @@ milestone_name: Clinical Core
 status: planning
 stopped_at: v2 Foundation milestone archived — ready to start Phase 3
 last_updated: "2026-03-18T00:00:00.000Z"
-last_activity: "2026-03-18 — v2 Foundation milestone archived (Phases 1-2, 12 plans)"
+last_activity: "2026-03-17 — Completed quick task 260318-ao6: redesign create user component from modal Dialog to Sheet side panel with improved form fields"
 progress:
   total_phases: 9
   completed_phases: 2
@@ -116,6 +116,12 @@ Recent decisions affecting current work:
 ### Pending Todos
 
 None yet.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260318-ao6 | the current create user component is modal. can we redesign it into a new dedicated section and not a modal one? and redesign the form fields into more userfriendly and intuitive. use existing shadcn components or blocks for forms. | 2026-03-17 | 33dfed3 | [260318-ao6-the-current-create-user-component-is-mod](./quick/260318-ao6-the-current-create-user-component-is-mod/) |
 
 ### Blockers/Concerns
 
