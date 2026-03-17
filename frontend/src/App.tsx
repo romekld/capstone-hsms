@@ -4,8 +4,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AppShell } from "@/layouts/AppShell";
 import { LoginPage } from "@/pages/LoginPage";
 import { DashboardPage } from "@/pages/DashboardPage";
-
-const UsersPage = () => <div>Users Page — Plan 02-07</div>;
+import { UsersPage } from "@/pages/admin/UsersPage";
 const UnauthorizedPage = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
     <div className="text-center">
