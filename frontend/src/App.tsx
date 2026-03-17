@@ -2,13 +2,18 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AppShell } from "@/layouts/AppShell";
+import { LoginPage } from "@/pages/LoginPage";
+import { DashboardPage } from "@/pages/DashboardPage";
 
-// Pages — will be created in Plans 02-06 and 02-07
-// Using lazy placeholders so the app compiles now
-const LoginPage = () => <div>Login Page — Plan 02-06</div>;
-const DashboardPage = () => <div>Dashboard — Plan 02-06</div>;
 const UsersPage = () => <div>Users Page — Plan 02-07</div>;
-const UnauthorizedPage = () => <div>Unauthorized</div>;
+const UnauthorizedPage = () => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="text-center">
+      <h1 className="text-[28px] font-semibold text-foreground mb-2">Unauthorized</h1>
+      <p className="text-sm text-muted-foreground">You don&apos;t have permission to access this page.</p>
+    </div>
+  </div>
+);
 
 export default function App() {
   return (
