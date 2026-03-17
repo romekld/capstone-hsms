@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-04-PLAN.md — AdminService, admin router (/api/admin/users + /api/admin/audit-logs), full test suite green
-last_updated: "2026-03-17T06:27:50Z"
-last_activity: 2026-03-17 — Plan 02-04 complete (AdminService, admin router, 7 admin tests pass, 57 total tests pass)
+stopped_at: Completed 02-05-PLAN.md — Vite+React+TS scaffold, shadcn init, IBM Plex fonts, OKLCH design tokens in globals.css
+last_updated: "2026-03-17T06:47:12.592Z"
+last_activity: 2026-03-17 — Plan 02-04 complete (AdminService, admin router, /api/admin/audit-logs, 7 admin tests pass)
 progress:
   total_phases: 9
   completed_phases: 1
   total_plans: 12
-  completed_plans: 8
+  completed_plans: 9
   percent: 18
 ---
 
@@ -56,6 +56,7 @@ Progress: [██░░░░░░░░] 18% (Phase 2, Plan 4/9)
 | Phase 02 P03a | 7min | 2 tasks | 10 files |
 | Phase 02 P03b | 3 | 2 tasks | 10 files |
 | Phase 02 P04 | 25min | 2 tasks | 9 files |
+| Phase 02 P05 | 13 | 2 tasks | 55 files |
 
 ## Accumulated Context
 
@@ -94,6 +95,10 @@ Recent decisions affecting current work:
 - [Plan 02-04]: require_role() returns Depends(_guard) — passed directly to router-level dependencies, not double-wrapped in Depends()
 - [Plan 02-04]: conftest overrides get_async_session per test so ASGITransport tests use test DB — prevents main DB contamination
 - [Plan 02-04]: audit_logs created in conftest with append-only RULEs — test DB has same append-only constraints as production
+- [Phase 02-05]: Removed embedded .git from frontend/ — npm create vite inits a git repo; deleted before staging in parent repo
+- [Phase 02-05]: .npmrc legacy-peer-deps=true committed in frontend/ — @tailwindcss/vite@4.2.1 peer requires vite^5/6/7, project uses vite@8; resolves without downgrading
+- [Phase 02-05]: globals.css at src/styles/globals.css (not src/index.css) per plan spec; components.json CSS path updated accordingly
+- [Phase 02-05]: shadcn base-nova style with OKLCH tokens; globals.css overwrites preset with UI-SPEC CHO 2 brand palette including --status-*, --bhs-tier, --cho-tier
 
 ### Pending Todos
 
@@ -108,6 +113,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-17T06:27:50Z
-Stopped at: Completed 02-04-PLAN.md — AdminService, admin router (/api/admin/users + /api/admin/audit-logs), full test suite green (57 passed)
+Last session: 2026-03-17T06:47:12.585Z
+Stopped at: Completed 02-05-PLAN.md — Vite+React+TS scaffold, shadcn init, IBM Plex fonts, OKLCH design tokens in globals.css
 Resume file: None
