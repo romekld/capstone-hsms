@@ -55,7 +55,7 @@ A real user can log in with email/password, receive JWT tokens (PyJWT), stay log
 - No special handling in BaseRepository or service layer needed; the router-level RBAC gate is sufficient
 
 ### Admin Panel — Frontend Scope
-- **Login page:** Clean full-screen centered card layout (shadcn `login-01` or `login-02` block), email + password fields, no registration link (accounts are system_admin-provisioned only)
+- **Login page:** Clean full-screen centered card layout (shadcn `login-02` block), email + password fields, no registration link (accounts are system_admin-provisioned only)
 - **Post-login routing:** Role-specific redirect — system_admin → `/admin/users`; all other roles → `/dashboard` (placeholder until Phase 3); sidebar navigation with role-filtered links built with shadcn `sidebar-*` blocks
 - **User list table:** Columns: full name, email, role(s), BHS assignment, active status, created date. Sortable, with deactivate/reactivate action per row.
 - **Create/Edit user modal:** Fields: full name, email, password (manual entry on create; optional reset on edit), role multi-select (7 checkboxes with system_admin exclusivity enforced in UI and backend), BHS assignment searchable dropdown (32 stations by name; field hidden/disabled when system_admin is selected)
