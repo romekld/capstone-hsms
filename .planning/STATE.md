@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-05-PLAN.md — Vite+React+TS scaffold, shadcn init, IBM Plex fonts, OKLCH design tokens in globals.css
-last_updated: "2026-03-17T06:47:12.592Z"
+stopped_at: Completed 02-05b-PLAN.md — Axios 401 interceptor, AuthContext, ProtectedRoute, AppShell sidebar-07 with role-filtered nav
+last_updated: "2026-03-17T06:59:41.901Z"
 last_activity: 2026-03-17 — Plan 02-04 complete (AdminService, admin router, /api/admin/audit-logs, 7 admin tests pass)
 progress:
   total_phases: 9
   completed_phases: 1
   total_plans: 12
-  completed_plans: 9
+  completed_plans: 10
   percent: 18
 ---
 
@@ -57,6 +57,7 @@ Progress: [██░░░░░░░░] 18% (Phase 2, Plan 4/9)
 | Phase 02 P03b | 3 | 2 tasks | 10 files |
 | Phase 02 P04 | 25min | 2 tasks | 9 files |
 | Phase 02 P05 | 13 | 2 tasks | 55 files |
+| Phase 02 P05b | 7min | 3 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -99,6 +100,8 @@ Recent decisions affecting current work:
 - [Phase 02-05]: .npmrc legacy-peer-deps=true committed in frontend/ — @tailwindcss/vite@4.2.1 peer requires vite^5/6/7, project uses vite@8; resolves without downgrading
 - [Phase 02-05]: globals.css at src/styles/globals.css (not src/index.css) per plan spec; components.json CSS path updated accordingly
 - [Phase 02-05]: shadcn base-nova style with OKLCH tokens; globals.css overwrites preset with UI-SPEC CHO 2 brand palette including --status-*, --bhs-tier, --cho-tier
+- [Phase 02-05b]: SidebarMenuButton uses base-ui render prop (not asChild) — shadcn installation uses @base-ui/react, not Radix
+- [Phase 02-05b]: Axios RetryableConfig extends InternalAxiosRequestConfig with _retry flag — avoids TypeScript strict mode casting errors
 
 ### Pending Todos
 
@@ -113,6 +116,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-17T06:47:12.585Z
-Stopped at: Completed 02-05-PLAN.md — Vite+React+TS scaffold, shadcn init, IBM Plex fonts, OKLCH design tokens in globals.css
+Last session: 2026-03-17T06:59:41.896Z
+Stopped at: Completed 02-05b-PLAN.md — Axios 401 interceptor, AuthContext, ProtectedRoute, AppShell sidebar-07 with role-filtered nav
 Resume file: None
