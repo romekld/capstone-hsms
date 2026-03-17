@@ -15,7 +15,7 @@ async def test_login_success(async_session):
         full_name="Test Nurse",
         hashed_password=hash_password("password123"),
         roles=["nurse"],
-        health_station_id=1,
+        health_station_id=None,  # null avoids FK constraint in test DB (no health_stations fixture)
         is_active=True,
     )
     async_session.add(user)
@@ -39,7 +39,7 @@ async def test_wrong_password(async_session):
         full_name="Test User",
         hashed_password=hash_password("correctpassword"),
         roles=["nurse"],
-        health_station_id=1,
+        health_station_id=None,
         is_active=True,
     )
     async_session.add(user)
@@ -59,7 +59,7 @@ async def test_inactive_user(async_session):
         full_name="Inactive User",
         hashed_password=hash_password("password123"),
         roles=["nurse"],
-        health_station_id=1,
+        health_station_id=None,
         is_active=False,
     )
     async_session.add(user)

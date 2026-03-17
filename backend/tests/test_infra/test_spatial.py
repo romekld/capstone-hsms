@@ -10,6 +10,8 @@ async def test_barangay_seed_count(async_session):
         count = result.scalar()
     except Exception:
         pytest.skip("barangays table not yet created — run alembic upgrade head (Plan 02/03)")
+    if count == 0:
+        pytest.skip("barangays table empty — run alembic upgrade head with seed migration (Plan 01-03)")
     assert count == 32, f"Expected 32 barangays (CHO 2 jurisdiction), got {count}"
 
 

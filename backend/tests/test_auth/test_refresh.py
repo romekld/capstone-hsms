@@ -15,7 +15,7 @@ async def test_refresh_rotates_token(async_session):
         full_name="Refresh Test",
         hashed_password=hash_password("password123"),
         roles=["nurse"],
-        health_station_id=1,
+        health_station_id=None,
         is_active=True,
     )
     async_session.add(user)
@@ -45,7 +45,7 @@ async def test_revoked_token(async_session):
         full_name="Revoked Test",
         hashed_password=hash_password("password123"),
         roles=["nurse"],
-        health_station_id=1,
+        health_station_id=None,
         is_active=True,
     )
     async_session.add(user)

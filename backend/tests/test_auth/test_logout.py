@@ -17,7 +17,7 @@ async def test_logout_revokes_session(async_session):
         full_name="Logout Test",
         hashed_password=hash_password("password123"),
         roles=["nurse"],
-        health_station_id=1,
+        health_station_id=None,
         is_active=True,
     )
     async_session.add(user)
