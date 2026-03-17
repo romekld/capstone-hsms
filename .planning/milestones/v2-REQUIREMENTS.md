@@ -1,3 +1,12 @@
+# Requirements Archive: v2 Foundation
+
+**Archived:** 2026-03-17
+**Status:** SHIPPED
+
+For current requirements, see `.planning/REQUIREMENTS.md`.
+
+---
+
 # Requirements: Project LINK (HSMS)
 
 **Defined:** 2026-03-15

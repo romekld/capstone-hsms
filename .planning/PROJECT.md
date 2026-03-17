@@ -12,17 +12,25 @@ City Health Officer and DSO can detect a Category I disease outbreak and respond
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Docker + docker-compose dev environment (FastAPI, PostgreSQL/PostGIS, Redis, Celery worker+beat, nginx) — v2
+- ✓ PostGIS seeded with Dasmariñas City barangay boundaries + 32 BHS station centroids (SRID 4326) — v2
+- ✓ Soft deletes on all clinical tables (`deleted_at TIMESTAMPTZ`); global `do_orm_execute` auto-filter — v2 (RA 10173)
+- ✓ Append-only `audit_logs` table with append-only PostgreSQL RULE — no PII in server logs — v2
+- ✓ User authentication with JWT — PyJWT access/refresh rotation, hashed refresh token in `user_sessions`, revocation on logout — v2
+- ✓ RBAC via `require_role()` FastAPI dependency — 7 roles enforced at router layer — v2
+- ✓ Barangay data isolation at repository layer — `BaseRepository._isolation_filter()` — v2
+- ✓ `city_health_officer` and `phis_coordinator` read-only cross-BHS access (`CROSS_BHS_ROLES`) — v2
+- ✓ `disease_surveillance_officer` cross-BHS access + PIDSR CRUD foundation — v2 (PIDSR routes deferred to Phase 3+)
+- ✓ `system_admin` exclusive role, manages users/roles/BHS assignment — v2
+- ✓ Admin panel UI — login page, UsersPage, Create/Edit modal, Deactivation AlertDialog, Activity Log tab — v2
 
 ### Active
 
-**Foundation**
-- [ ] User authentication with JWT (email/password, session persistence, refresh token revocation)
-- [ ] RBAC via `require_role()` FastAPI dependency — 7 roles: system_admin, city_health_officer, physician, phis_coordinator, disease_surveillance_officer, nurse/midwife, bhw
-- [ ] Barangay data isolation enforced at repository layer
-- [ ] Soft deletes on all clinical tables (`deleted_at TIMESTAMPTZ`) — RA 10173 compliance
-- [ ] Append-only `audit_logs` table — no PII in server logs
-- [ ] Docker + docker-compose dev environment (PostgreSQL, PostGIS, Redis, Celery, nginx)
+**Known gaps from v2 (tech debt):**
+- INFRA-04 path bug: `gis-data/` not mounted in Docker container — `alembic upgrade head` will `FileNotFoundError` in docker-compose runtime. Fix before Phase 3 startup.
+- nginx double-prefix: `proxy_pass http://backend:8000/` strips `/api`; all routes 404 through port 80. Fix before demo or integration testing.
+- `midwife` role: backend validates it; frontend has no `ROLE_OPTIONS` entry for it.
+- `audit_logs.performed_by` always NULL — actor identity requires JSONB parsing of `new_values`.
 
 **Patient Records**
 - [ ] Unified patient ITR (Individual Treatment Record) with city-wide search via GIN index
@@ -110,6 +118,8 @@ CHO 2 is purpose-built scope — this is not portable to CHO 1/3/4/5 without ful
 
 Known reporting gaps accepted as Phase 1 limitations: M1 MCPR (Family Planning), M1 ENC (Newborn Care), M2 under-5 morbidity (IMCI), Animal Bite PEP missed-dose alerts.
 
+**Shipped v2 (2026-03-18):** ~11,861 LOC (Python + TypeScript). Stack confirmed: FastAPI + SQLAlchemy 2.0 async + PyJWT + pwdlib + Alembic + PostGIS/GeoAlchemy2 + Redis/Celery + React + Vite + shadcn/ui (base-nova, OKLCH tokens). Two known bugs carried as tech debt (GIS mount path, nginx double-prefix). Next: Phase 3 — Patient ITR + Core Data Model.
+
 ## Constraints
 
 - **Timeline**: 4-month build (capstone thesis deadline)
@@ -122,30 +132,36 @@ Known reporting gaps accepted as Phase 1 limitations: M1 MCPR (Family Planning),
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Soft deletes only (no hard DELETE on clinical tables) | RA 10173 Data Privacy Act compliance; audit trail integrity | — Pending |
-| RBAC at router layer via require_role() dependency | Centralized enforcement, not scattered per-endpoint | — Pending |
-| Barangay isolation at repository layer only | Prevents data leakage; single enforcement point | — Pending |
-| Async-first SQLAlchemy 2.0 throughout | FastAPI async; never block event loop | — Pending |
-| ML inference via run_in_threadpool() or Celery | CPU-bound work must not block async endpoints | — Pending |
-| WebSocket auth via JWT query param | Stateless; works with browser WebSocket API limitations | — Pending |
-| IndexedDB + Service Worker for offline (not native app) | BHW uses phone browser; avoids app store distribution | — Pending |
-| Conflict resolution: server wins on newer updated_at; clinical fields → nurse review | Clinical safety; no silent overwrites of patient data | — Pending |
-| system_admin has zero clinical data access | Separation of system management from patient data | — Pending |
-| audit_viewer role merged into system_admin (7 roles total, not 8) | INITIAL_USERFLOW.docx resolution — confirm with CHO 2 before enum definition | — Pending |
+| Soft deletes only (no hard DELETE on clinical tables) | RA 10173 Data Privacy Act compliance; audit trail integrity | ✓ Good — `SoftDeleteMixin` + `do_orm_execute` hook shipped v2 |
+| RBAC at router layer via require_role() dependency | Centralized enforcement, not scattered per-endpoint | ✓ Good — `require_role()` returns `Depends(_guard)`; declarative at router level |
+| Barangay isolation at repository layer only | Prevents data leakage; single enforcement point | ✓ Good — `BaseRepository._isolation_filter()`; `CROSS_BHS_ROLES` frozenset exported for Phase 3+ |
+| Async-first SQLAlchemy 2.0 throughout | FastAPI async; never block event loop | ✓ Good — confirmed `do_orm_execute` on Session (not AsyncSession) works correctly per SQLAlchemy 2.0 docs |
+| ML inference via run_in_threadpool() or Celery | CPU-bound work must not block async endpoints | — Pending (Phase 8) |
+| WebSocket auth via JWT query param | Stateless; works with browser WebSocket API limitations | — Pending (Phase 6) |
+| IndexedDB + Service Worker for offline (not native app) | BHW uses phone browser; avoids app store distribution | — Pending (Phase 9) |
+| Conflict resolution: server wins on newer updated_at; clinical fields → nurse review | Clinical safety; no silent overwrites of patient data | — Pending (Phase 9) |
+| system_admin has zero clinical data access | Separation of system management from patient data | ✓ Good — `system_admin` excluded from `CROSS_BHS_ROLES`; enforced at router layer |
+| audit_viewer role merged into system_admin (7 roles total, not 8) | INITIAL_USERFLOW.docx resolution | ✓ Good — 7-role system shipped and verified |
+| Replace python-jose with PyJWT + pwdlib[argon2] | python-jose abandoned, CVEs; PyJWT 2.12 active, no cryptography dep | ✓ Good — shipped v2; argon2 hashing confirmed |
+| Single docker-compose.yml (no base+override split) | Simplifies solo dev workflow | ✓ Good — shipped v2 |
+| Refresh tokens stored as SHA-256 hash in user_sessions | DB breach cannot yield valid tokens | ✓ Good — shipped v2 |
+| User model uses is_active Boolean (not SoftDeleteMixin) | Deactivation is not deletion; admin tools need to query inactive users | ✓ Good — shipped v2 |
+| roles column is PostgreSQL ARRAY(TEXT) | Avoids JOIN table for RBAC; supports array containment operators | ✓ Good — shipped v2; multi-role (nurse+DSO) confirmed working |
+| BHS station coordinates from barangay polygon centroids | Spatially accurate within Philippines range; real GPS updatable by developer | ✓ Good — shipped v2 via shapely centroid calculation |
 
 ## Open Questions (Blocking)
 
 | Question | Must Resolve Before |
 |----------|---------------------|
-| `consultations.vitals` — discrete columns vs. `vitals JSONB` | Month 1 migration |
-| `ncd_enrollments.condition` — TEXT vs enum vs array (comorbidity) | Month 3 |
-| `epi_vaccinations.vaccine` — TEXT vs enum | Month 2 |
-| `disease_cases.patient_id` — nullable for aggregate Category II rows | Month 1 |
-| `stock_transactions.balance_after` — denormalized vs. live SUM | Month 2 inventory stub |
-| `users.health_station_id` — nullable enforcement for CHO-level roles | Before user creation flows |
-| `sync_queue` retention/cleanup policy | Month 4 offline sync |
-| `TimestampMixin` + `SoftDeleteMixin` pattern confirmation | First Alembic migration |
-| `psgc_code` vs `barangay_code` field name consistency | First migration (FK chains depend on this) |
+| `consultations.vitals` — discrete columns vs. `vitals JSONB` | Phase 3 migration |
+| `ncd_enrollments.condition` — TEXT vs enum vs array (comorbidity) | Phase 5 |
+| `epi_vaccinations.vaccine` — TEXT vs enum | Phase 4 |
+| `disease_cases.patient_id` — nullable for aggregate Category II rows | Phase 6 |
+| `stock_transactions.balance_after` — denormalized vs. live SUM | Phase 9 inventory |
+| `sync_queue` retention/cleanup policy | Phase 9 offline sync |
+| ~~`users.health_station_id` — nullable enforcement for CHO-level roles~~ | ✓ Resolved v2 — `nullable=True` in ORM; JWT payload carries `health_station_id`; isolation layer checks for None |
+| ~~`TimestampMixin` + `SoftDeleteMixin` pattern confirmation~~ | ✓ Resolved v2 — both implemented, `do_orm_execute` tested |
+| ~~`psgc_code` vs `barangay_code` field name consistency~~ | ✓ Resolved v2 — `psgc_code` used consistently in barangay model and FK chains |
 
 ---
-*Last updated: 2026-03-15 after initialization*
+*Last updated: 2026-03-18 after v2 Foundation milestone*
