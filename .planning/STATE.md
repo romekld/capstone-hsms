@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Completed 02-01-PLAN.md — JWT security primitives and User/UserSession models
-last_updated: "2026-03-17T05:35:05Z"
-last_activity: "2026-03-17 — Plan 02-01 complete (PyJWT security.py, User/UserSession ORM models, Alembic migration 0003)"
+stopped_at: Completed 02-02-PLAN.md — Wave 0 test scaffold, 12 auth+RBAC test stubs
+last_updated: "2026-03-17T05:41:29Z"
+last_activity: "2026-03-17 — Plan 02-02 complete (test_auth and test_admin packages, 12 pytest stubs for Wave 2 plans)"
 progress:
   total_phases: 9
   completed_phases: 1
   total_plans: 9
-  completed_plans: 1
-  percent: 11
+  completed_plans: 2
+  percent: 13
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 ## Current Position
 
 Phase: 2 of 9 (Authentication + RBAC + User Management)
-Plan: 1 of 9 in current phase
-Status: In progress — Plan 02-01 complete, proceeding to 02-02
-Last activity: 2026-03-17 — Plan 02-01 complete (PyJWT security.py, User/UserSession ORM models, Alembic migration 0003)
+Plan: 2 of 9 in current phase
+Status: In progress — Plan 02-02 complete, proceeding to 02-03
+Last activity: 2026-03-17 — Plan 02-02 complete (test_auth and test_admin packages, 12 pytest stubs for Wave 2 plans)
 
-Progress: [█░░░░░░░░░] 11% (Phase 2, Plan 1/9)
+Progress: [█░░░░░░░░░] 13% (Phase 2, Plan 2/9)
 
 ## Performance Metrics
 
@@ -43,7 +43,7 @@ Progress: [█░░░░░░░░░] 11% (Phase 2, Plan 1/9)
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| Phase 02 | 1 | ~20 min | ~20 min |
+| Phase 02 | 2 | ~22 min | ~11 min |
 
 **Recent Trend:**
 - Last 5 plans: 02-01 (~20 min)
@@ -52,6 +52,7 @@ Progress: [█░░░░░░░░░] 11% (Phase 2, Plan 1/9)
 *Updated after each plan completion*
 | Phase 01 P01 | 3 | 3 tasks | 17 files |
 | Phase 02 P01 | 20min | 3 tasks | 9 files |
+| Phase 02 P02 | 2min | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -79,6 +80,8 @@ Recent decisions affecting current work:
 - [Plan 02-01]: Refresh tokens stored as SHA-256 hash in user_sessions — DB breach cannot yield valid tokens
 - [Plan 02-01]: JWT sub field is str(user_id) — RFC 7519 requires string subject; callers cast back to int
 - [Plan 02-01]: roles column is PostgreSQL ARRAY(TEXT) — avoids JOIN table for RBAC checks, supports array containment operators
+- [Plan 02-02]: pytest.skip() chosen over pytest.mark.xfail for stubs — skip is explicit declared intent; xfail implies expected failure that might accidentally pass
+- [Plan 02-02]: test_base_repository.py uses synchronous def (not async def) — BaseRepository unit tests exercise pure Python logic without HTTP/DB context
 
 ### Pending Todos
 
@@ -93,6 +96,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-17T05:35:05Z
-Stopped at: Completed 02-01-PLAN.md — JWT security primitives, User/UserSession models, migration 0003
-Resume file: .planning/phases/02-authentication-rbac-user-management/02-02-PLAN.md
+Last session: 2026-03-17T05:41:29Z
+Stopped at: Completed 02-02-PLAN.md — Wave 0 test scaffold (12 auth+RBAC pytest stubs)
+Resume file: .planning/phases/02-authentication-rbac-user-management/02-03-PLAN.md

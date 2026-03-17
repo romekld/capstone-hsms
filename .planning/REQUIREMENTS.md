@@ -21,13 +21,13 @@ Requirements for the 4-month capstone build. Each maps to a roadmap phase.
 - [x] **AUTH-01**: User can log in with email and password; session persists via JWT access + refresh token pair
 - [x] **AUTH-02**: User can log out; refresh token is revoked server-side via `user_sessions` table
 - [x] **AUTH-03**: System enforces 7 RBAC roles: `system_admin`, `city_health_officer`, `physician`, `phis_coordinator`, `disease_surveillance_officer`, `nurse`/`midwife`, `bhw`
-- [ ] **AUTH-04**: `system_admin` role is exclusive — no combination with any clinical role is permitted
+- [x] **AUTH-04**: `system_admin` role is exclusive — no combination with any clinical role is permitted
 - [x] **AUTH-05**: A user may hold `nurse` + `disease_surveillance_officer` simultaneously (BHS Surveillance Focal Person)
-- [ ] **AUTH-06**: `system_admin` can create user accounts, assign roles, and assign users to a barangay health station
-- [ ] **AUTH-07**: All API endpoints enforce RBAC via `require_role()` FastAPI dependency at the router layer
-- [ ] **AUTH-08**: All clinical data queries are filtered by the requesting user's `health_station_id` at the repository layer (barangay isolation)
-- [ ] **AUTH-09**: `city_health_officer` and `phis_coordinator` have read-only access to data from all 32 BHS
-- [ ] **AUTH-10**: `disease_surveillance_officer` has PIDSR CRUD access plus read-only on all other clinical data across all 32 BHS
+- [x] **AUTH-06**: `system_admin` can create user accounts, assign roles, and assign users to a barangay health station
+- [x] **AUTH-07**: All API endpoints enforce RBAC via `require_role()` FastAPI dependency at the router layer
+- [x] **AUTH-08**: All clinical data queries are filtered by the requesting user's `health_station_id` at the repository layer (barangay isolation)
+- [x] **AUTH-09**: `city_health_officer` and `phis_coordinator` have read-only access to data from all 32 BHS
+- [x] **AUTH-10**: `disease_surveillance_officer` has PIDSR CRUD access plus read-only on all other clinical data across all 32 BHS
 
 ### Patient ITR (ITR)
 
