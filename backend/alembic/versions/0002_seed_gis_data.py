@@ -24,16 +24,32 @@ branch_labels = None
 depends_on = None
 
 
+def _resolve_geojson_path() -> str:
+    base_dir = os.path.dirname(__file__)
+    candidate_paths = [
+        os.path.join(base_dir, "../../fixtures/cho2-boundaries.geojson"),
+        os.path.join(base_dir, "../../../gis-data/cho2-boundaries.geojson"),
+        "/gis-data/cho2-boundaries.geojson",
+    ]
+
+    for path in candidate_paths:
+        if os.path.exists(path):
+            return path
+
+    raise FileNotFoundError(
+        "Unable to locate cho2-boundaries.geojson. Checked: "
+        + ", ".join(candidate_paths)
+    )
+
+
 def upgrade() -> None:
     conn = op.get_bind()
 
     # -------------------------------------------------------------------------
     # 1. Seed barangay boundaries from cho2-boundaries.geojson
     # -------------------------------------------------------------------------
-    # Path: alembic/versions/ -> alembic/ -> backend/ -> repo root -> gis-data/
-    geojson_path = os.path.join(
-        os.path.dirname(__file__), "../../gis-data/cho2-boundaries.geojson"
-    )
+    # Prefer backend fixtures, but support optional repo-level mount for local variants.
+    geojson_path = _resolve_geojson_path()
     with open(geojson_path, encoding="utf-8") as f:
         geojson = json.load(f)
 
