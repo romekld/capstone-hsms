@@ -15,7 +15,7 @@ export async function searchPatients(
   page: number = 1,
   pageSize: number = 20
 ): Promise<PatientSearchResponse> {
-  const { data } = await api.get<PatientSearchResponse>("/patients", {
+  const { data } = await api.get<PatientSearchResponse>("/patients/", {
     params: { q, city_wide: cityWide, page, page_size: pageSize },
   });
   return data;
@@ -29,7 +29,7 @@ export async function getPatient(id: number): Promise<PatientResponse> {
 export async function registerPatient(
   body: PatientCreateRequest
 ): Promise<PatientResponse> {
-  const { data } = await api.post<PatientResponse>("/patients", body);
+  const { data } = await api.post<PatientResponse>("/patients/", body);
   return data;
 }
 

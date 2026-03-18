@@ -10,7 +10,7 @@ import re
 from datetime import date
 
 from sqlalchemy import func, select
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import contains_eager, selectinload
 
 from app.models.patient import Patient
 from app.repositories.base import BaseRepository
@@ -34,7 +34,7 @@ class PatientRepository(BaseRepository):
         Returns (patients, total_count).
         BHS-scoped by default; city_wide=True skips isolation for read-only results.
         """
-        base_stmt = select(Patient).join(Patient.health_station)
+        base_stmt = select(Patient).join(Patient.health_station).options(contains_eager(Patient.health_station))
 
         if query_text.strip():
             sanitized = self._sanitize_search_input(query_text)
@@ -72,6 +72,7 @@ class PatientRepository(BaseRepository):
         stmt = (
             select(Patient)
             .join(Patient.health_station)
+            .options(contains_eager(Patient.health_station))
             .where(
                 func.lower(Patient.last_name) == last_name.strip().lower(),
                 func.lower(Patient.first_name) == first_name.strip().lower(),
