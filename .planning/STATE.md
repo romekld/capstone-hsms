@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 04.1-mch-shared-data-model-01-PLAN.md
-last_updated: "2026-03-18T23:26:02.016Z"
+stopped_at: Completed 04.1-mch-shared-data-model-02-PLAN.md
+last_updated: "2026-03-18T23:34:01.848Z"
 last_activity: 2026-03-18 — Phase 3 Plan 02 complete (PatientRepository, ConsultationRepository, PatientService, patient router, 6 API endpoints)
 progress:
   total_phases: 10
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
+  completed_plans: 2
   percent: 82
 ---
 
@@ -67,6 +67,7 @@ Progress: [████████░░] 82% (Phase 3, Plan 2/7)
 | Phase 03-patient-itr-core-data-model P04 | 10min | 1 tasks | 3 files |
 | Phase 03-patient-itr-core-data-model P05 | 5min | 1 tasks | 4 files |
 | Phase 04.1-mch-shared-data-model P01 | 3min | 2 tasks | 5 files |
+| Phase 04.1-mch-shared-data-model P02 | 5min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -135,6 +136,9 @@ Recent decisions affecting current work:
 - [Phase 04.1-mch-shared-data-model]: EpiVaccination.vaccine uses TEXT not ENUM — avoids migration churn if DOH adds vaccines; validated at Pydantic layer
 - [Phase 04.1-mch-shared-data-model]: PostpartumEnrollment.prenatal_enrollment_id nullable (ON DELETE SET NULL) — external facility deliveries may have no prenatal record
 - [Phase 04.1-mch-shared-data-model]: Visit tables have no health_station_id; BHS isolation via JOIN through enrollment — avoids denormalization across 4 extra tables
+- [Phase 04.1-mch-shared-data-model]: create_type=False pattern prevents SQLAlchemy ENUM double-creation when shared ENUM referenced in multiple op.create_table calls via asyncpg
+- [Phase 04.1-mch-shared-data-model]: EPI_VACCINES Pydantic Literal in schemas/epi.py validates vaccine names at API boundary; ORM column stays TEXT to avoid migration churn on DOH schedule updates
+- [Phase 04.1-mch-shared-data-model]: NutritionVisitCreate excludes waz/haz/whz/nutrition_status/severe_wasting — service layer computes on save; excludes from Create prevents client spoofing of ML-derived health classifications
 
 ### Pending Todos
 
@@ -157,6 +161,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-18T23:26:02.007Z
-Stopped at: Completed 04.1-mch-shared-data-model-01-PLAN.md
+Last session: 2026-03-18T23:34:01.841Z
+Stopped at: Completed 04.1-mch-shared-data-model-02-PLAN.md
 Resume file: None
