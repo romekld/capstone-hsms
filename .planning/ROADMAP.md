@@ -23,7 +23,7 @@ See `.planning/milestones/v2-ROADMAP.md` for full phase details.
 
 ### 📋 v3 Clinical Core (Phases 3–9)
 
-- [ ] **Phase 3: Patient ITR + Core Data Model** — Unified patient registration, duplicate detection, BHS-scoped and city-wide search, general consultations
+- [x] **Phase 3: Patient ITR + Core Data Model** — Unified patient registration, duplicate detection, BHS-scoped and city-wide search, general consultations (completed 2026-03-18)
   - **Goal:** Working patient registration and consultation recording system with city-wide duplicate detection and BHS-scoped access control
   - **Requirements:** [P3-01, P3-02, P3-03, P3-04, P3-05, P3-06, P3-07, P3-08, P3-09, P3-10]
   - **Plans:** 5 plans
@@ -45,7 +45,7 @@ See `.planning/milestones/v2-ROADMAP.md` for full phase details.
 |-------|-----------|----------------|--------|-----------|
 | 1. Infrastructure + DevOps | v2 | 3/3 | Complete | 2026-03-15 |
 | 2. Authentication + RBAC + User Management | v2 | 9/9 | Complete | 2026-03-17 |
-| 3. Patient ITR + Core Data Model | 4/5 | In Progress|  | - |
+| 3. Patient ITR + Core Data Model | 5/5 | Complete   | 2026-03-18 | - |
 | 4. Maternal + Child Health Programs | v3 | 0/TBD | Not started | - |
 | 5. TB-DOTS + NCD Programs | v3 | 0/TBD | Not started | - |
 | 6. Disease Surveillance + Real-Time Alerts | v3 | 0/TBD | Not started | - |
