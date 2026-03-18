@@ -6,6 +6,7 @@ import { LoginPage } from "@/pages/LoginPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { UsersPage } from "@/pages/admin/UsersPage";
 import { CreateUserPage } from "@/pages/admin/CreateUserPage";
+import { EditUserPage } from "@/pages/admin/EditUserPage";
 import { Button } from "@/components/ui/button";
 import { ShieldX, ArrowLeft } from "lucide-react";
 
@@ -52,6 +53,7 @@ export default function App() {
           <Route element={<AppShell />}>
             <Route path="/admin/users" element={<UsersPage />} />
             <Route path="/admin/users/new" element={<CreateUserPage />} />
+            <Route path="/admin/users/:id/edit" element={<EditUserPage />} />
           </Route>
         </Route>
 

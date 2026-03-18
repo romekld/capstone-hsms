@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { ArrowUp, ArrowDown, MoreHorizontal, Eye, EyeOff } from "lucide-react";
+import { ArrowUp, ArrowDown, MoreHorizontal } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,31 +21,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -59,269 +33,17 @@ import {
 } from "@/components/ui/table";
 
 import {
-  createUser,
   deactivateUser,
   listAuditLogs,
   listUsers,
   reactivateUser,
-  updateUser,
 } from "@/features/admin/api";
 import { HEALTH_STATIONS } from "@/features/admin/healthStations";
 import {
   ROLE_OPTIONS,
   type AuditLogEntry,
-  type UserCreateRequest,
   type UserListItem,
 } from "@/features/admin/types";
-
-// --- Create/Edit User Sheet ---
-interface UserSheetProps {
-  open: boolean;
-  editTarget: UserListItem | null; // null = create mode
-  onClose: () => void;
-  onSuccess: () => void;
-}
-
-function UserSheet({ open, editTarget, onClose, onSuccess }: UserSheetProps) {
-  const isEdit = !!editTarget;
-  const [fullName, setFullName] = useState(editTarget?.full_name ?? "");
-  const [email, setEmail] = useState(editTarget?.email ?? "");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [selectedRoles, setSelectedRoles] = useState<string[]>(editTarget?.roles ?? []);
-  const [healthStationId, setHealthStationId] = useState<number | null>(
-    editTarget?.health_station_id ?? null
-  );
-  const [isLoading, setIsLoading] = useState(false);
-  const [fieldError, setFieldError] = useState<string | null>(null);
-
-  // Reset form when sheet opens/closes
-  useEffect(() => {
-    if (open) {
-      setFullName(editTarget?.full_name ?? "");
-      setEmail(editTarget?.email ?? "");
-      setPassword("");
-      setSelectedRoles(editTarget?.roles ?? []);
-      setHealthStationId(editTarget?.health_station_id ?? null);
-      setFieldError(null);
-    }
-  }, [open, editTarget]);
-
-  const isSystemAdmin = selectedRoles.includes("system_admin");
-
-  const handleRoleChange = (role: string, checked: boolean) => {
-    if (checked) {
-      if (role === "system_admin") {
-        setSelectedRoles(["system_admin"]);
-        setHealthStationId(null);
-      } else {
-        setSelectedRoles((prev) => prev.filter((r) => r !== "system_admin").concat(role));
-      }
-    } else {
-      setSelectedRoles((prev) => prev.filter((r) => r !== role));
-    }
-  };
-
-  const handleSubmit = async () => {
-    setFieldError(null);
-    setIsLoading(true);
-    try {
-      if (isEdit && editTarget) {
-        await updateUser(editTarget.id, {
-          full_name: fullName,
-          roles: selectedRoles,
-          health_station_id: isSystemAdmin ? null : healthStationId,
-          ...(password ? { password } : {}),
-        });
-        toast.success("User updated successfully.");
-      } else {
-        const body: UserCreateRequest = {
-          email,
-          full_name: fullName,
-          password,
-          roles: selectedRoles,
-          health_station_id: isSystemAdmin ? null : healthStationId,
-        };
-        await createUser(body);
-        toast.success("User created successfully.");
-      }
-      onSuccess();
-      onClose();
-    } catch (err: unknown) {
-      const status = (err as { response?: { status: number; data?: { detail?: string } } })
-        ?.response?.status;
-      const detail =
-        (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ?? "";
-      if (status === 422 && detail.includes("system_admin")) {
-        setFieldError("system_admin cannot be combined with other roles.");
-      } else if (status === 409) {
-        setFieldError("This email is already in use.");
-      } else {
-        toast.error("Something went wrong. Try again.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
-      <SheetContent side="right" className="w-full sm:max-w-[480px] overflow-y-auto flex flex-col">
-        <SheetHeader className="px-6 pt-6 pb-2">
-          <SheetTitle>
-            {isEdit ? `Edit User — ${editTarget?.full_name}` : "Create User"}
-          </SheetTitle>
-        </SheetHeader>
-
-        <div className="flex-1 overflow-y-auto px-6 pb-4">
-          <FieldGroup>
-            {/* Full Name */}
-            <Field>
-              <FieldLabel htmlFor="full-name">Full Name</FieldLabel>
-              <Input
-                id="full-name"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-                className="h-11"
-              />
-            </Field>
-
-            {/* Email — only editable on create */}
-            {!isEdit && (
-              <Field data-invalid={fieldError?.includes("email") ? true : undefined}>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="h-11"
-                  aria-invalid={fieldError?.includes("email") ? true : undefined}
-                />
-                {fieldError?.includes("email") && (
-                  <FieldError>{fieldError}</FieldError>
-                )}
-              </Field>
-            )}
-
-            {/* Password */}
-            <Field>
-              <FieldLabel htmlFor="password">
-                Password
-                {isEdit && (
-                  <span className="ml-1 text-xs font-normal text-muted-foreground">
-                    (leave blank to keep current)
-                  </span>
-                )}
-              </FieldLabel>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder={isEdit ? "Leave blank to keep current password" : undefined}
-                  required={!isEdit}
-                  className="h-11 pr-10"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((s) => !s)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? <EyeOff data-icon /> : <Eye data-icon />}
-                </button>
-              </div>
-            </Field>
-          </FieldGroup>
-
-          {/* Roles */}
-          <FieldSet className="mt-5">
-            <FieldLegend variant="label">Roles</FieldLegend>
-            {fieldError?.includes("system_admin") && (
-              <FieldError className="-mt-2">{fieldError}</FieldError>
-            )}
-            <div className="flex flex-col gap-1">
-              {ROLE_OPTIONS.map(({ value, label }) => (
-                <div key={value} className="flex items-center gap-3 min-h-[40px]">
-                  <Checkbox
-                    id={`role-${value}`}
-                    checked={selectedRoles.includes(value)}
-                    onCheckedChange={(checked) => handleRoleChange(value, !!checked)}
-                    disabled={isSystemAdmin && value !== "system_admin"}
-                    className={isSystemAdmin && value !== "system_admin" ? "opacity-50" : ""}
-                  />
-                  <Label
-                    htmlFor={`role-${value}`}
-                    className={`text-sm font-normal cursor-pointer ${
-                      isSystemAdmin && value !== "system_admin" ? "opacity-50" : ""
-                    }`}
-                  >
-                    {label}
-                  </Label>
-                </div>
-              ))}
-            </div>
-          </FieldSet>
-
-          {/* BHS Assignment — hidden when system_admin selected */}
-          {!isSystemAdmin && (
-            <FieldGroup className="mt-5">
-              <Field>
-                <FieldLabel>BHS Assignment</FieldLabel>
-                <Select
-                  value={healthStationId != null ? String(healthStationId) : null}
-                  onValueChange={(v) => setHealthStationId(v ? Number(v) : null)}
-                >
-                  <SelectTrigger className="h-11 w-full">
-                    <SelectValue placeholder="— No BHS assignment —" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {HEALTH_STATIONS.map((hs) => (
-                      <SelectItem key={hs.id} value={String(hs.id)}>
-                        {hs.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FieldDescription>
-                  Required for Nurse, Midwife, Physician, and BHW roles.
-                </FieldDescription>
-              </Field>
-            </FieldGroup>
-          )}
-        </div>
-
-        <SheetFooter className="flex-row gap-2 px-6 py-4 border-t">
-          <Button variant="outline" onClick={onClose} disabled={isLoading} className="flex-1">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            disabled={
-              isLoading || !fullName || (!isEdit && !email) || selectedRoles.length === 0
-            }
-            className="flex-1 bg-primary hover:bg-primary/90"
-          >
-            {isLoading ? (
-              <span className="flex items-center gap-2">
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                Saving...
-              </span>
-            ) : isEdit ? (
-              "Save Changes"
-            ) : (
-              "Save User"
-            )}
-          </Button>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
-  );
-}
 
 // --- Deactivation AlertDialog ---
 interface DeactivateDialogProps {
@@ -460,8 +182,6 @@ export function UsersPage() {
   const [users, setUsers] = useState<UserListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
-  const [sheetOpen, setSheetOpen] = useState(false);
-  const [editTarget, setEditTarget] = useState<UserListItem | null>(null);
   const [deactivateTarget, setDeactivateTarget] = useState<UserListItem | null>(null);
   const [sortKey, setSortKey] = useState<keyof UserListItem>("full_name");
   const [sortAsc, setSortAsc] = useState(true);
@@ -679,10 +399,7 @@ export function UsersPage() {
                           />
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem
-                              onClick={() => {
-                                setEditTarget(user);
-                                setSheetOpen(true);
-                              }}
+                              onClick={() => navigate(`/admin/users/${user.id}/edit`)}
                             >
                               Edit
                             </DropdownMenuItem>
@@ -712,16 +429,6 @@ export function UsersPage() {
             <ActivityLogTab />
           </TabsContent>
         </Tabs>
-
-        <UserSheet
-          open={sheetOpen}
-          editTarget={editTarget}
-          onClose={() => {
-            setSheetOpen(false);
-            setEditTarget(null);
-          }}
-          onSuccess={loadUsers}
-        />
 
         <DeactivateDialog
           user={deactivateTarget}
