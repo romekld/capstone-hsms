@@ -33,7 +33,7 @@ See `.planning/milestones/v2-ROADMAP.md` for full phase details.
     - [ ] 03-04-PLAN.md — Patient registration page with duplicate detection UX
     - [ ] 03-05-PLAN.md — Patient profile page + Add Consultation page
 - [ ] **Phase 4: Maternal + Child Health Programs** *(head phase — delivered via sub-phases 4.1–4.4)*
-  - [ ] **Phase 4.1: MCH Shared Data Model** — ORM models, Pydantic schemas, and single Alembic migration for all eight MCH tables (prenatal, postpartum, EPI, nutrition)
+  - [x] **Phase 4.1: MCH Shared Data Model** — ORM models, Pydantic schemas, and single Alembic migration for all eight MCH tables (prenatal, postpartum, EPI, nutrition) (completed 2026-03-18)
   - [ ] **Phase 4.2: Prenatal + Postpartum Programs** — Prenatal enrollment/visits/overdue/high-risk flags + postpartum delivery recording with Day 1/Week 1/Week 6 auto-schedule
   - [ ] **Phase 4.3: EPI Vaccination Program** — Dose sequence enforcement, vaccine grid UI, auto-scheduling, defaulter detection, FIC computation
   - [ ] **Phase 4.4: Nutrition / OPT+ Program** — WHO Z-score auto-computation, severe wasting at-risk flag, Vitamin A/iron/deworming eligibility by age band
@@ -176,7 +176,7 @@ Plans:
 | 2. Authentication + RBAC + User Management | v2 | 9/9 | Complete | 2026-03-17 |
 | 3. Patient ITR + Core Data Model | v3 | 5/5 | Complete | 2026-03-18 |
 | 4. Maternal + Child Health Programs | v3 | — | Head phase (see 4.1–4.4) | — |
-| 4.1. MCH Shared Data Model | 1/2 | In Progress|  | — |
+| 4.1. MCH Shared Data Model | 1/2 | Complete    | 2026-03-18 | — |
 | 4.2. Prenatal + Postpartum Programs | v3 | 0/TBD | Not started | — |
 | 4.3. EPI Vaccination Program | v3 | 0/TBD | Not started | — |
 | 4.4. Nutrition / OPT+ Program | v3 | 0/TBD | Not started | — |
