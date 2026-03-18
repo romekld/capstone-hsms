@@ -5,6 +5,7 @@ import { AppShell } from "@/layouts/AppShell";
 import { LoginPage } from "@/pages/LoginPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { UsersPage } from "@/pages/admin/UsersPage";
+import { CreateUserPage } from "@/pages/admin/CreateUserPage";
 import { Button } from "@/components/ui/button";
 import { ShieldX, ArrowLeft } from "lucide-react";
 
@@ -50,6 +51,7 @@ export default function App() {
         <Route element={<ProtectedRoute allowedRoles={["system_admin"]} />}>
           <Route element={<AppShell />}>
             <Route path="/admin/users" element={<UsersPage />} />
+            <Route path="/admin/users/new" element={<CreateUserPage />} />
           </Route>
         </Route>
 

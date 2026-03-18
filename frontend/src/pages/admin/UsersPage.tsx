@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ArrowUp, ArrowDown, MoreHorizontal, Eye, EyeOff } from "lucide-react";
 
@@ -455,6 +456,7 @@ function ActivityLogTab() {
 
 // --- Main UsersPage ---
 export function UsersPage() {
+  const navigate = useNavigate();
   const [users, setUsers] = useState<UserListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
@@ -546,10 +548,7 @@ export function UsersPage() {
                 <TabsTrigger value="activity">Activity Log</TabsTrigger>
               </TabsList>
               <Button
-                onClick={() => {
-                  setEditTarget(null);
-                  setSheetOpen(true);
-                }}
+                onClick={() => navigate("/admin/users/new")}
                 className="bg-primary hover:bg-primary/90"
               >
                 Create User
@@ -578,10 +577,7 @@ export function UsersPage() {
                 </p>
                 <Button
                   className="mt-4 bg-primary hover:bg-primary/90"
-                  onClick={() => {
-                    setEditTarget(null);
-                    setSheetOpen(true);
-                  }}
+                  onClick={() => navigate("/admin/users/new")}
                 >
                   Create User
                 </Button>
