@@ -13,12 +13,22 @@ const PAGE_TITLES: Record<string, string> = {
   "/patients": "Patients",
   "/patients/new": "Register Patient",
   "/admin/users": "User Management",
+  "/admin/users/new": "Create User",
   "/unauthorized": "Access Restricted",
+}
+
+function resolvePageTitle(pathname: string): string {
+  if (PAGE_TITLES[pathname]) return PAGE_TITLES[pathname];
+  // Dynamic patient profile routes
+  if (pathname.startsWith("/patients")) return "Patients";
+  // Dynamic admin routes
+  if (pathname.startsWith("/admin/users")) return "User Management";
+  return "LINK";
 }
 
 export function AppShell() {
   const location = useLocation()
-  const pageTitle = PAGE_TITLES[location.pathname] ?? "LINK"
+  const pageTitle = resolvePageTitle(location.pathname)
 
   return (
     <SidebarProvider>

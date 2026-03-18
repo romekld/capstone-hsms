@@ -9,6 +9,7 @@ import { CreateUserPage } from "@/pages/admin/CreateUserPage";
 import { EditUserPage } from "@/pages/admin/EditUserPage";
 import { PatientsPage } from "@/pages/patients/PatientsPage";
 import { RegisterPatientPage } from "@/pages/patients/RegisterPatientPage";
+import { PatientProfilePage } from "@/pages/patients/PatientProfilePage";
 import { Button } from "@/components/ui/button";
 import { ShieldX, ArrowLeft } from "lucide-react";
 
@@ -65,7 +66,7 @@ export default function App() {
             <Route path="/patients" element={<PatientsPage />} />
             {/* /patients/new must be before /patients/:id — React Router first-wins */}
             <Route path="/patients/new" element={<RegisterPatientPage />} />
-            {/* /patients/:id added in Plan 05 */}
+            <Route path="/patients/:id" element={<PatientProfilePage />} />
           </Route>
         </Route>
 
