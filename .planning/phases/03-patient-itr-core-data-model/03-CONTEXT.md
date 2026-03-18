@@ -8,10 +8,20 @@
 
 Unified patient registration, city-wide duplicate detection, BHS-scoped and city-wide patient search, and general consultations. Every later clinical program (Phases 4–8) links to the `patient_id` FK established here. Clinical program enrollments (prenatal, EPI, TB, NCD) are out of scope — Phase 4+.
 
+**Who operates this phase:** Nurse and midwife register patients and record consultations. Physician can view and add consultations. CHO/DSO/coordinator have read-only city-wide access. **BHW has zero access in Phase 3.**
+
+**BHW scope clarification (confirmed):** BHW offline field entry (mobile-first PWA, IndexedDB, background sync) is fully Phase 9. Phase 3 does not build any BHW-facing UI or grant BHW role any patient access. Phase 9 will implement the BHW interface as a new frontend surface pointing to the same `patients` and `consultations` tables via `patient_id` FK. `local_id UUID` and `status record_status` sync columns are added in Phase 9 — not Phase 3.
+
 </domain>
 
 <decisions>
 ## Implementation Decisions
+
+### Role Access
+- **Nurse / Midwife:** Full CRUD — register patients, record consultations, run duplicate check, search patients (own BHS default, city-wide toggle)
+- **Physician:** Create consultations + view patient records (clinical notes, diagnoses scope per CLAUDE.md)
+- **CHO / DSO / PHIS Coordinator:** Read-only, city-wide patient search (already in CROSS_BHS_ROLES)
+- **BHW:** Zero access in Phase 3 — no patient lookup, no profile view, no consultation entry
 
 ### Vitals Model
 - **Hybrid approach:** Core vitals as discrete typed columns; additional vitals in `vitals_extra JSONB`.
@@ -41,12 +51,18 @@ Unified patient registration, city-wide duplicate detection, BHS-scoped and city
 - **Search fields:** Full-text GIN index on `last_name + first_name` tsvector; exact match on auto-generated `patient_id`. Name search is case-insensitive, partial-match capable.
 - **UI placement:** Dedicated `/patients` route with a search bar at top, sortable results table (columns: name, birthdate, sex, BHS, registration date), Register button. Clicking a row opens the patient profile page.
 
+### Patient Profile Page
+- **Layout:** Header card + Consultations tab only. No placeholder tabs for Phase 4–8 programs — clean, functional, no empty sections.
+- **Header card fields:** Name, birthdate, sex, age (computed), BHS. No mobile number or address in the header — keeps it focused on identity confirmation.
+- **Consultations tab:** Sortable table, default sort newest first. Columns: date, chief complaint, diagnosis, referring_to, recorded by.
+- **Add Consultation:** Button on the profile page — opens a Sheet side panel with consultation form (chief complaint required; vitals and diagnosis optional).
+
 ### Claude's Discretion
 - Auto-generated `patient_id` format (e.g., sequential INT PK, or a formatted code like `BHS##-YYYYNNNN`).
 - GIN index definition and tsvector configuration for name search.
 - Alembic migration structure for the `patients` and `consultations` tables.
-- Patient profile page layout (what tabs/sections to show, what programs are listed).
 - Error message wording for duplicate warning and city-wide read-only enforcement.
+- Exact consultation form field layout within the Sheet panel.
 
 </decisions>
 
@@ -85,9 +101,9 @@ Unified patient registration, city-wide duplicate detection, BHS-scoped and city
 ### Reusable Assets
 - `BaseRepository` (`backend/app/repositories/base.py`): `PatientRepository` and `ConsultationRepository` inherit from this. `_isolation_filter()` handles BHS-scoping automatically. Import `CROSS_BHS_ROLES` for city-wide search toggle logic.
 - `TimestampMixin` + `SoftDeleteMixin` (`backend/app/core/base.py`): Apply both to `patients` and `consultations` models. Soft-delete filter is automatic via `do_orm_execute` hook.
-- shadcn `table`, `pagination`, `skeleton` components: Already installed. Use for the patient search results table with loading skeleton.
-- shadcn `sheet` component: Already installed. Consider for patient registration form (matches existing Create User pattern from Phase 2).
-- shadcn `badge`: Use for patient status indicators (e.g., possible_duplicate flag, active/inactive).
+- shadcn `table`, `pagination`, `skeleton` components: Already installed. Use for the patient search results table and consultations history table with loading skeleton.
+- shadcn `sheet` component: Already installed. Use for patient registration form (matches Phase 2 Create User pattern) and Add Consultation form.
+- shadcn `badge`: Use for patient status indicators (e.g., `possible_duplicate` flag, BHS label on city-wide search results).
 
 ### Established Patterns
 - All relationships use `lazy="raise"` — explicit joins only; never rely on lazy loading.
@@ -111,22 +127,26 @@ Unified patient registration, city-wide duplicate detection, BHS-scoped and city
 - "Continue anyway" on duplicate must be audit-logged so the admin can review intentional duplicate registrations and merge/deactivate later.
 - City-wide search results should clearly show which BHS the patient belongs to (badge or column), so the nurse knows whose record it is before clicking through.
 - The patient registration form should feel similar to the Create User sheet panel (Phase 2 deliverable) — consistent UX for admin staff learning the system.
+- Patient profile header: confirmed fields are name, birthdate, sex, age (computed), BHS — keep it focused on identity confirmation at a glance.
 
 </specifics>
 
 <deferred>
 ## Deferred Ideas
 
+- BHW patient access (read-only or entry) — zero BHW access in Phase 3; all BHW-facing UI is Phase 9 (offline PWA + background sync).
+- `local_id UUID` + `status record_status` sync columns on `patients` and `consultations` — add via migration in Phase 9 when offline sync is implemented.
 - PhilHealth ID + membership type — not needed for Phase 3–7 clinical logic; defer to Phase 8 (FHSIS) or a later admin phase.
 - Civil status / occupation — may be needed for FHSIS M1/M2 formulas; defer to Phase 8 and add via migration.
 - Guardian / emergency contact — defer to Phase 4 (child health programs where guardian info is clinically relevant).
 - Global Cmd+K patient search (command palette) — defer to a polish/UX phase after clinical core is complete.
 - Patient merge / deactivate duplicate workflow — defer to admin tooling after Phase 3; `possible_duplicate` flag enables this later.
 - ICD-10 code picker / autocomplete for diagnosis field — defer; free text is sufficient for Phase 3.
+- Program tabs on patient profile (Prenatal, EPI, TB, NCD) — added progressively in Phases 4–8 as programs are built.
 
 </deferred>
 
 ---
 
 *Phase: 03-patient-itr-core-data-model*
-*Context gathered: 2026-03-18*
+*Context gathered: 2026-03-18 (updated)*
