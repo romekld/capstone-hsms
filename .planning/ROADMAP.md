@@ -24,6 +24,14 @@ See `.planning/milestones/v2-ROADMAP.md` for full phase details.
 ### 📋 v3 Clinical Core (Phases 3–9)
 
 - [ ] **Phase 3: Patient ITR + Core Data Model** — Unified patient registration, duplicate detection, BHS-scoped and city-wide search, general consultations
+  - **Goal:** Working patient registration and consultation recording system with city-wide duplicate detection and BHS-scoped access control
+  - **Requirements:** [P3-01, P3-02, P3-03, P3-04, P3-05, P3-06, P3-07, P3-08, P3-09, P3-10]
+  - **Plans:** 5 plans
+    - [ ] 03-01-PLAN.md — Patient + Consultation ORM models, Pydantic schemas, Alembic migration
+    - [ ] 03-02-PLAN.md — Backend API layer: repositories, service, router with RBAC + audit logging
+    - [ ] 03-03-PLAN.md — Frontend types, API client, Patient Search page with sidebar integration
+    - [ ] 03-04-PLAN.md — Patient registration page with duplicate detection UX
+    - [ ] 03-05-PLAN.md — Patient profile page + Add Consultation page
 - [ ] **Phase 4: Maternal + Child Health Programs** — Prenatal, postpartum, EPI vaccination, and nutrition modules with scheduling, overdue detection, WHO Z-scores
 - [ ] **Phase 5: TB-DOTS + NCD Programs** — TB case management with daily DOTS and sputum tracking, NCD enrollment with PhilPEN risk stratification
 - [ ] **Phase 6: Disease Surveillance + Real-Time Alerts** — Category I/II disease cases, WebSocket alerts, PIDSR validation, Category II batch export
@@ -37,7 +45,7 @@ See `.planning/milestones/v2-ROADMAP.md` for full phase details.
 |-------|-----------|----------------|--------|-----------|
 | 1. Infrastructure + DevOps | v2 | 3/3 | Complete | 2026-03-15 |
 | 2. Authentication + RBAC + User Management | v2 | 9/9 | Complete | 2026-03-17 |
-| 3. Patient ITR + Core Data Model | v3 | 0/TBD | Not started | - |
+| 3. Patient ITR + Core Data Model | v3 | 0/5 | Planned | - |
 | 4. Maternal + Child Health Programs | v3 | 0/TBD | Not started | - |
 | 5. TB-DOTS + NCD Programs | v3 | 0/TBD | Not started | - |
 | 6. Disease Surveillance + Real-Time Alerts | v3 | 0/TBD | Not started | - |
