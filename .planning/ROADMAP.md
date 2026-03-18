@@ -45,7 +45,7 @@ See `.planning/milestones/v2-ROADMAP.md` for full phase details.
 |-------|-----------|----------------|--------|-----------|
 | 1. Infrastructure + DevOps | v2 | 3/3 | Complete | 2026-03-15 |
 | 2. Authentication + RBAC + User Management | v2 | 9/9 | Complete | 2026-03-17 |
-| 3. Patient ITR + Core Data Model | 2/5 | In Progress|  | - |
+| 3. Patient ITR + Core Data Model | 3/5 | In Progress|  | - |
 | 4. Maternal + Child Health Programs | v3 | 0/TBD | Not started | - |
 | 5. TB-DOTS + NCD Programs | v3 | 0/TBD | Not started | - |
 | 6. Disease Surveillance + Real-Time Alerts | v3 | 0/TBD | Not started | - |

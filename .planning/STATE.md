@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 03-02-PLAN.md
-last_updated: "2026-03-18T10:20:02.889Z"
+stopped_at: Completed 03-03-PLAN.md
+last_updated: "2026-03-18T10:29:04.384Z"
 last_activity: 2026-03-18 — Phase 3 Plan 02 complete (PatientRepository, ConsultationRepository, PatientService, patient router, 6 API endpoints)
 progress:
-  total_phases: 9
+  total_phases: 3
   completed_phases: 2
   total_plans: 17
-  completed_plans: 14
+  completed_plans: 15
   percent: 82
 ---
 
@@ -63,6 +63,7 @@ Progress: [████████░░] 82% (Phase 3, Plan 2/7)
 | Phase 02 P06 | 3min | 2 tasks | 3 files |
 | Phase 02 P07 | 45min | 3 tasks | 6 files |
 | Phase 03-patient-itr-core-data-model P02 | 5min | 2 tasks | 5 files |
+| Phase 03-patient-itr-core-data-model P03 | 5min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -122,6 +123,8 @@ Recent decisions affecting current work:
 - [Phase 03-patient-itr-core-data-model]: require_role() already returns Depends(_guard) — pass directly to endpoint _ parameter without double-wrapping in Depends() (established in Plan 02-04, confirmed in Plan 03-02)
 - [Phase 03-patient-itr-core-data-model]: PATIENT_READ_ROLES / PATIENT_WRITE_ROLES / CONSULTATION_WRITE_ROLES defined in service module and imported by router — single source of truth for RBAC role lists
 - [Phase 03-patient-itr-core-data-model]: /check-duplicate route registered before /{patient_id} — FastAPI first-wins matching; literal path segment must precede integer path param
+- [Phase 03-patient-itr-core-data-model]: SortIcon extracted outside PatientsPage with explicit props — avoids react-hooks/static-components lint error for components created during render
+- [Phase 03-patient-itr-core-data-model]: Async useEffect uses inner async run() function — synchronous setState in effect body triggers react-hooks/set-state-in-effect lint error; page reset handled in event handlers
 
 ### Pending Todos
 
@@ -144,6 +147,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-18T10:20:02.878Z
-Stopped at: Completed 03-02-PLAN.md
+Last session: 2026-03-18T10:29:04.378Z
+Stopped at: Completed 03-03-PLAN.md
 Resume file: None
