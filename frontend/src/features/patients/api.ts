@@ -62,6 +62,16 @@ export async function createConsultation(
   return data;
 }
 
+export async function getConsultation(
+  patientId: number,
+  consultationId: number
+): Promise<ConsultationResponse> {
+  const { data } = await api.get<ConsultationResponse>(
+    `/patients/${patientId}/consultations/${consultationId}`
+  );
+  return data;
+}
+
 export async function listConsultations(
   patientId: number,
   page: number = 1,

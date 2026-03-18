@@ -36,6 +36,22 @@ class ConsultationRepository(BaseRepository):
         result = await self.session.execute(data_stmt)
         return list(result.scalars().all()), total
 
+    async def get_by_id(self, consultation_id: int, patient_id: int) -> Consultation | None:
+        """Get a single consultation by ID, scoped to the given patient_id.
+
+        Eagerly loads recorded_by_user for recorded_by_name in response.
+        """
+        stmt = (
+            select(Consultation)
+            .options(selectinload(Consultation.recorded_by_user))
+            .where(
+                Consultation.id == consultation_id,
+                Consultation.patient_id == patient_id,
+            )
+        )
+        result = await self.session.execute(stmt)
+        return result.scalar_one_or_none()
+
     async def create(self, **kwargs) -> Consultation:
         """Insert a new Consultation row. Flush (not commit) — caller commits."""
         consultation = Consultation(**kwargs)

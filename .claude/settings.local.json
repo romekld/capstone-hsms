@@ -3,5 +3,8 @@
     "allow": [
       "Bash(find:*)"
     ]
+  },
+  "enabledPlugins": {
+    "pyright-lsp@claude-plugins-official": true
   }
 }

@@ -263,6 +263,41 @@ class PatientService:
             total_pages=total_pages,
         )
 
+    async def get_consultation(
+        self, patient_id: int, consultation_id: int
+    ) -> ConsultationResponse:
+        """Return a single consultation by ID. Verifies patient exists first."""
+        patient = await self.patient_repo.get_by_id(patient_id)
+        if not patient:
+            raise HTTPException(status_code=404, detail="Patient not found.")
+
+        consultation = await self.consultation_repo.get_by_id(consultation_id, patient_id)
+        if not consultation:
+            raise HTTPException(status_code=404, detail="Consultation not found.")
+
+        recorded_name = (
+            consultation.recorded_by_user.full_name
+            if consultation.recorded_by_user else "Unknown"
+        )
+        return ConsultationResponse(
+            id=consultation.id,
+            patient_id=consultation.patient_id,
+            recorded_by=consultation.recorded_by,
+            recorded_by_name=recorded_name,
+            chief_complaint=consultation.chief_complaint,
+            bp_systolic=consultation.bp_systolic,
+            bp_diastolic=consultation.bp_diastolic,
+            heart_rate=consultation.heart_rate,
+            respiratory_rate=consultation.respiratory_rate,
+            temperature=consultation.temperature,
+            weight=consultation.weight,
+            height=consultation.height,
+            vitals_extra=consultation.vitals_extra,
+            diagnosis=consultation.diagnosis,
+            referring_to=consultation.referring_to,
+            created_at=consultation.created_at,
+        )
+
     # -------------------------------------------------------------------------
     # Private helpers
     # -------------------------------------------------------------------------

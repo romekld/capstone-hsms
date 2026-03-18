@@ -10,6 +10,8 @@ import { EditUserPage } from "@/pages/admin/EditUserPage";
 import { PatientsPage } from "@/pages/patients/PatientsPage";
 import { RegisterPatientPage } from "@/pages/patients/RegisterPatientPage";
 import { PatientProfilePage } from "@/pages/patients/PatientProfilePage";
+import { NewConsultationPage } from "@/pages/patients/NewConsultationPage";
+import { ConsultationDetailPage } from "@/pages/patients/ConsultationDetailPage";
 import { Button } from "@/components/ui/button";
 import { ShieldX, ArrowLeft } from "lucide-react";
 
@@ -67,6 +69,8 @@ export default function App() {
             {/* /patients/new must be before /patients/:id — React Router first-wins */}
             <Route path="/patients/new" element={<RegisterPatientPage />} />
             <Route path="/patients/:id" element={<PatientProfilePage />} />
+            <Route path="/patients/:id/consultations/new" element={<NewConsultationPage />} />
+            <Route path="/patients/:id/consultations/:consultationId" element={<ConsultationDetailPage />} />
           </Route>
         </Route>
 

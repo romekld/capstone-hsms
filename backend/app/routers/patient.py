@@ -108,6 +108,19 @@ async def create_consultation(
     return await svc.create_consultation(patient_id, body)
 
 
+@router.get("/{patient_id}/consultations/{consultation_id}", response_model=ConsultationResponse)
+async def get_consultation(
+    patient_id: int,
+    consultation_id: int,
+    db: AsyncDB = None,
+    current_user: CurrentUser = None,
+    _=require_role(PATIENT_READ_ROLES),
+):
+    """Return a single consultation by ID, scoped to the patient."""
+    svc = PatientService(db, current_user)
+    return await svc.get_consultation(patient_id, consultation_id)
+
+
 @router.get("/{patient_id}/consultations", response_model=PaginatedResponse[ConsultationResponse])
 async def list_consultations(
     patient_id: int,

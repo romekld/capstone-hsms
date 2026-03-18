@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowUp, ArrowDown, PlusCircle } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -39,7 +39,6 @@ import { toast as sonnerToast } from "sonner";
 import { getPatient, listConsultations } from "@/features/patients/api";
 import type { PatientResponse, ConsultationResponse } from "@/features/patients/types";
 import { useAuth } from "@/hooks/useAuth";
-import { ConsultationSheet } from "./ConsultationSheet";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -137,6 +136,7 @@ function SortIcon({ direction, active }: SortIconProps) {
 export function PatientProfilePage() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const patientId = Number(id);
 
   // ---- Patient data -------------------------------------------------------
@@ -150,9 +150,6 @@ export function PatientProfilePage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-
-  // ---- Sheet state --------------------------------------------------------
-  const [showConsultationSheet, setShowConsultationSheet] = useState(false);
 
   // ---- Fetch patient -------------------------------------------------------
   useEffect(() => {
@@ -227,11 +224,6 @@ export function PatientProfilePage() {
 
   // ---- Full name ----------------------------------------------------------
   const fullName = patient ? buildFullName(patient) : "";
-
-  // ---- Refresh callback ---------------------------------------------------
-  const refreshConsultations = () => {
-    void fetchConsultations();
-  };
 
   // =========================================================================
   // Render — error state
@@ -367,7 +359,7 @@ export function PatientProfilePage() {
               <h2 className="text-base font-semibold text-foreground">Consultations</h2>
               {canAddConsultation && (
                 <Button
-                  onClick={() => setShowConsultationSheet(true)}
+                  onClick={() => navigate(`/patients/${patientId}/consultations/new`)}
                   className="gap-1.5"
                 >
                   <PlusCircle className="h-4 w-4" data-icon="inline-start" />
@@ -410,7 +402,7 @@ export function PatientProfilePage() {
                         {canAddConsultation && (
                           <Button
                             className="mt-4"
-                            onClick={() => setShowConsultationSheet(true)}
+                            onClick={() => navigate(`/patients/${patientId}/consultations/new`)}
                           >
                             <PlusCircle className="h-4 w-4 mr-2" />
                             Add Consultation
@@ -420,7 +412,12 @@ export function PatientProfilePage() {
                     </TableRow>
                   ) : (
                     sortedConsultations.map((c) => (
-                      <TableRow key={c.id} style={{ minHeight: "44px" }}>
+                      <TableRow
+                        key={c.id}
+                        style={{ minHeight: "44px" }}
+                        className="cursor-pointer hover:bg-muted/50 transition-colors"
+                        onClick={() => navigate(`/patients/${patientId}/consultations/${c.id}`)}
+                      >
                         <TableCell className="text-xs text-muted-foreground font-mono py-3 whitespace-nowrap">
                           {formatDateTime(c.created_at)}
                         </TableCell>
@@ -476,17 +473,6 @@ export function PatientProfilePage() {
           </TabsContent>
         </Tabs>
 
-        {/* Consultation Sheet */}
-        {patient && (
-          <ConsultationSheet
-            open={showConsultationSheet}
-            onOpenChange={setShowConsultationSheet}
-            patientId={patient.id}
-            patientName={fullName}
-            healthStationName={patient.health_station_name}
-            onSuccess={refreshConsultations}
-          />
-        )}
       </div>
     </div>
   );
