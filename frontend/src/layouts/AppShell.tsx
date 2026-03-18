@@ -11,6 +11,7 @@ import {
 const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
   "/patients": "Patients",
+  "/patients/new": "Register Patient",
   "/admin/users": "User Management",
   "/unauthorized": "Access Restricted",
 }
