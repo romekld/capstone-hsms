@@ -11,6 +11,11 @@ export async function createUser(body: UserCreateRequest): Promise<UserListItem>
   return data;
 }
 
+export async function getUser(userId: number): Promise<UserListItem> {
+  const { data } = await api.get<UserListItem>(`/admin/users/${userId}`);
+  return data;
+}
+
 export async function updateUser(userId: number, body: UserUpdateRequest): Promise<UserListItem> {
   const { data } = await api.put<UserListItem>(`/admin/users/${userId}`, body);
   return data;
