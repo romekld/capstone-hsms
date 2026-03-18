@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v3
 milestone_name: Clinical Core
-status: planning
-stopped_at: Phase 3 planned — 7 plans ready to execute
-last_updated: "2026-03-18T12:00:00.000Z"
-last_activity: "2026-03-18 — Phase 3 (Patient ITR + Core Data Model) fully planned: RESEARCH.md + 7 PLAN.md files created and verified PASS"
+status: executing
+stopped_at: "Completed 03-01-PLAN.md"
+last_updated: "2026-03-18T10:09:00.000Z"
+last_activity: "2026-03-18 — Phase 3 Plan 01 complete: Patient + Consultation ORM models, Alembic migration 0004, 10 Wave 0 test stubs"
 progress:
   total_phases: 9
   completed_phases: 2
   total_plans: 7
-  completed_plans: 0
-  percent: 22
+  completed_plans: 1
+  percent: 24
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 ## Current Position
 
 Phase: 3 of 9 (Patient ITR + Core Data Model)
-Plan: 0 of 7 — ready to execute
-Status: Planned — execute with /gsd:execute-phase 3
-Last activity: 2026-03-18 — Phase 3 fully planned (RESEARCH.md + 7 PLAN.md files, verified PASS)
+Plan: 1 of 7 — complete
+Status: Executing — next plan: 03-02-PLAN.md
+Last activity: 2026-03-18 — Phase 3 Plan 01 complete (Patient + Consultation ORM, migration 0004, Wave 0 stubs)
 
-Progress: [██████████] 100% (Phase 2, Plan 8/8)
+Progress: [███████████] 24% (Phase 3, Plan 1/7)
 
 ## Performance Metrics
 
@@ -50,6 +50,7 @@ Progress: [██████████] 100% (Phase 2, Plan 8/8)
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 03 P01 | 5min | 3 tasks | 17 files |
 | Phase 01 P01 | 3 | 3 tasks | 17 files |
 | Phase 02 P01 | 20min | 3 tasks | 9 files |
 | Phase 02 P02 | 2min | 3 tasks | 8 files |
@@ -112,6 +113,11 @@ Recent decisions affecting current work:
 - [Phase 02]: ROLE_LABELS map at module level (not inside component) — stable reference, no re-creation on render
 - [Phase 02]: [Plan 02-07]: HEALTH_STATIONS hardcoded as local constant (32 BHS names, IDs 1-32) — GIS API not yet built; Phase 7 executor should replace with GET /api/gis/health-stations
 - [Phase 02]: [Plan 02-07]: ActivityLogPage.tsx re-exports UsersPage — activity log is an embedded tab; file exists for App.tsx route completeness only
+- [Plan 03-01]: Patient sex column uses TEXT + CHECK constraint (not PostgreSQL ENUM) — ENUM is immutable; TEXT + CHECK can be extended without ALTER TYPE
+- [Plan 03-01]: GIN index on search_vector created via raw SQL in migration — Alembic autogenerate cannot reflect expression-based indexes (GitHub issue #1390)
+- [Plan 03-01]: tsvector uses 'simple' config — Filipino names must not be stemmed ('english' config would corrupt "dela Cruz", "Santos")
+- [Plan 03-01]: BMI is Pydantic computed_field on ConsultationResponse, never stored — eliminates stale data risk when vitals are updated
+- [Plan 03-01]: health_station_id excluded from PatientCreate request body — auto-set from current_user.health_station_id in service layer to prevent cross-BHS registration
 
 ### Pending Todos
 
@@ -134,6 +140,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-18T12:00:00.000Z
-Stopped at: Phase 3 fully planned — 7 plans verified PASS
-Resume file: .planning/phases/03-patient-itr-core-data-model/03-01-PLAN.md
+Last session: 2026-03-18T10:09:00.000Z
+Stopped at: Completed 03-01-PLAN.md
+Resume file: .planning/phases/03-patient-itr-core-data-model/03-02-PLAN.md
