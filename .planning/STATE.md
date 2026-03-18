@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 4.1 context updated
-last_updated: "2026-03-18T23:02:16.177Z"
+stopped_at: Completed 04.1-mch-shared-data-model-01-PLAN.md
+last_updated: "2026-03-18T23:26:02.016Z"
 last_activity: 2026-03-18 — Phase 3 Plan 02 complete (PatientRepository, ConsultationRepository, PatientService, patient router, 6 API endpoints)
 progress:
   total_phases: 10
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 2
+  completed_plans: 1
   percent: 82
 ---
 
@@ -66,6 +66,7 @@ Progress: [████████░░] 82% (Phase 3, Plan 2/7)
 | Phase 03-patient-itr-core-data-model P03 | 5min | 2 tasks | 6 files |
 | Phase 03-patient-itr-core-data-model P04 | 10min | 1 tasks | 3 files |
 | Phase 03-patient-itr-core-data-model P05 | 5min | 1 tasks | 4 files |
+| Phase 04.1-mch-shared-data-model P01 | 3min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -131,6 +132,9 @@ Recent decisions affecting current work:
 - [Phase 03-patient-itr-core-data-model]: BARANGAY_OPTIONS hardcoded from cho2-boundaries.geojson fixture — same pattern as HEALTH_STATIONS in admin; Phase 7 can replace with GIS API fetch
 - [Phase 03-05]: Sheet side panel used for Add Consultation per CONTEXT.md locked decision (not a dedicated page)
 - [Phase 03-05]: AppShell resolvePageTitle added to handle dynamic /patients/:id pathname matching
+- [Phase 04.1-mch-shared-data-model]: EpiVaccination.vaccine uses TEXT not ENUM — avoids migration churn if DOH adds vaccines; validated at Pydantic layer
+- [Phase 04.1-mch-shared-data-model]: PostpartumEnrollment.prenatal_enrollment_id nullable (ON DELETE SET NULL) — external facility deliveries may have no prenatal record
+- [Phase 04.1-mch-shared-data-model]: Visit tables have no health_station_id; BHS isolation via JOIN through enrollment — avoids denormalization across 4 extra tables
 
 ### Pending Todos
 
@@ -153,6 +157,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-18T23:02:16.156Z
-Stopped at: Phase 4.1 context updated
-Resume file: .planning/phases/04.1-mch-shared-data-model/04.1-CONTEXT.md
+Last session: 2026-03-18T23:26:02.007Z
+Stopped at: Completed 04.1-mch-shared-data-model-01-PLAN.md
+Resume file: None

@@ -176,7 +176,7 @@ Plans:
 | 2. Authentication + RBAC + User Management | v2 | 9/9 | Complete | 2026-03-17 |
 | 3. Patient ITR + Core Data Model | v3 | 5/5 | Complete | 2026-03-18 |
 | 4. Maternal + Child Health Programs | v3 | — | Head phase (see 4.1–4.4) | — |
-| 4.1. MCH Shared Data Model | v3 | 0/2 | Planning complete | — |
+| 4.1. MCH Shared Data Model | 1/2 | In Progress|  | — |
 | 4.2. Prenatal + Postpartum Programs | v3 | 0/TBD | Not started | — |
 | 4.3. EPI Vaccination Program | v3 | 0/TBD | Not started | — |
 | 4.4. Nutrition / OPT+ Program | v3 | 0/TBD | Not started | — |
