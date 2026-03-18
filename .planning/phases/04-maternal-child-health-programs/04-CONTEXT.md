@@ -1,111 +1,27 @@
-# Phase 4: MCH Shared Data Model - Context
+# Phase 4: Maternal + Child Health Programs - Context (Head Phase)
 
-**Gathered:** 2026-03-18
-**Status:** Ready for planning
+**Status:** Head phase — implementation delivered via sub-phases 4.1–4.4
 
-<domain>
-## Phase Boundary
+This is an organizational grouping. All decisions and plans live in the sub-phase directories.
 
-Create the ORM models, Pydantic schemas, and a **single Alembic migration** for all eight MCH tables needed by Phases 5–7. No API endpoints, no frontend UI — this phase delivers the schema foundation only.
+## Sub-Phases
 
-**Tables:** `prenatal_enrollments`, `prenatal_visits`, `postpartum_enrollments`, `postpartum_visits`, `epi_enrollments`, `epi_vaccinations`, `nutrition_enrollments`, `nutrition_visits`
+| Sub-phase | Directory | What it delivers |
+|-----------|-----------|-----------------|
+| **4.1** | `.planning/phases/04.1-mch-shared-data-model/` | ORM models, Pydantic schemas, Alembic migration for all 8 MCH tables |
+| **4.2** | `.planning/phases/04.2-prenatal-postpartum/` | Full prenatal + postpartum stack (backend + frontend) |
+| **4.3** | `.planning/phases/04.3-epi-vaccination/` | Full EPI vaccination stack (backend + frontend) |
+| **4.4** | `.planning/phases/04.4-nutrition-opt-plus/` | Full nutrition / OPT+ stack (backend + frontend) |
 
-**Out of scope:** All API routes, services, repositories, and frontend work (those belong to Phases 5, 6, and 7).
+## Program Decisions Reference
 
-</domain>
+All captured implementation decisions for the four MCH programs (UI layout, workflow, overdue detection, high-risk flags, vaccine grid, Z-score display) are in:
 
-<decisions>
-## Implementation Decisions
+- `.planning/phases/04.1-mch-shared-data-model/04-CONTEXT-PROGRAM-DECISIONS.md`
 
-### ORM models
-- All 8 models use `TimestampMixin` + `SoftDeleteMixin` from `backend/app/core/base.py`
-- All enrollment tables: `patient_id FK → patients.id` + `health_station_id FK → health_stations.id`
-- All relationships use `lazy="raise"` — explicit joins only
-
-### ML integration fields (must be present for Phase 11)
-- `prenatal_enrollments.is_high_risk BOOLEAN NOT NULL DEFAULT FALSE` — fed to at-risk classifier
-- `epi_enrollments.fic_status BOOLEAN NOT NULL DEFAULT FALSE` — fed to barangay risk index
-- `nutrition_visits.severe_wasting BOOLEAN NOT NULL DEFAULT FALSE` — WHZ < −3 flag, fed to at-risk classifier
-
-### EPI vaccine column
-- `epi_vaccinations.vaccine` — use **TEXT** (not enum) to avoid migration churn if DOH adds vaccines; validate allowed values at the Pydantic schema layer instead
-
-### Alembic migration
-- Single migration file covering all 8 tables — do not split by program
-- Migration file: `alembic/versions/XXXX_mch_schema.py`
-
-### Claude's Discretion
-- Exact column names and nullable constraints beyond the fields listed above
-- Index strategy (beyond obvious PK/FK indexes)
-- Whether to use PostgreSQL-level CHECK constraints or Pydantic-only validation for enums
-
-</decisions>
-
-<canonical_refs>
-## Canonical References
-
-**Downstream agents MUST read these before planning or implementing.**
-
-### Phase 3 patterns (extend, don't replace)
-- `.planning/phases/03-patient-itr-core-data-model/03-CONTEXT.md` — FK standard (`patient_id`), `BaseRepository` isolation, `TimestampMixin`/`SoftDeleteMixin` usage
-- `.planning/phases/02-authentication-rbac-user-management/02-CONTEXT.md` — `require_role()`, `BaseRepository._isolation_filter()`
-
-### Core project constraints
-- `.planning/PROJECT.md` §Compliance Requirements — RA 10173 (soft deletes mandatory), DOH DM 2024-0007 (FHSIS formulas that aggregate this phase's data in Phase 11)
-- `.planning/PROJECT.md` §Open Questions (Blocking) — `epi_vaccinations.vaccine` TEXT vs enum (RESOLVED: use TEXT, validate in Pydantic)
-- `.planning/milestones/v2-REQUIREMENTS.md` §Maternal Care — Prenatal (PRNT-01 to PRNT-06) — field-level requirements for prenatal enrollment and visits
-- `.planning/milestones/v2-REQUIREMENTS.md` §Maternal Care — Postpartum (PNPL-01 to PNPL-04) — postpartum schedule and visit fields
-- `.planning/milestones/v2-REQUIREMENTS.md` §Child Health — EPI (EPI-01 to EPI-07) — dose sequence, FIC, vaccine fields
-- `.planning/milestones/v2-REQUIREMENTS.md` §Child Health — Nutrition (NUTR-01 to NUTR-05) — Z-score fields, eligibility fields
-
-### Existing code (read before planning)
-- `backend/app/core/base.py` — `TimestampMixin`, `SoftDeleteMixin`, `do_orm_execute` hook
-- `backend/app/models/patient.py` — FK target for all enrollment tables
-- `backend/app/models/health_station.py` — FK target for all enrollment tables
-
-### No external DOH spec files exist in repo
-- Philippine DOH EPI vaccine schedule — hardcode in backend (not configurable)
-- WHO Growth Standard tables — bundle as static data (not DB table)
-
-</canonical_refs>
-
-<code_context>
-## Existing Code Insights
-
-### Reusable Assets
-- `TimestampMixin` + `SoftDeleteMixin` (`backend/app/core/base.py`): Apply to all 8 new tables
-- `backend/app/models/patient.py`: FK target — `patients.id`
-- `backend/app/models/health_station.py`: FK target — `health_stations.id`
-- Phase 3 migration (most recent): Reference for Alembic migration style/conventions used in this project
-
-### Established Patterns
-- Soft deletes: `deleted_at TIMESTAMPTZ` column via `SoftDeleteMixin` — never hard DELETE
-- `lazy="raise"` on all relationships — enforced project-wide
-- Async-first: all SQLAlchemy operations use async sessions
-
-### Integration Points
-- `prenatal_enrollments.is_high_risk` → Phase 11 ML at-risk classifier
-- `epi_enrollments.fic_status` → Phase 11 barangay risk index
-- `nutrition_visits.severe_wasting` → Phase 11 ML at-risk classifier
-
-</code_context>
-
-<specifics>
-## Specific Ideas
-
-- Single migration for all 8 tables — avoid ordering dependencies between multiple migration files
-- `epi_vaccinations.vaccine` as TEXT resolved: validate in Pydantic with `Literal[...]` or a string enum, not a PostgreSQL ENUM type
-
-</specifics>
-
-<deferred>
-## Deferred to Phases 5–7
-
-All program-specific implementation decisions (UI layout, workflow, overdue detection, high-risk flags, vaccine grid, Z-score display) are captured in the original pre-split context file at `.planning/phases/04-maternal-child-health-programs/04-CONTEXT-PROGRAM-DECISIONS.md`. Downstream agents planning Phases 5, 6, and 7 MUST read that file.
-
-</deferred>
+Sub-phase planners (4.2, 4.3, 4.4) MUST read this file before planning.
 
 ---
 
-*Phase: 04-mch-shared-data-model*
-*Context gathered: 2026-03-18*
+*Phase: 04-maternal-child-health-programs*
+*Reorganized: 2026-03-18 — split into vertical sub-phases 4.1–4.4*
