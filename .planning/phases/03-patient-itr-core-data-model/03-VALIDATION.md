@@ -40,14 +40,14 @@ created: 2026-03-18
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
 | 03-01-01 | 01 | 1 | P3-01 | integration | `pytest tests/test_patients/test_patient_model.py -x` | ❌ W0 | ⬜ pending |
 | 03-01-02 | 01 | 1 | P3-02 | integration | `pytest tests/test_patients/test_consultation_model.py -x` | ❌ W0 | ⬜ pending |
-| 03-02-01 | 02 | 1 | P3-03 | integration | `pytest tests/test_patients/test_duplicate_detection.py -x` | ❌ W0 | ⬜ pending |
-| 03-02-02 | 02 | 1 | P3-04 | integration | `pytest tests/test_patients/test_patient_search.py -x` | ❌ W0 | ⬜ pending |
-| 03-03-01 | 03 | 1 | P3-05 | integration | `pytest tests/test_patients/test_patient_registration.py -x` | ❌ W0 | ⬜ pending |
-| 03-03-02 | 03 | 1 | P3-06 | integration | `pytest tests/test_patients/test_patient_profile.py -x` | ❌ W0 | ⬜ pending |
-| 03-03-03 | 03 | 1 | P3-07 | integration | `pytest tests/test_patients/test_consultation_create.py -x` | ❌ W0 | ⬜ pending |
-| 03-04-01 | 04 | 1 | P3-08 | integration | `pytest tests/test_patients/test_patient_rbac.py -x` | ❌ W0 | ⬜ pending |
-| 03-04-02 | 04 | 1 | P3-09 | integration | `pytest tests/test_patients/test_city_wide_readonly.py -x` | ❌ W0 | ⬜ pending |
-| 03-05-01 | 05 | 2 | P3-10 | integration | `pytest tests/test_patients/test_patient_audit.py -x` | ❌ W0 | ⬜ pending |
+| 03-01-03 | 01 | 1 | W0 | stub | `pytest tests/test_patients/ -x --collect-only` | ❌ W0 | ⬜ pending |
+| 03-02-01 | 02 | 2 | P3-03 | integration | `pytest tests/test_patients/test_duplicate_detection.py -x` | ❌ W0 | ⬜ pending |
+| 03-02-02 | 02 | 2 | P3-04 | integration | `pytest tests/test_patients/test_patient_search.py -x` | ❌ W0 | ⬜ pending |
+| 03-03-01 | 03 | 2 | P3-05 | integration | `pytest tests/test_patients/test_patient_registration.py -x` | ❌ W0 | ⬜ pending |
+| 03-03-02 | 03 | 2 | P3-06 | integration | `pytest tests/test_patients/test_patient_profile.py -x` | ❌ W0 | ⬜ pending |
+| 03-04-01 | 04 | 3 | P3-08 | integration | `pytest tests/test_patients/test_patient_rbac.py -x` | ❌ W0 | ⬜ pending |
+| 03-04-02 | 04 | 3 | P3-09 | integration | `pytest tests/test_patients/test_city_wide_readonly.py -x` | ❌ W0 | ⬜ pending |
+| 03-05-01 | 05 | 3 | P3-07, P3-10 | integration | `pytest tests/test_patients/test_consultation_create.py tests/test_patients/test_patient_audit.py -x` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
