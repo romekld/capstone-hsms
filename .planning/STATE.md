@@ -123,6 +123,7 @@ None yet.
 |---|-------------|------|--------|-----------|
 | 260318-ao6 | the current create user component is modal. can we redesign it into a new dedicated section and not a modal one? and redesign the form fields into more userfriendly and intuitive. use existing shadcn components or blocks for forms. | 2026-03-17 | 33dfed3 | [260318-ao6-the-current-create-user-component-is-mod](./quick/260318-ao6-the-current-create-user-component-is-mod/) |
 | 260318-eh1 | Full redesign: replace Sheet create flow with dedicated /admin/users/new full-page form; modular UserFormSections (Identity, Credentials, Roles, BHS) | 2026-03-18 | 045c954 | [260318-eh1-full-redesign-admin-user-management-page](./quick/260318-eh1-full-redesign-admin-user-management-page/) |
+| 260318-ew3 | Replace edit-user Sheet/drawer with dedicated /admin/users/:id/edit full-page form; adds getUser API fn, pre-populates all fields, read-only email display | 2026-03-18 | 076bee2 | [260318-ew3-replace-edit-user-sheet-with-dedicated-a](./quick/260318-ew3-replace-edit-user-sheet-with-dedicated-a/) |
 
 ### Blockers/Concerns
 
