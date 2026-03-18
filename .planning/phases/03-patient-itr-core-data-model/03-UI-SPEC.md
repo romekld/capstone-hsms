@@ -56,7 +56,7 @@ Exceptions:
 | Role | Size | Weight | Line Height | Usage |
 |------|------|--------|-------------|-------|
 | Body | 16px | 400 (regular) | 1.5 | Form field values, table cell content, paragraph descriptions |
-| Label | 14px | 500 (medium) | 1.4 | Form field labels, table column headers, badge text, helper text |
+| Label | 14px | 600 (semibold) | 1.4 | Form field labels, table column headers, badge text, helper text |
 | Heading | 20px | 600 (semibold) | 1.3 | Page section titles (e.g. "Patient Profile", "Consultations"), dialog/page titles |
 | Display | 28px | 600 (semibold) | 1.2 | Page-level h1 (e.g. "Patients", "Register Patient") — one per route |
 
@@ -65,6 +65,7 @@ Notes:
 - No more than 75 characters per line for body copy in forms and descriptions
 - Font: Inter Variable via `--font-sans: 'Inter Variable', sans-serif` (set in globals.css)
 - All sizes expressed as rem in implementation: 16px = 1rem, 14px = 0.875rem, 20px = 1.25rem, 28px = 1.75rem
+- Exactly 2 weights declared: 400 (regular) for Body; 600 (semibold) for Label, Heading, and Display
 
 ---
 
@@ -99,6 +100,7 @@ Never apply accent color to decorative elements, card borders, or secondary labe
 
 ### Route: `/patients` — Patient Search Page
 
+- Focal point: "Register Patient" primary button in top-right of the page toolbar.
 - Page h1 (Display/28px): "Patients"
 - Top bar: search `Input` (full width on mobile, 400px max on desktop) + "Register Patient" `Button` (primary, right-aligned)
 - Search scope toggle: `Checkbox` + label "Search all BHS" — appears inline with search bar; hidden for CHO/DSO/coordinator (always city-wide for them)
@@ -111,6 +113,7 @@ Never apply accent color to decorative elements, card borders, or secondary labe
 
 ### Route: `/patients/new` — Register Patient (Dedicated Page)
 
+- Focal point: First required form field ("Given Name" / First Name input) — receives autofocus on page load.
 - This is a dedicated page, NOT a sheet or modal. Source: user clarification decision.
 - Page h1 (Display/28px): "Register Patient"
 - Back navigation: Breadcrumb `Patients > Register Patient` using shadcn `Breadcrumb`
@@ -124,7 +127,7 @@ Never apply accent color to decorative elements, card borders, or secondary labe
 - Required field indicator: asterisk (*) next to `FieldLabel`, with a legend note "* Required" above the submit button
 - Vitals: NOT collected at registration — vitals belong to consultation records only
 - Submit button: "Register Patient" (primary, full-width on mobile, auto-width on desktop) — disabled during async operation (ui-ux-pro-max `loading-buttons` rule)
-- Cancel: secondary `Button` "Cancel" navigates back to `/patients`
+- Cancel: secondary `Button` "Back to Patients" navigates to `/patients`
 
 ### Duplicate Warning State (on `/patients/new`)
 
@@ -138,6 +141,7 @@ Never apply accent color to decorative elements, card borders, or secondary labe
 
 ### Route: `/patients/:id` — Patient Profile Page
 
+- Focal point: Patient name display header (the Display/28px h1) — the primary identity confirmation element.
 - Page h1 (Display/28px): Patient's full name
 - Sub-header: Breadcrumb `Patients > [Patient Name]`
 - **Profile header card** (`Card` component): Displays name, birthdate, sex, computed age, BHS — all read-only. No mobile/address in header (CONTEXT.md decision).
@@ -151,6 +155,7 @@ Never apply accent color to decorative elements, card borders, or secondary labe
 
 ### Route: `/patients/:id/consultations/new` — Add Consultation (Dedicated Page)
 
+- Focal point: "Chief Complaint" textarea — first required field, receives autofocus on page load.
 - This is a dedicated page, NOT a sheet or modal. Source: user clarification decision.
 - Page h1 (Display/28px): "New Consultation"
 - Sub-header: Breadcrumb `Patients > [Patient Name] > New Consultation`
@@ -173,7 +178,7 @@ Never apply accent color to decorative elements, card borders, or secondary labe
   4. **Assessment** — Diagnosis: `Textarea` optional, minimum 2 rows; label "Diagnosis (ICD-10 or description)"
   5. **Referral** — Referring To: `Input type="text"` optional; label "Refer to (if applicable)"
 - Submit button: "Save Consultation" (primary, full-width on mobile) — disabled during async
-- Cancel: secondary `Button` "Cancel" navigates back to `/patients/:id`
+- Cancel: secondary `Button` "Back to [Patient Name]" navigates to `/patients/:id`
 
 ### Vitals Input — Field Worker Ergonomics
 
@@ -239,7 +244,8 @@ Primary target device for nurse/midwife: tablet (768px–1024px). All touch targ
 | Duplicate action — use existing | "Use Existing Patient" |
 | Duplicate action — override | "Register Anyway" |
 | Duplicate override confirm (inline warning below button) | "This will be flagged for review by the administrator." |
-| Cancel button | "Cancel" (all forms) |
+| Cancel button — Register Patient page (`/patients/new`) | "Back to Patients" (navigates to `/patients`) |
+| Cancel button — Add Consultation page (`/patients/:id/consultations/new`) | "Back to [Patient Name]" (navigates to `/patients/:id`) |
 
 Destructive and irreversible actions in Phase 3:
 - "Register Anyway" (duplicate override): No separate confirmation dialog. The intent is communicated by the subordinate visual placement and the inline warning text "This will be flagged for review by the administrator." This is not a delete — it is audit-logged and reversible by admin.
@@ -294,7 +300,9 @@ All components are from the shadcn official registry. No vetting gate needed.
 From ui-ux-pro-max skill, Priority 1 (CRITICAL) and Priority 2 (CRITICAL):
 
 - All form inputs have associated `Label` (via `Field` / `FieldLabel` components from `field.tsx`)
-- All icon-only buttons (row kebab, sort arrows) have `aria-label` attributes
+- All icon-only buttons have `aria-label` attributes — exact strings:
+  - Row kebab menu button: `aria-label="Patient actions"`
+  - Sortable column sort arrow buttons: `aria-label="Sort by [column name]"` (e.g. `aria-label="Sort by Patient Name"`)
 - Color is never the sole indicator — duplicate warning uses text + icon + color
 - Focus rings visible on all interactive elements (`ring-2 ring-ring ring-offset-2`)
 - Tab order matches visual DOM order on all forms
