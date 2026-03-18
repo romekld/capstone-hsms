@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v3
-milestone_name: Clinical Core
+milestone: v1.0
+milestone_name: milestone
 status: executing
-stopped_at: "Completed 03-01-PLAN.md"
-last_updated: "2026-03-18T10:09:00.000Z"
-last_activity: "2026-03-18 — Phase 3 Plan 01 complete: Patient + Consultation ORM models, Alembic migration 0004, 10 Wave 0 test stubs"
+stopped_at: Completed 03-02-PLAN.md
+last_updated: "2026-03-18T10:20:02.889Z"
+last_activity: 2026-03-18 — Phase 3 Plan 02 complete (PatientRepository, ConsultationRepository, PatientService, patient router, 6 API endpoints)
 progress:
   total_phases: 9
   completed_phases: 2
-  total_plans: 7
-  completed_plans: 1
-  percent: 24
+  total_plans: 17
+  completed_plans: 14
+  percent: 82
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 ## Current Position
 
 Phase: 3 of 9 (Patient ITR + Core Data Model)
-Plan: 1 of 7 — complete
-Status: Executing — next plan: 03-02-PLAN.md
-Last activity: 2026-03-18 — Phase 3 Plan 01 complete (Patient + Consultation ORM, migration 0004, Wave 0 stubs)
+Plan: 2 of 7 — complete
+Status: Executing — next plan: 03-03-PLAN.md
+Last activity: 2026-03-18 — Phase 3 Plan 02 complete (PatientRepository, ConsultationRepository, PatientService, patient router, 6 API endpoints)
 
-Progress: [███████████] 24% (Phase 3, Plan 1/7)
+Progress: [████████░░] 82% (Phase 3, Plan 2/7)
 
 ## Performance Metrics
 
@@ -62,6 +62,7 @@ Progress: [███████████] 24% (Phase 3, Plan 1/7)
 | Phase 02 P06 | 3 | 2 tasks | 3 files |
 | Phase 02 P06 | 3min | 2 tasks | 3 files |
 | Phase 02 P07 | 45min | 3 tasks | 6 files |
+| Phase 03-patient-itr-core-data-model P02 | 5min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -118,6 +119,9 @@ Recent decisions affecting current work:
 - [Plan 03-01]: tsvector uses 'simple' config — Filipino names must not be stemmed ('english' config would corrupt "dela Cruz", "Santos")
 - [Plan 03-01]: BMI is Pydantic computed_field on ConsultationResponse, never stored — eliminates stale data risk when vitals are updated
 - [Plan 03-01]: health_station_id excluded from PatientCreate request body — auto-set from current_user.health_station_id in service layer to prevent cross-BHS registration
+- [Phase 03-patient-itr-core-data-model]: require_role() already returns Depends(_guard) — pass directly to endpoint _ parameter without double-wrapping in Depends() (established in Plan 02-04, confirmed in Plan 03-02)
+- [Phase 03-patient-itr-core-data-model]: PATIENT_READ_ROLES / PATIENT_WRITE_ROLES / CONSULTATION_WRITE_ROLES defined in service module and imported by router — single source of truth for RBAC role lists
+- [Phase 03-patient-itr-core-data-model]: /check-duplicate route registered before /{patient_id} — FastAPI first-wins matching; literal path segment must precede integer path param
 
 ### Pending Todos
 
@@ -140,6 +144,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-18T10:09:00.000Z
-Stopped at: Completed 03-01-PLAN.md
-Resume file: .planning/phases/03-patient-itr-core-data-model/03-02-PLAN.md
+Last session: 2026-03-18T10:20:02.878Z
+Stopped at: Completed 03-02-PLAN.md
+Resume file: None
