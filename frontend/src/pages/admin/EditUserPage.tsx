@@ -18,10 +18,12 @@ import {
   CredentialsSection,
   RolesSection,
 } from "@/features/admin/components/UserFormSections";
+import { useHealthStations } from "@/features/health-stations/useHealthStations";
 
 export function EditUserPage() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const { stations, loading: stationsLoading, error: stationsError } = useHealthStations();
 
   // Load state
   const [isFetching, setIsFetching] = useState(true);
@@ -198,6 +200,9 @@ export function EditUserPage() {
                 healthStationId={healthStationId}
                 onHealthStationChange={setHealthStationId}
                 hidden={isSystemAdmin}
+                stations={stations}
+                stationsLoading={stationsLoading}
+                stationsError={stationsError}
               />
             </div>
           </div>

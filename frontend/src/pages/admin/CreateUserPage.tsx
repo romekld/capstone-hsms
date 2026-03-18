@@ -11,9 +11,11 @@ import {
   IdentitySection,
   RolesSection,
 } from "@/features/admin/components/UserFormSections";
+import { useHealthStations } from "@/features/health-stations/useHealthStations";
 
 export function CreateUserPage() {
   const navigate = useNavigate();
+  const { stations, loading: stationsLoading, error: stationsError } = useHealthStations();
 
   // Form state
   const [fullName, setFullName] = useState("");
@@ -117,6 +119,9 @@ export function CreateUserPage() {
               healthStationId={healthStationId}
               onHealthStationChange={setHealthStationId}
               hidden={isSystemAdmin}
+              stations={stations}
+              stationsLoading={stationsLoading}
+              stationsError={stationsError}
             />
           </div>
         </div>

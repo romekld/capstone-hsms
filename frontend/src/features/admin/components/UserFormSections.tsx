@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { HEALTH_STATIONS } from "@/features/admin/healthStations";
+import type { HealthStation } from "@/features/health-stations/types";
 import { ROLE_OPTIONS } from "@/features/admin/types";
 
 // --- IdentitySection ---
@@ -187,12 +187,18 @@ interface BhsAssignmentSectionProps {
   healthStationId: number | null;
   onHealthStationChange: (id: number | null) => void;
   hidden: boolean;
+  stations: HealthStation[];
+  stationsLoading: boolean;
+  stationsError: string | null;
 }
 
 export function BhsAssignmentSection({
   healthStationId,
   onHealthStationChange,
   hidden,
+  stations,
+  stationsLoading,
+  stationsError,
 }: BhsAssignmentSectionProps) {
   if (hidden) return null;
 
@@ -207,19 +213,23 @@ export function BhsAssignmentSection({
           <Select
             value={healthStationId != null ? String(healthStationId) : ""}
             onValueChange={(v) => onHealthStationChange(v ? Number(v) : null)}
+            disabled={stationsLoading || !!stationsError}
           >
             <SelectTrigger id="bhs-assignment" className="h-12 w-full">
-              <SelectValue placeholder="— No BHS assignment —" />
+              <SelectValue
+                placeholder={stationsLoading ? "Loading stations…" : "— No BHS assignment —"}
+              />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="">— No BHS assignment —</SelectItem>
-              {HEALTH_STATIONS.map((hs) => (
+              {stations.map((hs) => (
                 <SelectItem key={hs.id} value={String(hs.id)}>
                   {hs.name}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+          {stationsError && <FieldError>{stationsError}</FieldError>}
           <FieldDescription>
             Required for Nurse, Midwife, Physician, and BHW roles.
           </FieldDescription>

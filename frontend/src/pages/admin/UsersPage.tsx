@@ -38,7 +38,7 @@ import {
   listUsers,
   reactivateUser,
 } from "@/features/admin/api";
-import { HEALTH_STATIONS } from "@/features/admin/healthStations";
+import { useHealthStations } from "@/features/health-stations/useHealthStations";
 import {
   ROLE_OPTIONS,
   type AuditLogEntry,
@@ -179,6 +179,7 @@ function ActivityLogTab() {
 // --- Main UsersPage ---
 export function UsersPage() {
   const navigate = useNavigate();
+  const { stations } = useHealthStations();
   const [users, setUsers] = useState<UserListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
@@ -218,7 +219,7 @@ export function UsersPage() {
   });
 
   const getBhsName = (id: number | null) =>
-    id ? HEALTH_STATIONS.find((s) => s.id === id)?.name ?? `BHS #${id}` : "\u2014";
+    id ? stations.find((s) => s.id === id)?.name ?? `BHS #${id}` : "\u2014";
 
   const handleDeactivate = async () => {
     if (!deactivateTarget) return;

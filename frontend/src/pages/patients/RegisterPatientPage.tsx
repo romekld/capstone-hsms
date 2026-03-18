@@ -30,7 +30,7 @@ import {
 
 import { checkDuplicate, registerPatient } from "@/features/patients/api";
 import type { PatientListItem } from "@/features/patients/types";
-import { HEALTH_STATIONS } from "@/features/admin/healthStations";
+import { useHealthStations } from "@/features/health-stations/useHealthStations";
 import { useAuth } from "@/hooks/useAuth";
 
 // Extracted from backend/fixtures/cho2-boundaries.geojson (ADM4_PCODE → ADM4_EN)
@@ -91,6 +91,7 @@ function formatRegistrationDate(isoDatetime: string): string {
 export function RegisterPatientPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { stations, loading: stationsLoading, error: stationsError } = useHealthStations();
 
   // Form fields
   const [lastName, setLastName] = useState("");
@@ -198,7 +199,7 @@ export function RegisterPatientPage() {
   };
 
   const selectedBhsName =
-    HEALTH_STATIONS.find((s) => String(s.id) === healthStationId)?.name ?? "";
+    stations.find((s) => String(s.id) === healthStationId)?.name ?? "";
 
   return (
     <div className="min-h-screen bg-background login-page-enter">
@@ -435,25 +436,30 @@ export function RegisterPatientPage() {
                 <Select
                   value={healthStationId}
                   onValueChange={(val) => setHealthStationId(val)}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || stationsLoading || !!stationsError}
                 >
                   <SelectTrigger
                     id="health-station"
                     className="w-full"
                     aria-required="true"
                   >
-                    <SelectValue placeholder="Select health station">
+                    <SelectValue
+                      placeholder={stationsLoading ? "Loading stations…" : "Select health station"}
+                    >
                       {selectedBhsName || undefined}
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    {HEALTH_STATIONS.map((s) => (
+                    {stations.map((s) => (
                       <SelectItem key={s.id} value={String(s.id)}>
                         {s.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+                {stationsError && (
+                  <p className="text-sm text-destructive mt-1">{stationsError}</p>
+                )}
                 <p className="text-xs text-muted-foreground mt-1">
                   Pre-filled from your account. The backend assigns this automatically.
                 </p>
