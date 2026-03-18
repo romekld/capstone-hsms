@@ -27,6 +27,12 @@ async def list_users(db: AsyncDB, current_user: CurrentUser):
     return await svc.list_users()
 
 
+@router.get("/users/{user_id}", response_model=UserListItem)
+async def get_user(user_id: int, db: AsyncDB, current_user: CurrentUser):
+    svc = AdminService(db, current_user)
+    return await svc.get_user(user_id)
+
+
 @router.post("/users", response_model=UserListItem, status_code=201)
 async def create_user(body: UserCreateRequest, db: AsyncDB, current_user: CurrentUser):
     svc = AdminService(db, current_user)

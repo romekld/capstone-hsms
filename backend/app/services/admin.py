@@ -43,6 +43,20 @@ class AdminService:
         self.current_user = current_user
         self.repo = UserRepository(session)
 
+    async def get_user(self, user_id: int) -> UserListItem:
+        user = await self.repo.get_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found.")
+        return UserListItem(
+            id=user.id,
+            email=user.email,
+            full_name=user.full_name,
+            roles=user.roles,
+            health_station_id=user.health_station_id,
+            is_active=user.is_active,
+            created_at=user.created_at.isoformat(),
+        )
+
     async def list_users(self) -> list[UserListItem]:
         users = await self.repo.list_all()
         return [
