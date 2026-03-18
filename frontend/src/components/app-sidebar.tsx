@@ -4,6 +4,7 @@ import {
   HeartPulse,
   LayoutDashboard,
   Users,
+  ClipboardList,
   Baby,
   Activity,
   Stethoscope,
@@ -41,6 +42,19 @@ const NAV_ITEMS = [
       "disease_surveillance_officer",
       "nurse",
       "bhw",
+    ],
+  },
+  {
+    label: "Patients",
+    href: "/patients",
+    icon: ClipboardList,
+    roles: [
+      "nurse",
+      "midwife",
+      "physician",
+      "city_health_officer",
+      "phis_coordinator",
+      "disease_surveillance_officer",
     ],
   },
   {

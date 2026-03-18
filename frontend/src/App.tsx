@@ -7,6 +7,7 @@ import { DashboardPage } from "@/pages/DashboardPage";
 import { UsersPage } from "@/pages/admin/UsersPage";
 import { CreateUserPage } from "@/pages/admin/CreateUserPage";
 import { EditUserPage } from "@/pages/admin/EditUserPage";
+import { PatientsPage } from "@/pages/patients/PatientsPage";
 import { Button } from "@/components/ui/button";
 import { ShieldX, ArrowLeft } from "lucide-react";
 
@@ -54,6 +55,14 @@ export default function App() {
             <Route path="/admin/users" element={<UsersPage />} />
             <Route path="/admin/users/new" element={<CreateUserPage />} />
             <Route path="/admin/users/:id/edit" element={<EditUserPage />} />
+          </Route>
+        </Route>
+
+        {/* Protected — clinical roles — patient search and records */}
+        <Route element={<ProtectedRoute allowedRoles={["nurse", "midwife", "physician", "city_health_officer", "phis_coordinator", "disease_surveillance_officer"]} />}>
+          <Route element={<AppShell />}>
+            <Route path="/patients" element={<PatientsPage />} />
+            {/* /patients/new and /patients/:id added in Plans 04 and 05 */}
           </Route>
         </Route>
 

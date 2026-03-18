@@ -10,6 +10,7 @@ import {
 // Human-readable page titles by pathname
 const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
+  "/patients": "Patients",
   "/admin/users": "User Management",
   "/unauthorized": "Access Restricted",
 }
