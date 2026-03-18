@@ -60,10 +60,11 @@ See `.planning/milestones/v2-ROADMAP.md` for full phase details.
   2. `prenatal_enrollments.is_high_risk BOOLEAN`, `epi_enrollments.fic_status BOOLEAN`, and `nutrition_visits.severe_wasting BOOLEAN` are present and ready for Phase 8 ML consumption
   3. Pydantic v2 schemas cover create/update/response for all 8 models
   4. `epi_vaccinations.vaccine` uses TEXT (not PostgreSQL ENUM); validated at Pydantic layer
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04.1-01: TBD
+- [ ] 04.1-01-PLAN.md — All 8 MCH ORM models (prenatal, postpartum, EPI, nutrition) with FKs, mixins, ML fields
+- [ ] 04.1-02-PLAN.md — Pydantic schemas (16 classes) + single Alembic migration for all 8 tables
 
 ### Phase 4.2: Prenatal + Postpartum Programs
 **Goal**: Nurses manage the full prenatal lifecycle (enrollment → AOG-based visit scheduling → overdue detection → high-risk flagging) and postpartum care (delivery recording auto-creates postpartum enrollment with Day 1 / Week 1 / Week 6 schedule), with program tabs on patient profile and dedicated overdue list pages
@@ -175,7 +176,7 @@ Plans:
 | 2. Authentication + RBAC + User Management | v2 | 9/9 | Complete | 2026-03-17 |
 | 3. Patient ITR + Core Data Model | v3 | 5/5 | Complete | 2026-03-18 |
 | 4. Maternal + Child Health Programs | v3 | — | Head phase (see 4.1–4.4) | — |
-| 4.1. MCH Shared Data Model | v3 | 0/TBD | Not started | — |
+| 4.1. MCH Shared Data Model | v3 | 0/2 | Planning complete | — |
 | 4.2. Prenatal + Postpartum Programs | v3 | 0/TBD | Not started | — |
 | 4.3. EPI Vaccination Program | v3 | 0/TBD | Not started | — |
 | 4.4. Nutrition / OPT+ Program | v3 | 0/TBD | Not started | — |
