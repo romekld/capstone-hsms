@@ -2,43 +2,72 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { publicApi } from '../lib/api';
 import { Announcement, Service } from '../types/announcement';
-import { AnnouncementCard } from '../components/AnnouncementCard';
-import { ServiceCard } from '../components/ServiceCard';
-import { NewsletterSignup } from '../components/NewsletterSignup';
-import { ContactForm } from '../components/ContactForm';
-import { ServiceFinder } from '../components/ServiceFinder';
+import { healthPrograms } from '../lib/healthPrograms';
 import { Footer } from '../components/Footer';
-import { ArrowRight, Phone, MapPin, Users, Activity, Shield, Heart, Clock, ExternalLink } from 'lucide-react';
+import {
+  ArrowRight,
+  Activity,
+  Shield,
+  Heart,
+  Clock,
+  MapPin,
+  Phone,
+} from 'lucide-react';
 
 export function Home() {
   const [featuredAnnouncements, setFeaturedAnnouncements] = useState<Announcement[]>([]);
   const [featuredServices, setFeaturedServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedBarangay, setSelectedBarangay] = useState('all');
 
-  const latestUpdates = [
+  const fallbackAnnouncements = [
     {
-      id: 101,
-      category: 'DASMARIÑAS CHO',
-      title: 'Persistent in Bringing Health Care Services to the Community',
-      description:
-        'In partnership with the Provincial Health Office and OPG-Extension Office, CHO2 conducted a medical and dental mission at San Miguel 1 Covered Court to expand community access to quality care.',
-      publishedDate: 'October 1, 2018',
-      collage: [
-        'https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=600&q=80',
-        'https://images.unsplash.com/photo-1551190822-a9333d879b1f?auto=format&fit=crop&w=600&q=80',
-      ],
+      id: 901,
+      title: 'Quarterly Polio Vaccination Drive',
+      summary: 'Health workers will run a barangay-wide vaccination drive this week for children below five years old.',
+      date: 'March 18, 2026',
+      image: 'https://images.unsplash.com/photo-1631815589968-fdb09a223b1e?auto=format&fit=crop&w=600&q=80',
     },
     {
-      id: 102,
-      category: 'DASMARIÑAS CHO',
-      title: 'Caring Close to Home: Healthcare Touches Down in Barangay Langkaan 1, Dasma',
-      description:
-        'The outreach delivered free medical consultations, check-ups, prescribed medicines, multivitamins, and mosquito repellent lotion for 364 patients in Barangay Langkaan 1.',
-      publishedDate: 'December 20, 2023',
-      image:
-        'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=1200&q=80',
+      id: 902,
+      title: 'Dengue Prevention Week',
+      summary: 'Free fogging and mosquito habitat checks will be conducted in priority zones with high case counts.',
+      date: 'March 11, 2026',
+      image: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=600&q=80',
+    },
+    {
+      id: 903,
+      title: 'Free Optical Mission',
+      summary: 'Residents may register for eye screening and reading glasses distribution at the CHO outreach desk.',
+      date: 'March 6, 2026',
+      image: 'https://images.unsplash.com/photo-1580281657527-47f249e8f4df?auto=format&fit=crop&w=600&q=80',
     },
   ];
+
+  const serviceIcons = [Activity, Heart, Shield, Clock, MapPin, Phone];
+  const barangays = [
+    'San Juan',
+    'Salawag',
+    'Langkaan I',
+    'Langkaan II',
+    'Sampaloc I',
+    'Sampaloc II',
+    'Burol',
+    'Paliparan I',
+    'Paliparan II',
+    'Paliparan III',
+  ];
+
+  const formatPublishedDate = (dateString: string) => {
+    const parsed = new Date(dateString);
+    if (Number.isNaN(parsed.getTime())) return 'Recent update';
+
+    return parsed.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
 
   const scrollToLatestAnnouncements = () => {
     const section = document.getElementById('latest-announcements');
@@ -56,7 +85,7 @@ export function Home() {
         const servicesResponse = await publicApi.getServices();
         
         setFeaturedAnnouncements(announcementsResponse.data.slice(0, 3));
-        setFeaturedServices(servicesResponse.data.slice(0, 3));
+        setFeaturedServices(servicesResponse.data.slice(0, 6));
       } catch (error) {
         console.error('Error loading home data:', error);
       } finally {
@@ -71,9 +100,10 @@ export function Home() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
-          <div className="relative">
-            <div className="w-12 h-12 border-4 border-primary/20 rounded-full"></div>
-            <div className="absolute top-0 left-0 w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <div className="flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.3s]"></span>
+            <span className="h-3 w-3 rounded-full bg-primary/80 animate-bounce [animation-delay:-0.15s]"></span>
+            <span className="h-3 w-3 rounded-full bg-primary animate-bounce"></span>
           </div>
           <p className="text-muted-foreground">Loading health services...</p>
         </div>
@@ -81,261 +111,187 @@ export function Home() {
     );
   }
 
+  const displayedProgramCards = healthPrograms.slice(0, 4);
+
+  const announcementRows = featuredAnnouncements.length > 0
+    ? featuredAnnouncements.map((announcement, index) => ({
+        id: announcement.id,
+        title: announcement.title,
+        summary: announcement.summary || `${announcement.content.slice(0, 110)}...`,
+        date: formatPublishedDate(announcement.published_at),
+        image: announcement.image_url || fallbackAnnouncements[index % fallbackAnnouncements.length].image,
+      }))
+    : fallbackAnnouncements;
+
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative bg-background overflow-hidden">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[75vh] flex items-center py-12 lg:py-16">
-          <div className="max-w-3xl text-left space-y-8">
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-balance text-foreground">
-                City Health Office II
-              </h1>
-              <p className="text-xl md:text-2xl lg:text-3xl text-muted-foreground text-balance">
-                Your Health, Our Priority - Serving Dasmariñas City with Quality Healthcare
-              </p>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-start">
-              <Link
-                to="/services"
-                className="inline-flex items-center justify-center px-8 py-4 bg-secondary text-secondary-foreground font-semibold rounded-lg hover:bg-secondary/90 transition-all duration-200 hover:scale-105 shadow-lg"
-              >
-                Our Services
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <button
-                type="button"
-                onClick={scrollToLatestAnnouncements}
-                className="inline-flex items-center justify-center px-8 py-4 bg-card text-foreground font-semibold rounded-lg hover:bg-muted transition-all duration-200 border border-border"
-              >
-                Latest Updates
-              </button>
+    <div className="min-h-screen bg-[#edf2f3]">
+      <section className="relative overflow-hidden pb-14 pt-10 lg:pb-20">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-16 top-4 h-56 w-56 rounded-full bg-emerald-300/20 blur-3xl"></div>
+          <div className="absolute right-8 top-14 h-44 w-44 rounded-full bg-cyan-300/25 blur-3xl"></div>
+        </div>
 
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <p className="font-main text-xs font-semibold uppercase tracking-[0.28em] text-emerald-800/70">
+                  Community Health Network
+                </p>
+                <h1 className="font-main text-4xl font-extrabold leading-[0.95] text-emerald-950 md:text-6xl lg:text-7xl">
+                  Your Community&apos;s
+                  <span className="block text-emerald-700">Sanctuary of Health.</span>
+                </h1>
+                <p className="max-w-xl text-base text-emerald-900/70 md:text-lg">
+                  Access essential medical services, health programs, and coordinated outreach built for every barangay in Dasmariñas City.
+                </p>
+              </div>
+
+              <div className="w-full max-w-sm space-y-2">
+                <label htmlFor="service-category" className="font-main text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800/75">
+                  Select Barangay
+                </label>
+                <select
+                  id="service-category"
+                  value={selectedBarangay}
+                  onChange={(event) => setSelectedBarangay(event.target.value)}
+                  className="w-full rounded-xl bg-white/90 px-4 py-3 text-sm font-medium text-emerald-900 shadow-md shadow-emerald-900/5 outline-none ring-0 transition focus:shadow-lg"
+                >
+                  <option value="all">All Barangays</option>
+                  {barangays.map((barangay) => (
+                    <option key={barangay} value={barangay}>
+                      Barangay {barangay}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  to="/services"
+                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 transition hover:-translate-y-0.5 hover:bg-emerald-800"
+                >
+                  See all services
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <button
+                  type="button"
+                  onClick={scrollToLatestAnnouncements}
+                  className="inline-flex items-center rounded-xl bg-white/80 px-5 py-3 text-sm font-semibold text-emerald-900 shadow-md shadow-emerald-900/5 transition hover:bg-white"
+                >
+                  Latest announcements
+                </button>
+              </div>
+            </div>
+
+            <div className="relative min-h-[320px] overflow-hidden rounded-3xl bg-gradient-to-br from-cyan-900 via-cyan-700 to-emerald-500 p-6 shadow-2xl shadow-cyan-900/25">
+              <img
+                src="https://images.unsplash.com/photo-1666214280391-8ff5bd3c0bf0?auto=format&fit=crop&w=1300&q=80"
+                alt="Healthcare professionals at work"
+                className="h-full min-h-[300px] w-full rounded-2xl object-cover opacity-75"
+                loading="lazy"
+              />
+
+              <div className="absolute bottom-6 left-6 rounded-2xl bg-emerald-200/90 px-4 py-3 shadow-xl shadow-emerald-950/20 backdrop-blur-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-950/70">Certified Care</p>
+                <p className="font-main text-sm font-bold text-emerald-950">
+                  {featuredServices[0]?.name || 'Prenatal Care'}
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/45 to-transparent" />
+      <section className="pb-12 lg:pb-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="font-main text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700/75">Services • CHO2</p>
+              <h2 className="font-main text-3xl font-extrabold text-emerald-950 md:text-4xl">Core Health Programs</h2>
+            </div>
+            <Link
+              to="/services"
+              className="inline-flex items-center gap-2 rounded-full bg-emerald-700 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-emerald-50 transition hover:bg-emerald-800"
+            >
+              See all services
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
 
-      {/* Emergency Services */}
-      <section className="py-16 bg-destructive/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center p-3 bg-destructive/10 rounded-full mb-4">
-              <Shield className="h-8 w-8 text-destructive" />
+          {displayedProgramCards.length > 0 ? (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {displayedProgramCards.map((program, index) => {
+                const Icon = serviceIcons[index % serviceIcons.length];
+
+                return (
+                  <Link
+                    key={program.id}
+                    to="/services"
+                    className="block rounded-2xl bg-white/90 p-5 shadow-sm shadow-emerald-900/10 transition duration-200 hover:-translate-y-1 hover:shadow-lg"
+                  >
+                    <div className="mb-4 flex items-start justify-between gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                    </div>
+                    <h3 className="font-main text-lg font-bold text-emerald-950">{program.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-emerald-900/70">{program.description}</p>
+                  </Link>
+                );
+              })}
             </div>
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              Emergency Services
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Available 24/7 for urgent medical needs and emergencies
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-card rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
-              <Phone className="h-8 w-8 text-destructive mx-auto mb-3" />
-              <h3 className="font-semibold text-foreground mb-2">Emergency Hotline</h3>
-              <p className="text-2xl font-bold text-destructive mb-1">(046) 123-4567</p>
-              <p className="text-sm text-muted-foreground">Available 24/7</p>
+          ) : (
+            <div className="rounded-2xl bg-white/85 p-6 text-sm text-emerald-900/70 shadow-sm shadow-emerald-900/10">
+              No services available for this category right now.
             </div>
-            <div className="bg-card rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
-              <Activity className="h-8 w-8 text-health-warning mx-auto mb-3" />
-              <h3 className="font-semibold text-foreground mb-2">Urgent Care</h3>
-              <p className="text-sm text-muted-foreground mb-2">Non-life threatening emergencies</p>
-              <p className="text-sm text-muted-foreground">Mon-Fri: 8AM-8PM</p>
-            </div>
-            <div className="bg-card rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
-              <Heart className="h-8 w-8 text-health-success mx-auto mb-3" />
-              <h3 className="font-semibold text-foreground mb-2">Medical Advice</h3>
-              <p className="text-sm text-muted-foreground mb-2">Telehealth consultation</p>
-              <p className="text-sm text-muted-foreground">Daily: 6AM-10PM</p>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-health-warning/45 to-transparent" />
-
-      {/* Featured Announcements */}
-      <section id="latest-announcements" className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              Latest Announcements
-            </h2>
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Stay updated with the latest news and updates from CHO2
+      <section id="latest-announcements" className="pb-20">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.4fr_1fr] lg:gap-10 lg:px-8">
+          <div className="space-y-3">
+            <p className="font-main text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700/75">Updates • Newsfeed</p>
+            <h2 className="font-main text-3xl font-extrabold text-emerald-950 md:text-4xl">Latest Health Announcements</h2>
+            <p className="text-sm leading-6 text-emerald-900/70">
+              Read real-time advisories, outreach notices, and service updates from City Health Office II.
             </p>
             <Link
               to="/announcements"
-              className="inline-flex items-center text-primary hover:text-primary/80 font-medium transition-colors"
+              className="inline-flex items-center gap-2 rounded-full bg-emerald-700 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-emerald-50 transition hover:bg-emerald-800"
             >
-              View All Announcements
-              <ArrowRight className="ml-2 h-4 w-4" />
+              See all updates
+              <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {latestUpdates.map((item) => (
-              <article key={item.id} className="bg-white rounded-xl p-4 md:p-5">
-                <div className="mb-4">
-                  {item.collage ? (
-                    <div className="grid grid-cols-2 gap-2 h-64">
-                      {item.collage.map((imageUrl, index) => (
-                        <img
-                          key={`${item.id}-${index}`}
-                          src={imageUrl}
-                          alt={`${item.title} scene ${index + 1}`}
-                          className="h-full w-full object-cover rounded-lg"
-                          loading="lazy"
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="h-64 w-full object-cover rounded-lg"
-                      loading="lazy"
-                    />
-                  )}
+
+          <div className="space-y-3">
+            {announcementRows.map((announcement) => (
+              <Link
+                key={announcement.id}
+                to={`/announcements#announcement-${announcement.id}`}
+                className="group flex gap-3 rounded-xl bg-white/90 p-3 shadow-sm shadow-emerald-900/10 transition hover:bg-white hover:shadow-md"
+              >
+                <img
+                  src={announcement.image}
+                  alt={announcement.title}
+                  className="h-16 w-16 rounded-lg object-cover"
+                  loading="lazy"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700/75">{announcement.date}</p>
+                  <h3 className="font-main text-sm font-bold text-emerald-950 transition group-hover:text-emerald-700 md:text-base">
+                    {announcement.title}
+                  </h3>
+                  <p className="mt-1 text-xs text-emerald-900/65 md:text-sm">{announcement.summary}</p>
                 </div>
-
-                <p className="text-xs font-bold tracking-wide text-emerald-900 uppercase mb-3">{item.category}</p>
-
-                <h3 className="text-2xl font-bold text-zinc-900 leading-tight line-clamp-2 mb-3">{item.title}</h3>
-
-                <p className="font-subtext text-sm leading-6 text-zinc-600 line-clamp-3 mb-6">{item.description}</p>
-
-                <div className="flex items-center justify-between gap-3">
-                  <p className="font-subtext text-sm text-zinc-500">{item.publishedDate}</p>
-
-                  <Link
-                    to={`/announcements#announcement-${item.id}`}
-                    className="inline-flex items-center gap-1 rounded-lg bg-emerald-800 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
-                  >
-                    Read More
-                    <ExternalLink className="h-4 w-4" />
-                  </Link>
-                </div>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-
-      {/* Featured Services */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              Our Services
-            </h2>
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Comprehensive healthcare services for the Dasmariñas community
-            </p>
-            <Link
-              to="/services"
-              className="inline-flex items-center text-primary hover:text-primary/80 font-medium transition-colors"
-            >
-              View All Services
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredServices.map((service) => (
-              <ServiceCard key={service.id} service={service} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-health-accent/40 to-transparent" />
-
-      {/* Service Finder */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              Find the Right Service
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Search and filter through our comprehensive healthcare services
-            </p>
-          </div>
-          
-          <ServiceFinder services={featuredServices} />
-        </div>
-      </section>
-
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/45 to-transparent" />
-
-      {/* Quick Stats */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center group">
-              <div className="flex justify-center mb-4">
-                <div className="p-4 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
-                  <Users className="h-8 w-8 text-primary" />
-                </div>
-              </div>
-              <h3 className="text-3xl font-bold text-foreground mb-2">50,000+</h3>
-              <p className="text-muted-foreground">Residents Served</p>
-            </div>
-            <div className="text-center group">
-              <div className="flex justify-center mb-4">
-                <div className="p-4 bg-health-success/10 rounded-xl group-hover:bg-health-success/20 transition-colors">
-                  <Clock className="h-8 w-8 text-health-success" />
-                </div>
-              </div>
-              <h3 className="text-3xl font-bold text-foreground mb-2">24/7</h3>
-              <p className="text-muted-foreground">Emergency Services</p>
-            </div>
-            <div className="text-center group">
-              <div className="flex justify-center mb-4">
-                <div className="p-4 bg-health-accent/10 rounded-xl group-hover:bg-health-accent/20 transition-colors">
-                  <MapPin className="h-8 w-8 text-health-accent" />
-                </div>
-              </div>
-              <h3 className="text-3xl font-bold text-foreground mb-2">5</h3>
-              <p className="text-muted-foreground">Health Centers</p>
-            </div>
-            <div className="text-center group">
-              <div className="flex justify-center mb-4">
-                <div className="p-4 bg-secondary rounded-xl group-hover:bg-secondary/80 transition-colors">
-                  <Phone className="h-8 w-8 text-secondary-foreground" />
-                </div>
-              </div>
-              <h3 className="text-3xl font-bold text-foreground mb-2">Hotline</h3>
-              <p className="text-muted-foreground">(046) 123-4567</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-health-accent/45 to-transparent" />
-
-      {/* Newsletter and Contact */}
-      <section className="py-16 health-gradient-subtle">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div className="animate-fade-in-up">
-              <NewsletterSignup />
-            </div>
-            <div className="animate-fade-in-up animate-stagger-2">
-              <ContactForm />
-            </div>
-          </div>
-        </div>
-      </section>
-      
       <Footer />
     </div>
   );

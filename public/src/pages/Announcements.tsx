@@ -85,14 +85,47 @@ const CATEGORY_STYLES: Record<FeedCategory, string> = {
   Notice: 'bg-lime-100 text-lime-800 border border-lime-200',
 };
 
+const BARANGAY_OPTIONS = [
+  'All Barangays',
+  'Burol I',
+  'Burol II',
+  'Burol III',
+  'Emmanuel Bergado I',
+  'Emmanuel Bergado II',
+  'Fatima I',
+  'Fatima II',
+  'Fatima III',
+  'Luzviminda I',
+  'Luzviminda II',
+  'San Andres I',
+  'San Andres II',
+  'San Antonio de Padua I',
+  'San Antonio de Padua II',
+  'San Francisco I',
+  'San Francisco II',
+  'San Lorenzo Ruiz I',
+  'San Lorenzo Ruiz II',
+  'San Luis I',
+  'San Luis II',
+  'San Mateo',
+  'San Nicolas I',
+  'San Nicolas II',
+  'San Roque (Sta. Cristina II)',
+  'San Simon (Barangay 7)',
+  'Santa Cristina I',
+  'Santa Cristina II',
+  'Santa Cruz I',
+  'Santa Cruz II',
+  'Santa Fe',
+  'Santa Maria (Barangay 20)',
+  'Victoria Reyes',
+];
+
 export function Announcements() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedBarangay, setSelectedBarangay] = useState('All Barangays');
 
-  const barangays = useMemo(
-    () => ['All Barangays', ...new Set(ANNOUNCEMENTS.map((item) => item.barangay)).values()],
-    []
-  );
+  const barangays = useMemo(() => BARANGAY_OPTIONS, []);
 
   const filteredAnnouncements = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
@@ -120,13 +153,34 @@ export function Announcements() {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_-10%_-20%,rgba(16,185,129,0.14),transparent_45%),radial-gradient(circle_at_110%_-5%,rgba(20,184,166,0.12),transparent_45%),linear-gradient(180deg,#f8fcf9_0%,#edf5ef_100%)]">
+
+
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
         <section className="rounded-3xl border border-emerald-100/70 bg-white/90 shadow-sm p-8 lg:p-10 animate-fade-in-down">
-          <p className="text-sm font-semibold tracking-[0.18em] uppercase text-emerald-700 mb-3">City Health Office Bulletin</p>
-          <h1 className="text-4xl lg:text-5xl font-bold text-emerald-950 mb-4 text-balance">Announcements Feed</h1>
-          <p className="text-lg text-emerald-900/75 leading-relaxed max-w-3xl">
-            Stay updated on advisories, events, and official notices for your barangay through a clear and accessible public information feed.
-          </p>
+          <div className="grid grid-cols-1 lg:grid-cols-[1.55fr_1fr] gap-6 lg:gap-8 items-start">
+            <div>
+              <p className="text-sm font-semibold tracking-[0.18em] uppercase text-emerald-700 mb-3">City Health Office Bulletin</p>
+              <h1 className="text-[clamp(2rem,4.8vw,3.4rem)] font-bold leading-[1.08] tracking-[-0.02em] text-emerald-950 mb-4 text-balance">
+                Announcements Feed
+              </h1>
+              <p className="text-lg text-emerald-900/75 leading-relaxed max-w-3xl">
+                Stay updated on advisories, events, and official notices for your barangay through a clear and accessible public information feed.
+              </p>
+            </div>
+
+            <aside className="rounded-2xl border border-emerald-200/80 bg-[linear-gradient(155deg,rgba(16,185,129,0.14),rgba(255,255,255,0.95)_45%,rgba(20,184,166,0.08))] p-5 shadow-sm">
+              <p className="mt-2 text-base font-semibold leading-snug text-emerald-950">
+                Welcome to the City Health Office announcement board.
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-emerald-900/80">
+                For urgent concerns, coordinate with your barangay health worker while checking this page for verified public updates.
+              </p>
+              <p className="mt-4 inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-emerald-800 border border-emerald-200">
+                Public info updates daily
+              </p>
+            </aside>
+          </div>
         </section>
 
         <section className="sticky top-16 z-20 rounded-2xl border border-emerald-100 bg-white/85 backdrop-blur-lg shadow-sm p-4 sm:p-5">

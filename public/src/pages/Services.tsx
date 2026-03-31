@@ -9,13 +9,7 @@ import {
   Stethoscope,
   ChevronRight,
 } from 'lucide-react';
-
-interface HealthProgram {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-}
+import { healthPrograms } from '../lib/healthPrograms';
 
 export function Services() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -25,49 +19,16 @@ export function Services() {
     setIsLoaded(true);
   }, []);
 
-  const programs: HealthProgram[] = [
-    {
-      id: 'immunization',
-      title: 'Immunization Program',
-      description:
-        'Comprehensive vaccination services for children and adults, protecting against preventable diseases and ensuring community health.',
-      icon: <Syringe className="h-8 w-8" />,
-    },
-    {
-      id: 'maternal',
-      title: 'Maternal & Child Care',
-      description:
-        'Prenatal care, safe delivery services, and postnatal support for mothers and newborns to ensure healthy families.',
-      icon: <Heart className="h-8 w-8" />,
-    },
-    {
-      id: 'nutrition',
-      title: 'Nutrition Program',
-      description:
-        'Nutritional counseling and dietary guidance to promote healthy eating habits and prevent lifestyle-related diseases.',
-      icon: <Apple className="h-8 w-8" />,
-    },
-    {
-      id: 'disease-prevention',
-      title: 'Disease Prevention & Control',
-      description:
-        'Disease surveillance, outbreak management, and prevention strategies to protect public health and minimize epidemic risks.',
-      icon: <Shield className="h-8 w-8" />,
-    },
-    {
-      id: 'environmental-health',
-      title: 'Environmental Health Services',
-      description:
-        'Water quality monitoring, sanitation inspection, and pollution control to ensure safe and healthy living environments.',
-      icon: <Leaf className="h-8 w-8" />,
-    },
-    {
-      id: 'consultations',
-      title: 'Medical Consultations',
-      description:
-        'Professional medical advice and diagnostic services provided by experienced healthcare practitioners for various health concerns.',
-      icon: <Stethoscope className="h-8 w-8" />,
-    },
+  const programIcons = [
+    <Stethoscope className="h-8 w-8" />,
+    <Heart className="h-8 w-8" />,
+    <Apple className="h-8 w-8" />,
+    <Shield className="h-8 w-8" />,
+    <Leaf className="h-8 w-8" />,
+    <Stethoscope className="h-8 w-8" />,
+    <Heart className="h-8 w-8" />,
+    <Shield className="h-8 w-8" />,
+    <Syringe className="h-8 w-8" />,
   ];
 
   return (
@@ -102,7 +63,7 @@ export function Services() {
       {/* Services Grid Section */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {programs.map((program, index) => (
+          {healthPrograms.map((program, index) => (
             <div
               key={program.id}
               className={`group transform transition-all duration-700 ${
@@ -136,7 +97,7 @@ export function Services() {
                       className="p-3 backdrop-blur-sm rounded-xl text-white"
                       style={{ backgroundColor: 'rgba(255, 255, 255, 0.25)' }}
                     >
-                      {program.icon}
+                      {programIcons[index % programIcons.length]}
                     </div>
                   </div>
                 </div>
