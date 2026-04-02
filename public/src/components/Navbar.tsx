@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 import { Menu, X, Heart, Search, User, Users } from 'lucide-react';
-import { ThemeToggle } from './ThemeToggle';
 import { Button } from './ui/button';
 
 export function Navbar() {
@@ -74,9 +73,6 @@ export function Navbar() {
               <Users className="h-4 w-4" />
               <span className="text-sm font-medium">Are you a patient?</span>
             </Button>
-            
-            {/* Theme toggle */}
-            <ThemeToggle />
             
             {/* Mobile menu button */}
             <div className="md:hidden">

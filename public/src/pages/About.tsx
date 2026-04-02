@@ -1,4 +1,4 @@
-import { Building2, Users, MapPin, Phone, Mail, Clock, Award } from 'lucide-react';
+import { Building2, Users, MapPin, Phone, Mail, Clock, Award, BookOpen, PenLine } from 'lucide-react';
 import { Footer } from '../components/Footer';
 
 export function About() {
@@ -12,8 +12,8 @@ export function About() {
               <Building2 className="h-12 w-12" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            About City Health Office II
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-4 leading-tight tracking-tight w-full">
+            About CHO II
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Committed to providing quality healthcare services to the residents of Dasmariñas City. 
@@ -48,73 +48,93 @@ export function About() {
           </div>
         </div>
 
-        {/* Services Overview */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            What We Offer
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="bg-emerald-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Users className="h-8 w-8 text-emerald-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Primary Care</h3>
-              <p className="text-gray-600 text-sm">
-                General health consultations, preventive care, and treatment of common illnesses
-              </p>
+        {/* Blog */}
+        <section className="mb-16">
+          <div className="mb-8 text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/80 px-4 py-2 text-sm font-medium text-emerald-800 shadow-sm">
+              <BookOpen className="h-4 w-4" />
+              Community Blog
             </div>
-            
-            <div className="text-center">
-              <div className="bg-green-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Award className="h-8 w-8 text-green-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Maternal Health</h3>
-              <p className="text-gray-600 text-sm">
-                Prenatal care, postpartum support, and maternal health services
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-purple-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Building2 className="h-8 w-8 text-purple-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Child Health</h3>
-              <p className="text-gray-600 text-sm">
-                Immunizations, growth monitoring, and pediatric care
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-yellow-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Phone className="h-8 w-8 text-yellow-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Emergency Services</h3>
-              <p className="text-gray-600 text-sm">
-                24/7 emergency response and critical care services
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-red-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Mail className="h-8 w-8 text-red-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Health Education</h3>
-              <p className="text-gray-600 text-sm">
-                Community health programs and wellness education
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-indigo-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Clock className="h-8 w-8 text-indigo-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Diagnostic Services</h3>
-              <p className="text-gray-600 text-sm">
-                Laboratory tests and diagnostic procedures
-              </p>
-            </div>
+            <h2 className="mt-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+              Stories from CHO II
+            </h2>
+            <p className="mx-auto mt-3 max-w-3xl text-lg text-gray-600">
+              A closer look at the office, the people it serves, and the commitment behind every health service.
+            </p>
           </div>
-        </div>
+
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+            <article className="overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-[0_20px_60px_-30px_rgba(16,185,129,0.45)]">
+              <div className="border-b border-emerald-100 bg-gradient-to-r from-emerald-50 via-white to-teal-50 px-6 py-5 sm:px-8">
+                <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
+                  <PenLine className="h-4 w-4" />
+                  Office Profile
+                </div>
+                <h3 className="mt-3 text-2xl font-bold text-gray-900 sm:text-3xl">
+                  Serving Dasmariñas at the community level
+                </h3>
+              </div>
+              <div className="space-y-6 px-6 py-6 sm:px-8 sm:py-8">
+                <p className="text-lg leading-8 text-gray-700 text-balance">
+                  City Health Office II (CHO II), located in Barangay Sta. Cruz I, Area E, City of Dasmariñas, Cavite, is committed to promoting and protecting the health and well-being of the community. The office serves a population of approximately 164,691 residents across 32 barangays.
+                </p>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-2xl bg-emerald-50 px-5 py-4">
+                    <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">Population Served</p>
+                    <p className="font-main mt-2 text-2xl font-bold text-emerald-950">164,691</p>
+                    <p className="mt-1 text-sm text-gray-600">Residents across 32 barangays</p>
+                  </div>
+                  <div className="rounded-2xl bg-teal-50 px-5 py-4">
+                    <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-700">Community Coverage</p>
+                    <p className="font-main mt-2 text-2xl font-bold text-teal-950">32 Barangays</p>
+                    <p className="mt-1 text-sm text-gray-600">Supported through local health access points</p>
+                  </div>
+                </div>
+                <p className="text-base leading-8 text-gray-700 text-balance">
+                  CHO II operates through a network of dedicated healthcare professionals, with each barangay supported by one assigned nurse or midwife and an average of five Barangay Health Workers. Together, they ensure that essential health services are accessible at the community level.
+                </p>
+              </div>
+            </article>
+
+            <aside className="space-y-6">
+              <article className="rounded-3xl border border-slate-200 bg-slate-950 p-6 text-white shadow-[0_20px_60px_-30px_rgba(15,23,42,0.5)]">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-200">
+                  <Award className="h-4 w-4" />
+                  Our Commitment
+                </div>
+                <h3 className="mt-4 text-2xl font-bold text-white">A better system for a growing city</h3>
+                <p className="mt-4 text-sm leading-7 text-slate-300 text-balance">
+                  We are dedicated to delivering efficient, accessible, and high-quality healthcare services. As we continue to serve our growing community, CHO II recognizes the importance of improving coordination, reducing delays, and enhancing service delivery through innovation and better systems.
+                </p>
+                <p className="mt-4 text-sm leading-7 text-slate-300 text-balance">
+                  Our goal is to continuously evolve and adopt solutions that support faster, more reliable, and data-driven healthcare for every resident of Dasmariñas.
+                </p>
+              </article>
+
+              <article className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-sm">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-2xl bg-emerald-100 p-3 text-emerald-700">
+                    <Users className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">Community-first care</h3>
+                    <p className="text-sm text-gray-600">Built around accessibility and continuity</p>
+                  </div>
+                </div>
+                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-2xl bg-gray-50 p-4">
+                    <p className="text-sm font-semibold text-gray-900">Assigned support</p>
+                    <p className="mt-1 text-sm text-gray-600">One nurse or midwife per barangay</p>
+                  </div>
+                  <div className="rounded-2xl bg-gray-50 p-4">
+                    <p className="text-sm font-semibold text-gray-900">Frontline network</p>
+                    <p className="mt-1 text-sm text-gray-600">Average of five Barangay Health Workers</p>
+                  </div>
+                </div>
+              </article>
+            </aside>
+          </div>
+        </section>
 
         {/* Contact Information */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

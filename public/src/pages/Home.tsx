@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { publicApi } from '../lib/api';
+import { BARANGAY_OPTIONS } from '../lib/barangays';
 import { Announcement, Service } from '../types/announcement';
 import { healthPrograms } from '../lib/healthPrograms';
 import { Footer } from '../components/Footer';
@@ -45,18 +46,6 @@ export function Home() {
   ];
 
   const serviceIcons = [Activity, Heart, Shield, Clock, MapPin, Phone];
-  const barangays = [
-    'San Juan',
-    'Salawag',
-    'Langkaan I',
-    'Langkaan II',
-    'Sampaloc I',
-    'Sampaloc II',
-    'Burol',
-    'Paliparan I',
-    'Paliparan II',
-    'Paliparan III',
-  ];
 
   const formatPublishedDate = (dateString: string) => {
     const parsed = new Date(dateString);
@@ -139,8 +128,8 @@ export function Home() {
                   Community Health Network
                 </p>
                 <h1 className="font-main text-4xl font-extrabold leading-[0.95] text-emerald-950 md:text-6xl lg:text-7xl">
-                  Your Community&apos;s
-                  <span className="block text-emerald-700">Sanctuary of Health.</span>
+                  City Health Office II,
+                  <span className="block text-emerald-700"> Serving Every Barangay</span>
                 </h1>
                 <p className="max-w-xl text-base text-emerald-900/70 md:text-lg">
                   Access essential medical services, health programs, and coordinated outreach built for every barangay in Dasmariñas City.
@@ -158,9 +147,9 @@ export function Home() {
                   className="w-full rounded-xl bg-white/90 px-4 py-3 text-sm font-medium text-emerald-900 shadow-md shadow-emerald-900/5 outline-none ring-0 transition focus:shadow-lg"
                 >
                   <option value="all">All Barangays</option>
-                  {barangays.map((barangay) => (
+                  {BARANGAY_OPTIONS.map((barangay) => (
                     <option key={barangay} value={barangay}>
-                      Barangay {barangay}
+                      {barangay}
                     </option>
                   ))}
                 </select>
