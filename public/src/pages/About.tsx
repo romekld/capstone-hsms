@@ -1,4 +1,4 @@
-import { Building2, Users, MapPin, Phone, Mail, Clock, Award, BookOpen, PenLine } from 'lucide-react';
+import { Award, BookOpen, Building2, Clock, Mail, MapPin, PenLine, Phone, Users } from 'lucide-react';
 import { Footer } from '../components/Footer';
 
 export function About() {
@@ -12,8 +12,8 @@ export function About() {
               <Building2 className="h-12 w-12" />
             </div>
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-4 leading-tight tracking-tight w-full">
-            About CHO II
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            About City Health Office II
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Committed to providing quality healthcare services to the residents of Dasmariñas City. 

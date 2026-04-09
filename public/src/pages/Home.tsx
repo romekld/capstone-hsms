@@ -5,6 +5,7 @@ import { BARANGAY_OPTIONS } from '../lib/barangays';
 import { Announcement, Service } from '../types/announcement';
 import { healthPrograms } from '../lib/healthPrograms';
 import { Footer } from '../components/Footer';
+import { AppSelect } from '../components/ui/app-select';
 import {
   ArrowRight,
   Activity,
@@ -14,6 +15,16 @@ import {
   MapPin,
   Phone,
 } from 'lucide-react';
+
+const HOME_BARANGAY_OPTIONS = [
+  { label: 'All Barangays', value: 'all' },
+  ...BARANGAY_OPTIONS
+    .filter((barangay) => barangay !== 'All Barangays')
+    .map((barangay) => ({
+      label: barangay,
+      value: barangay,
+    })),
+];
 
 export function Home() {
   const [featuredAnnouncements, setFeaturedAnnouncements] = useState<Announcement[]>([]);
@@ -136,40 +147,36 @@ export function Home() {
                 </p>
               </div>
 
-              <div className="w-full max-w-sm space-y-2">
-                <label htmlFor="service-category" className="font-main text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800/75">
-                  Select Barangay
-                </label>
-                <select
-                  id="service-category"
-                  value={selectedBarangay}
-                  onChange={(event) => setSelectedBarangay(event.target.value)}
-                  className="w-full rounded-xl bg-white/90 px-4 py-3 text-sm font-medium text-emerald-900 shadow-md shadow-emerald-900/5 outline-none ring-0 transition focus:shadow-lg"
-                >
-                  <option value="all">All Barangays</option>
-                  {BARANGAY_OPTIONS.map((barangay) => (
-                    <option key={barangay} value={barangay}>
-                      {barangay}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <div className="space-y-4">
+                <div className="w-full max-w-sm space-y-2">
+                  <label htmlFor="service-category" className="font-main text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800/75">
+                    Select Barangay
+                  </label>
+                  <AppSelect
+                    id="service-category"
+                    value={selectedBarangay}
+                    onValueChange={setSelectedBarangay}
+                    options={HOME_BARANGAY_OPTIONS}
+                    className="w-full rounded-xl border border-transparent bg-white/90 px-4 py-3 text-sm font-medium text-emerald-900 shadow-md shadow-emerald-900/5 ring-0 transition focus:shadow-lg"
+                  />
+                </div>
 
-              <div className="flex flex-wrap items-center gap-3">
-                <Link
-                  to="/services"
-                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 transition hover:-translate-y-0.5 hover:bg-emerald-800"
-                >
-                  See all services
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <button
-                  type="button"
-                  onClick={scrollToLatestAnnouncements}
-                  className="inline-flex items-center rounded-xl bg-white/80 px-5 py-3 text-sm font-semibold text-emerald-900 shadow-md shadow-emerald-900/5 transition hover:bg-white"
-                >
-                  Latest announcements
-                </button>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Link
+                    to="/services"
+                    className="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 transition hover:-translate-y-0.5 hover:bg-emerald-800"
+                  >
+                    See all services
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={scrollToLatestAnnouncements}
+                    className="inline-flex items-center rounded-xl bg-white/80 px-5 py-3 text-sm font-semibold text-emerald-900 shadow-md shadow-emerald-900/5 transition hover:bg-white"
+                  >
+                    Latest announcements
+                  </button>
+                </div>
               </div>
             </div>
 

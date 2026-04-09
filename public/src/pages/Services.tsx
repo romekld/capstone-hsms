@@ -102,8 +102,7 @@ export function Services() {
                   </div>
                 </div>
 
-                {/* Content */}
-                <div className="p-6 sm:p-7 flex flex-col h-full text-center">
+                <div className="flex h-[calc(100%-6rem)] flex-col p-6">
                   <h3
                     className="text-xl font-semibold mb-3 group-hover:transition-colors line-clamp-2 duration-300"
                     style={{

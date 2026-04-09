@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Footer } from '../components/Footer';
+import { AppSelect } from '../components/ui/app-select';
 import { CalendarDays, Search } from 'lucide-react';
 
 type FeedCategory = 'Advisory' | 'Event' | 'Notice';
@@ -189,18 +190,13 @@ export function Announcements() {
               <label htmlFor="barangay-filter" className="text-sm font-semibold text-emerald-900">
                 Filter by Barangay
               </label>
-              <select
+              <AppSelect
                 id="barangay-filter"
                 value={selectedBarangay}
-                onChange={(e) => setSelectedBarangay(e.target.value)}
-                className="mt-2 w-full rounded-xl border border-emerald-200 bg-white px-3.5 py-3 text-sm text-slate-800 outline-none focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400"
-              >
-                {barangays.map((barangay) => (
-                  <option key={barangay} value={barangay}>
-                    {barangay}
-                  </option>
-                ))}
-              </select>
+                onValueChange={setSelectedBarangay}
+                options={barangays}
+                className="mt-2 w-full rounded-xl border border-emerald-200 bg-white px-3.5 py-3 text-sm text-slate-800 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-300"
+              />
             </div>
 
             <div className="lg:col-span-3">

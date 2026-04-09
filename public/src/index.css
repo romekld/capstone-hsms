@@ -77,36 +77,6 @@
     min-height: 100vh;
   }
 
-  /* Main typography across the app */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  button,
-  a,
-  input,
-  textarea,
-  select {
-    font-family: "Poppins", "IBM Plex Sans", sans-serif;
-  }
-
-  /* Subtext typography across all pages */
-  p,
-  small,
-  .text-muted-foreground,
-  .font-subtext {
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
-  select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: none !important;
-  }
-
   .font-main {
     font-family: "Poppins", "IBM Plex Sans", sans-serif;
   }
@@ -115,14 +85,30 @@
     font-family: Arial, Helvetica, sans-serif;
   }
 
-  /* Keep navbar typography consistent with primary font */
-  .navbar-poppins,
-  .navbar-poppins * {
-    font-family: "Poppins", "IBM Plex Sans", sans-serif;
-  }
-
   #root {
     min-height: 100vh;
+  }
+
+  .dropdown-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(16, 185, 129, 0.45) transparent;
+  }
+
+  .dropdown-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .dropdown-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .dropdown-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(16, 185, 129, 0.45);
+    border-radius: 999px;
+  }
+
+  .dropdown-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(5, 150, 105, 0.7);
   }
   
   /* Custom healthcare utilities */

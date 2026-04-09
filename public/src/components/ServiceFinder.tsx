@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Service } from '../types/announcement';
+import { AppSelect } from './ui/app-select';
 import { Search, Filter, Stethoscope, Clock, Phone, ChevronDown } from 'lucide-react';
 
 interface ServiceFinderProps {
@@ -100,17 +101,12 @@ export function ServiceFinder({ services }: ServiceFinderProps) {
               <label className="block text-sm font-medium text-foreground mb-2">
                 Category
               </label>
-              <select
+              <AppSelect
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-              >
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
+                onValueChange={setSelectedCategory}
+                options={categories}
+                className="w-full rounded-lg border bg-background px-3 py-2 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
+              />
             </div>
 
             {/* Operating Hours Filter */}
@@ -118,17 +114,12 @@ export function ServiceFinder({ services }: ServiceFinderProps) {
               <label className="block text-sm font-medium text-foreground mb-2">
                 Operating Hours
               </label>
-              <select
+              <AppSelect
                 value={selectedHours}
-                onChange={(e) => setSelectedHours(e.target.value)}
-                className="w-full px-3 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-              >
-                {operatingHours.map((hours) => (
-                  <option key={hours} value={hours}>
-                    {hours}
-                  </option>
-                ))}
-              </select>
+                onValueChange={setSelectedHours}
+                options={operatingHours}
+                className="w-full rounded-lg border bg-background px-3 py-2 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
+              />
             </div>
           </div>
 
