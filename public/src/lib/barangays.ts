@@ -1,5 +1,4 @@
 export const BARANGAY_OPTIONS = [
-  'All Barangays',
   'Burol I',
   'Burol II',
   'Burol III',

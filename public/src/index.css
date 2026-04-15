@@ -88,28 +88,6 @@
   #root {
     min-height: 100vh;
   }
-
-  .dropdown-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(16, 185, 129, 0.45) transparent;
-  }
-
-  .dropdown-scrollbar::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .dropdown-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .dropdown-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(16, 185, 129, 0.45);
-    border-radius: 999px;
-  }
-
-  .dropdown-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(5, 150, 105, 0.7);
-  }
   
   /* Custom healthcare utilities */
   .health-gradient {

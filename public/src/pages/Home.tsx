@@ -19,7 +19,6 @@ import {
 const HOME_BARANGAY_OPTIONS = [
   { label: 'All Barangays', value: 'all' },
   ...BARANGAY_OPTIONS
-    .filter((barangay) => barangay !== 'All Barangays')
     .map((barangay) => ({
       label: barangay,
       value: barangay,
