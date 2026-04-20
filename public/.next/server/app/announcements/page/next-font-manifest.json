@@ -1,8 +1,0 @@
-{
-  "pages": {},
-  "app": {
-    "[project]/public/src/app/announcements/page": []
-  },
-  "appUsingSizeAdjust": true,
-  "pagesUsingSizeAdjust": false
-}

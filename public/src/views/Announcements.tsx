@@ -264,8 +264,8 @@ export function Announcements() {
 
   return (
     <div className="min-h-screen bg-emerald-50">
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
-        <section className="overflow-hidden rounded-[2rem] border border-emerald-100 bg-emerald-50 p-6 shadow-[0_24px_70px_-48px_rgba(5,36,16,0.18)] sm:p-8 lg:p-10">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <section className="overflow-hidden rounded-[2rem] border border-emerald-100 bg-emerald-50 p-5 shadow-[0_24px_70px_-48px_rgba(5,36,16,0.18)] sm:p-6 lg:p-8">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
             <div>
               <span className="font-subtext inline-flex min-h-9 items-center rounded-full border border-emerald-200 bg-emerald-100 px-4 text-xs font-bold uppercase tracking-[0.2em] text-[#052410]">
@@ -291,7 +291,7 @@ export function Announcements() {
           </div>
         </section>
 
-        <section className="sticky top-16 z-20 mt-6 rounded-[1.75rem] border border-emerald-100 bg-emerald-50/95 p-4 shadow-[0_18px_60px_-48px_rgba(5,36,16,0.2)] backdrop-blur sm:p-5">
+        <section className="sticky top-4 z-20 mt-2 rounded-[1.75rem] border border-emerald-100 bg-emerald-50/95 p-4 shadow-[0_18px_60px_-48px_rgba(5,36,16,0.2)] backdrop-blur sm:top-5 sm:mt-3 sm:p-5">
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.7fr)_220px_220px_220px]">
             <label className="block">
               <span className="font-main text-sm font-semibold text-[#052410]">Search announcements</span>

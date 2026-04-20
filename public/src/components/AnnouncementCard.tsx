@@ -29,7 +29,7 @@ export function AnnouncementCard({ announcement, onReadMore, featured = false }:
         featured ? 'shadow-lg' : 'shadow-sm'
       }`}
     >
-      <div className="relative h-44 overflow-hidden bg-slate-100">
+      <div className="relative h-36 overflow-hidden bg-slate-100 sm:h-40">
         {announcement.image_url ? (
           <img
             src={announcement.image_url}
@@ -44,7 +44,7 @@ export function AnnouncementCard({ announcement, onReadMore, featured = false }:
           />
         )}
 
-        <div className="absolute left-4 top-4">
+        <div className="absolute left-3 top-3 sm:left-4 sm:top-4">
           <span
             className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${categoryStyles[category] ?? categoryStyles.Notices}`}
           >

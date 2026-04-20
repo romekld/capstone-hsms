@@ -22,12 +22,10 @@ export function Navbar() {
 
     if (location.pathname === '/announcements') {
       const input = document.getElementById('announcement-search') as HTMLInputElement | null;
-      if (!input) {
-        return;
+      if (input) {
+        input.focus();
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-
-      input.focus();
-      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 

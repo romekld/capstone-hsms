@@ -10,14 +10,64 @@ import {
   Stethoscope,
   ChevronRight,
 } from 'lucide-react';
+import { publicApi } from '../lib/api';
 import { healthPrograms } from '../lib/healthPrograms';
+
+type ServiceItem = {
+  id: number | string;
+  slug: string;
+  name: string;
+  description: string;
+};
+
+function fallbackServices(): ServiceItem[] {
+  return healthPrograms.map((program) => ({
+    id: program.id,
+    slug: program.id,
+    name: program.title,
+    description: program.description,
+  }));
+}
 
 export function Services() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [services, setServices] = useState<ServiceItem[]>(fallbackServices());
 
   useEffect(() => {
     // Trigger animation on mount
     setIsLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadServices = async () => {
+      try {
+        const response = await publicApi.getServices();
+        if (!mounted) return;
+
+        setServices(
+          response.data.length > 0
+            ? response.data.map((service) => ({
+                id: service.id,
+                slug: service.slug,
+                name: service.name,
+                description: service.description,
+              }))
+            : fallbackServices(),
+        );
+      } catch {
+        if (mounted) {
+          setServices(fallbackServices());
+        }
+      }
+    };
+
+    void loadServices();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const programIcons = [
@@ -64,7 +114,7 @@ export function Services() {
       {/* Services Grid Section */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {healthPrograms.map((program, index) => (
+          {services.map((program, index) => (
             <div
               key={program.id}
               className={`group transform transition-all duration-700 ${
@@ -77,6 +127,7 @@ export function Services() {
               }}
             >
               <article
+                id={`service-${program.slug}`}
                 className="relative h-full rounded-2xl overflow-hidden border shadow-sm hover:shadow-lg transition-all duration-300"
                 style={{
                   backgroundColor: '#f0fdf4',
@@ -112,7 +163,7 @@ export function Services() {
                     onMouseEnter={(e) => (e.currentTarget.style.color = '#10b981')}
                     onMouseLeave={(e) => (e.currentTarget.style.color = '#052410')}
                   >
-                    {program.title}
+                    {program.name}
                   </h3>
 
                   <p className="text-sm leading-relaxed mb-6 line-clamp-4 flex-grow" style={{ color: '#052410' }}>

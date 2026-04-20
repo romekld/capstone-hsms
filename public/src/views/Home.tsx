@@ -111,7 +111,7 @@ export function Home() {
     );
   }
 
-  const displayedProgramCards = healthPrograms.slice(0, 4);
+  const displayedProgramCards = featuredServices.length > 0 ? featuredServices.slice(0, 4) : healthPrograms.slice(0, 4);
 
   const announcementRows = featuredAnnouncements.length > 0
     ? featuredAnnouncements.map((announcement, index) => ({
@@ -223,7 +223,7 @@ export function Home() {
                 return (
                   <Link
                     key={program.id}
-                    to="/services"
+                    to={`/services#service-${program.slug ?? program.id}`}
                     className="block rounded-2xl bg-white/90 p-5 shadow-sm shadow-emerald-900/10 transition duration-200 hover:-translate-y-1 hover:shadow-lg"
                   >
                     <div className="mb-4 flex items-start justify-between gap-3">
@@ -231,7 +231,7 @@ export function Home() {
                         <Icon className="h-5 w-5" />
                       </div>
                     </div>
-                    <h3 className="font-main text-lg font-bold text-emerald-950">{program.title}</h3>
+                    <h3 className="font-main text-lg font-bold text-emerald-950">{program.name || program.title}</h3>
                     <p className="mt-2 text-sm leading-6 text-emerald-900/70">{program.description}</p>
                   </Link>
                 );
@@ -266,7 +266,7 @@ export function Home() {
             {announcementRows.map((announcement) => (
               <Link
                 key={announcement.id}
-                to={`/announcements#announcement-${announcement.id}`}
+                href={`/announcements#announcement-${announcement.id}`}
                 className="group flex gap-3 rounded-xl bg-white/90 p-3 shadow-sm shadow-emerald-900/10 transition hover:bg-white hover:shadow-md"
               >
                 <img
