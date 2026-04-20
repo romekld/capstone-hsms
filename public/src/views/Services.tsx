@@ -50,7 +50,7 @@ export function Services() {
           response.data.length > 0
             ? response.data.map((service) => ({
                 id: service.id,
-                slug: service.slug,
+                slug: String(service.id),
                 name: service.name,
                 description: service.description,
               }))

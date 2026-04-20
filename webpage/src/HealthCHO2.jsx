@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef, useEffect } from "react";
 
 // ── CONSTANTS ────────────────────────────────────────────────────────────────────
@@ -212,6 +214,16 @@ function WarningIcon({ size = 13 }) {
   );
 }
 
+function MoreVerticalIcon({ size = 16 }) {
+  return (
+    <SvgIcon size={size}>
+      <circle cx="12" cy="5" r="1.6" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none" />
+    </SvgIcon>
+  );
+}
+
 // ── STYLES ───────────────────────────────────────────────────────────────────────
 const css = `
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
@@ -251,13 +263,17 @@ button{cursor:pointer;}
 .btn-sm{padding:6px 12px;font-size:12px}
 
 .profile-wrap{position:relative}
-.profile-trigger{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--gray-200);
-  background:linear-gradient(135deg,var(--g700),var(--g500));color:#fff;display:flex;
-  align-items:center;justify-content:center;font-size:12px;font-weight:800;letter-spacing:.2px;
-  box-shadow:0 2px 8px rgba(6,95,70,.2);transition:all .18s}
-.profile-trigger:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(6,95,70,.28)}
-.profile-trigger:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(16,185,129,.22)}
-.profile-trigger img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.admin-avatar{border-radius:50%;border:1.5px solid var(--gray-200);
+  background:linear-gradient(135deg,var(--g700),var(--g500));color:#fff;display:inline-flex;
+  align-items:center;justify-content:center;font-weight:800;letter-spacing:.2px;
+  box-shadow:0 2px 8px rgba(6,95,70,.2);overflow:hidden;flex-shrink:0}
+.admin-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-trigger{padding:0;border:none;background:none;border-radius:50%;display:flex;
+  transition:transform .18s,box-shadow .18s}
+.profile-trigger:hover{transform:translateY(-1px)}
+.profile-trigger:hover .admin-avatar{box-shadow:0 5px 14px rgba(6,95,70,.28)}
+.profile-trigger:focus-visible{outline:none}
+.profile-trigger:focus-visible .admin-avatar{box-shadow:0 0 0 3px rgba(16,185,129,.22),0 2px 8px rgba(6,95,70,.2)}
 
 .profile-menu{position:absolute;right:0;top:44px;min-width:248px;background:var(--white);
   border:1px solid var(--gray-200);border-radius:12px;box-shadow:var(--sh2);overflow:hidden;z-index:1200}
@@ -269,6 +285,20 @@ button{cursor:pointer;}
   transition:background .15s,color .15s;white-space:nowrap}
 .profile-item:hover{background:var(--g50);color:var(--g800)}
 .profile-item.logout:hover{background:#FEF2F2;color:var(--red)}
+
+.icon-btn{width:34px;height:34px;border-radius:999px;border:1.5px solid var(--gray-200);
+  background:var(--white);color:var(--gray-500);display:inline-flex;align-items:center;justify-content:center;
+  transition:all .18s;box-shadow:0 1px 2px rgba(6,78,59,.06)}
+.icon-btn:hover{background:var(--g50);border-color:var(--g200);color:var(--g800)}
+.icon-btn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(16,185,129,.18)}
+.action-menu-wrap{position:relative;display:flex;align-items:center}
+.action-menu{position:absolute;top:42px;right:0;min-width:152px;background:var(--white);
+  border:1px solid var(--gray-200);border-radius:12px;box-shadow:var(--sh2);padding:6px;z-index:40}
+.action-item{width:100%;display:flex;align-items:center;gap:8px;padding:9px 10px;border:none;background:transparent;
+  border-radius:8px;text-align:left;font-size:12.5px;font-weight:600;color:var(--gray-800);transition:all .15s}
+.action-item:hover{background:var(--g50);color:var(--g800)}
+.action-item.danger{color:var(--red)}
+.action-item.danger:hover{background:#FEF2F2;color:#B91C1C}
 
 .card{background:var(--white);border-radius:var(--r2);border:1px solid var(--gray-200);box-shadow:var(--sh)}
 .input{width:100%;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:var(--r);
@@ -337,6 +367,18 @@ function LogoImg({ src, size=34 }) {
     <img src={src} alt="CHO 2 Logo"
       style={{width:size,height:size,borderRadius:size*0.26,objectFit:"contain",
         background:"white",border:"1px solid var(--gray-200)",flexShrink:0}}/>
+  );
+}
+
+function AdminAvatar({ src, size = 34, label = "Administrator profile" }) {
+  return (
+    <span
+      className="admin-avatar"
+      style={{ width: size, height: size, fontSize: Math.max(11, Math.round(size * 0.34)) }}
+      aria-hidden={src ? undefined : true}
+    >
+      {src ? <img src={src} alt={label} /> : <span>CA</span>}
+    </span>
   );
 }
 
@@ -735,18 +777,21 @@ function PostFormModal({ post, onSave, onClose }) {
 }
 
 // ── POST DETAIL MODAL ────────────────────────────────────────────────────────────
-function PostDetailModal({ post, onClose, onEdit, onDelete }) {
+function PostDetailModal({ post, onClose, onEdit, onDelete, profilePic }) {
   return (
     <div className="overlay" onClick={onClose}>
       <div className="modal sc" style={{maxWidth:620}} onClick={e=>e.stopPropagation()}>
         <div style={{padding:"20px 26px 16px",borderBottom:"1px solid var(--gray-200)",
           display:"flex",justifyContent:"space-between",alignItems:"center"}}>
           <CatBadge cat={post.category}/>
-          <button onClick={onClose} style={{background:"none",border:"none",color:"var(--gray-400)",lineHeight:0}}>
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path d="M18 6L6 18M6 6l12 12"/>
-            </svg>
-          </button>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <PostActionsMenu post={post} onEdit={onEdit} onDelete={onDelete}/>
+            <button onClick={onClose} style={{background:"none",border:"none",color:"var(--gray-400)",lineHeight:0}}>
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
         </div>
         <div style={{padding:"20px 26px",overflowY:"auto",maxHeight:"78vh"}}>
           <h2 style={{fontSize:20,fontWeight:700,color:"var(--g900)",marginBottom:8,lineHeight:1.4}}>{post.title}</h2>
@@ -758,29 +803,18 @@ function PostDetailModal({ post, onClose, onEdit, onDelete }) {
               {post.barangay}
             </span>
           </div>
-          <p style={{fontSize:12,color:"var(--gray-400)",marginBottom:16,textAlign:"left"}}>
-            Posted by {ADMIN.name} · {formatPostDate(post.createdAt)}
-          </p>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}>
+            <AdminAvatar src={profilePic} size={34} label={`${ADMIN.name} profile`}/>
+            <div style={{textAlign:"left",lineHeight:1.2}}>
+              <p style={{fontSize:12.5,fontWeight:700,color:"var(--g800)"}}>{ADMIN.name}</p>
+              <p style={{fontSize:12,color:"var(--gray-400)",marginTop:2}}>{formatPostDate(post.createdAt)}</p>
+            </div>
+          </div>
           {post.imageUrl&&(
             <img src={post.imageUrl} alt={post.title}
               style={{width:"100%",borderRadius:10,marginBottom:16,maxHeight:340,objectFit:"cover"}}/>
           )}
           <p style={{fontSize:15,color:"var(--gray-600)",lineHeight:1.8,whiteSpace:"pre-line",textAlign:"left"}}>{post.content}</p>
-          <div style={{marginTop:22,display:"flex",gap:10,justifyContent:"flex-end"}}>
-            <button className="btn btn-ghost btn-sm" onClick={()=>onEdit(post)}>
-              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-              </svg>
-              Edit
-            </button>
-            <button className="btn btn-red btn-sm" onClick={()=>onDelete(post)}>
-              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
-              </svg>
-              Delete
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -788,6 +822,63 @@ function PostDetailModal({ post, onClose, onEdit, onDelete }) {
 }
 
 // ── CATEGORY BADGE ───────────────────────────────────────────────────────────────
+function PostActionsMenu({ post, onEdit, onDelete }) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const closeOnOutside = e => {
+      if (!menuRef.current?.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", closeOnOutside);
+    return () => document.removeEventListener("mousedown", closeOnOutside);
+  }, []);
+
+  return (
+    <div className="action-menu-wrap" ref={menuRef} onClick={e=>e.stopPropagation()}>
+      <button
+        type="button"
+        className="icon-btn"
+        onClick={()=>setOpen(v=>!v)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-label={`Post actions for ${post.title}`}
+        title="Post actions"
+      >
+        <MoreVerticalIcon size={15}/>
+      </button>
+
+      {open && (
+        <div className="action-menu sc" role="menu">
+          <button
+            type="button"
+            className="action-item"
+            onClick={()=>{setOpen(false);onEdit(post);}}
+            role="menuitem"
+          >
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            Edit
+          </button>
+          <button
+            type="button"
+            className="action-item danger"
+            onClick={()=>{setOpen(false);onDelete(post);}}
+            role="menuitem"
+          >
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
+            </svg>
+            Delete
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function CatBadge({ cat }) {
   return (
     <span style={{display:"inline-flex",alignItems:"center",gap:5,
@@ -802,18 +893,12 @@ function CatBadge({ cat }) {
 }
 
 // ── POST CARD ────────────────────────────────────────────────────────────────────
-function PostCard({ post, onView, onEdit, onDelete, idx }) {
+function PostCard({ post, onView, onEdit, onDelete, idx, profilePic }) {
   return (
     <div className="card fu" style={{marginBottom:14,overflow:"hidden",animationDelay:`${idx*0.07}s`}}>
       <div style={{padding:"14px 18px 10px",display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12}}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
-          <div style={{width:38,height:38,borderRadius:10,flexShrink:0,
-            background:"linear-gradient(135deg,var(--g700),var(--g500))",
-            display:"flex",alignItems:"center",justifyContent:"center"}}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-            </svg>
-          </div>
+          <AdminAvatar src={profilePic} size={38} label={`${ADMIN.name} profile`}/>
           <div style={{textAlign:"left",lineHeight:1.15}}>
             <div style={{fontSize:13,fontWeight:700,color:"var(--g800)"}}>{ADMIN.name}</div>
             <div style={{fontSize:11,color:"var(--gray-400)",marginTop:1}}>{formatPostDate(post.createdAt)}</div>
@@ -827,22 +912,7 @@ function PostCard({ post, onView, onEdit, onDelete, idx }) {
           <span style={{display:"inline-flex",alignItems:"center",gap:6,padding:"4px 10px",borderRadius:20,background:"var(--g50)",color:"var(--g800)",fontSize:11.5,fontWeight:700}}>
             {post.barangay}
           </span>
-          <div style={{display:"flex",gap:4}}>
-            <button className="btn btn-ghost btn-sm" onClick={()=>onEdit(post)}>
-              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-              </svg>
-              Edit
-            </button>
-            <button className="btn btn-sm" onClick={()=>onDelete(post)}
-              style={{background:"#FEF2F2",color:"var(--red)",border:"1.5px solid #FECACA"}}>
-              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
-              </svg>
-              Delete
-            </button>
-          </div>
+          <PostActionsMenu post={post} onEdit={onEdit} onDelete={onDelete}/>
         </div>
       </div>
 
@@ -1078,6 +1148,7 @@ export default function App() {
       )}
       {modal?.type==="view"&&(
         <PostDetailModal post={modal.post} onClose={()=>setModal(null)}
+          profilePic={profilePic}
           onEdit={p=>setModal({type:"edit",post:p})}
           onDelete={p=>setModal({type:"delete",post:p})}/>
       )}
@@ -1137,10 +1208,7 @@ export default function App() {
                 aria-expanded={profileOpen}
                 title="Profile menu"
               >
-                {profilePic
-                  ? <img src={profilePic} alt="Administrator profile"/>
-                  : <span>CA</span>
-                }
+                <AdminAvatar src={profilePic} size={34} label="Administrator profile"/>
               </button>
 
               {profileOpen && (
@@ -1245,13 +1313,7 @@ export default function App() {
               {/* ── FEED ── */}
               <div style={{flex:1,minWidth:0}}>
                 <div className="card" style={{padding:"14px 18px",marginBottom:14,display:"flex",gap:12,alignItems:"center",textAlign:"left"}}>
-                  <div style={{width:40,height:40,borderRadius:10,flexShrink:0,
-                    background:"linear-gradient(135deg,var(--g700),var(--g500))",
-                    display:"flex",alignItems:"center",justifyContent:"center"}}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                      <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                    </svg>
-                  </div>
+                  <AdminAvatar src={profilePic} size={40} label={`${ADMIN.name} profile`}/>
                   <button onClick={()=>setModal({type:"create"})}
                     style={{flex:1,textAlign:"left",padding:"10px 16px",background:"var(--g50)",
                       border:"1.5px solid var(--g200)",borderRadius:24,color:"var(--gray-400)",
@@ -1290,6 +1352,7 @@ export default function App() {
                 ) : (
                   filtered.map((post,i)=>(
                     <PostCard key={post.id} post={post} idx={i}
+                      profilePic={profilePic}
                       onView={p=>setModal({type:"view",post:p})}
                       onEdit={p=>setModal({type:"edit",post:p})}
                       onDelete={p=>setModal({type:"delete",post:p})}/>

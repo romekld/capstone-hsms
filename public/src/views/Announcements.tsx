@@ -2,6 +2,7 @@
 
 import { startTransition, useDeferredValue, useEffect, useRef, useState } from 'react';
 import { EyeOff, MapPin, RotateCcw, Search, Trash2, X } from 'lucide-react';
+import { BARANGAY_OPTIONS } from '../lib/barangays';
 
 type AnnouncementType = 'Notice' | 'Advisory' | 'Event';
 type SortOption = 'newest' | 'oldest' | 'author';
@@ -120,7 +121,7 @@ const SORT_OPTIONS: Array<{ value: SortOption; label: string }> = [
   { value: 'oldest', label: 'Oldest first' },
   { value: 'author', label: 'Poster name A-Z' },
 ];
-const BARANGAY_OPTIONS = ['all', ...Array.from(new Set(ANNOUNCEMENTS.map((post) => post.barangay))).sort((left, right) => left.localeCompare(right))];
+const ANNOUNCEMENTS_BARANGAY_OPTIONS = ['all', ...BARANGAY_OPTIONS];
 
 const TYPE_BADGE_STYLES: Record<AnnouncementType, string> = {
   Notice: 'border-emerald-200 bg-emerald-50 text-emerald-800',
@@ -334,7 +335,7 @@ export function Announcements() {
                 onChange={(event) => startTransition(() => setSelectedBarangay(event.target.value))}
                 className="font-main mt-2 min-h-12 w-full rounded-2xl border border-emerald-100 bg-white px-4 text-sm text-[#052410] outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
               >
-                {BARANGAY_OPTIONS.map((option) => (
+                {ANNOUNCEMENTS_BARANGAY_OPTIONS.map((option) => (
                   <option key={option} value={option}>
                     {option === 'all' ? 'All barangays' : option}
                   </option>

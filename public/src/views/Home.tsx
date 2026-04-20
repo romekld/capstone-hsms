@@ -93,7 +93,7 @@ export function Home() {
       }
     };
 
-    loadHomeData();
+    void loadHomeData();
   }, []);
 
   if (loading) {
@@ -111,7 +111,20 @@ export function Home() {
     );
   }
 
-  const displayedProgramCards = featuredServices.length > 0 ? featuredServices.slice(0, 4) : healthPrograms.slice(0, 4);
+  const displayedProgramCards =
+    featuredServices.length > 0
+      ? featuredServices.slice(0, 4).map((service) => ({
+          id: service.id,
+          slug: String(service.id),
+          name: service.name,
+          description: service.description,
+        }))
+      : healthPrograms.slice(0, 4).map((program) => ({
+          id: program.id,
+          slug: program.id,
+          name: program.title,
+          description: program.description,
+        }));
 
   const announcementRows = featuredAnnouncements.length > 0
     ? featuredAnnouncements.map((announcement, index) => ({
@@ -231,7 +244,7 @@ export function Home() {
                         <Icon className="h-5 w-5" />
                       </div>
                     </div>
-                    <h3 className="font-main text-lg font-bold text-emerald-950">{program.name || program.title}</h3>
+                    <h3 className="font-main text-lg font-bold text-emerald-950">{program.name}</h3>
                     <p className="mt-2 text-sm leading-6 text-emerald-900/70">{program.description}</p>
                   </Link>
                 );
@@ -266,7 +279,7 @@ export function Home() {
             {announcementRows.map((announcement) => (
               <Link
                 key={announcement.id}
-                href={`/announcements#announcement-${announcement.id}`}
+                to={`/announcements#announcement-${announcement.id}`}
                 className="group flex gap-3 rounded-xl bg-white/90 p-3 shadow-sm shadow-emerald-900/10 transition hover:bg-white hover:shadow-md"
               >
                 <img
