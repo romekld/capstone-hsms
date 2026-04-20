@@ -1,0 +1,8 @@
+{
+  "pages": {},
+  "app": {
+    "[project]/public/src/app/_not-found/page": []
+  },
+  "appUsingSizeAdjust": true,
+  "pagesUsingSizeAdjust": false
+}

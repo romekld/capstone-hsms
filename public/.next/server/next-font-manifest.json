@@ -1,0 +1,12 @@
+{
+  "app": {
+    "[project]/public/src/app/_not-found/page": [],
+    "[project]/public/src/app/about/page": [],
+    "[project]/public/src/app/announcements/page": [],
+    "[project]/public/src/app/page": [],
+    "[project]/public/src/app/services/page": []
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}

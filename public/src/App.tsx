@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { ScrollToTop } from './components/ScrollToTop';
-import { Home } from './pages/Home';
-import { About } from './pages/About';
-import { Services } from './pages/Services';
-import { Announcements } from './pages/Announcements';
+import { Home } from './views/Home';
+import { About } from './views/About';
+import { Services } from './views/Services';
+import { Announcements } from './views/Announcements';
 
 
 function App() {
