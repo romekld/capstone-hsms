@@ -1,4 +1,6 @@
-﻿import { Clock, Mail, MapPin, Phone } from 'lucide-react';
+import Link from 'next/link';
+import { Clock, Mail, MapPin, Phone } from 'lucide-react';
+
 import { Cho2Logo } from './Cho2Logo';
 
 export function Footer() {
@@ -24,24 +26,24 @@ export function Footer() {
             <h3 className="font-main mb-4 text-lg font-semibold text-white">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <a href="/" className="font-subtext text-emerald-200 transition-colors hover:text-emerald-50">
+                <Link href="/" className="font-subtext text-emerald-200 transition-colors hover:text-emerald-50">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/announcements" className="font-subtext text-emerald-200 transition-colors hover:text-emerald-50">
+                <Link href="/announcements" className="font-subtext text-emerald-200 transition-colors hover:text-emerald-50">
                   Announcements
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/services" className="font-subtext text-emerald-200 transition-colors hover:text-emerald-50">
+                <Link href="/services" className="font-subtext text-emerald-200 transition-colors hover:text-emerald-50">
                   Services
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/about" className="font-subtext text-emerald-200 transition-colors hover:text-emerald-50">
+                <Link href="/about" className="font-subtext text-emerald-200 transition-colors hover:text-emerald-50">
                   About
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

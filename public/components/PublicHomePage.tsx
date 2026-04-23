@@ -12,7 +12,6 @@ import {
   Shield,
 } from "lucide-react";
 
-import { Footer } from "../src/components/Footer";
 import { AppSelect } from "../src/components/ui/app-select";
 import { BARANGAY_OPTIONS } from "../src/lib/barangays";
 import { healthPrograms } from "../src/lib/healthPrograms";
@@ -148,8 +147,7 @@ export function PublicHomePage() {
       : fallbackAnnouncements;
 
   return (
-    <>
-      <div className="min-h-screen bg-[#edf2f3]">
+    <div className="min-h-screen bg-[#edf2f3]">
         <section className="relative overflow-hidden pb-14 pt-10 lg:pb-20">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute -left-16 top-4 h-56 w-56 rounded-full bg-emerald-300/20 blur-3xl" />
@@ -337,8 +335,5 @@ export function PublicHomePage() {
           </div>
         </section>
       </div>
-
-      <Footer />
-    </>
   );
 }

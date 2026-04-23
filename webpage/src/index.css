@@ -52,12 +52,17 @@
 
 body {
   margin: 0;
+  width: 100%;
+  min-height: 100svh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
-#root {
+body > * {
   width: 100%;
   margin: 0;
-  text-align: center;
   min-height: 100svh;
   display: flex;
   flex-direction: column;

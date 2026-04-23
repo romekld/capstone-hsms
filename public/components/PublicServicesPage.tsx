@@ -11,7 +11,6 @@ import {
   Syringe,
 } from "lucide-react";
 
-import { Footer } from "../src/components/Footer";
 import { healthPrograms } from "../src/lib/healthPrograms";
 import { publicApi } from "../lib/api";
 
@@ -51,7 +50,7 @@ export function PublicServicesPage() {
           response.data.length > 0
             ? response.data.map((service) => ({
                 id: service.id,
-                slug: service.slug,
+                slug: String(service.id),
                 name: service.name,
                 description: service.description,
               }))
@@ -84,8 +83,7 @@ export function PublicServicesPage() {
   ];
 
   return (
-    <>
-      <div className="min-h-screen" style={{ backgroundColor: "#f0fdf4" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#f0fdf4" }}>
         <div className="relative overflow-hidden" style={{ backgroundColor: "#f0fdf4" }}>
           <div className="absolute inset-0 bg-gradient-to-br from-transparent to-transparent opacity-50 pointer-events-none" />
           <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
@@ -314,8 +312,5 @@ export function PublicServicesPage() {
           </div>
         </div>
       </div>
-
-      <Footer />
-    </>
   );
 }

@@ -3,7 +3,6 @@
 import { startTransition, useDeferredValue, useEffect, useRef, useState } from "react";
 import { EyeOff, MapPin, RotateCcw, Search, Trash2, X } from "lucide-react";
 
-import { Footer } from "../src/components/Footer";
 import { BARANGAY_OPTIONS } from "../src/lib/barangays";
 
 type AnnouncementType = "Notice" | "Advisory" | "Event";
@@ -280,8 +279,7 @@ export function PublicAnnouncementsPage() {
   }
 
   return (
-    <>
-      <div className="min-h-screen bg-emerald-50">
+    <div className="min-h-screen bg-emerald-50">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
           <section className="overflow-hidden rounded-[2rem] border border-emerald-100 bg-emerald-50 p-5 shadow-[0_24px_70px_-48px_rgba(5,36,16,0.18)] sm:p-6 lg:p-8">
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
@@ -561,8 +559,5 @@ export function PublicAnnouncementsPage() {
           </section>
         </div>
       </div>
-
-      <Footer />
-    </>
   );
 }
