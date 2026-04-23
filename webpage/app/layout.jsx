@@ -1,8 +1,8 @@
-import "../src/index.css";
+import './globals.css';
 
 export const metadata = {
-  title: "CHO 2 Admin Webpage",
-  description: "Next.js App Router entry for the CHO 2 admin webpage.",
+  title: 'webpage',
+  description: 'Health CHO 2 dashboard',
 };
 
 export default function RootLayout({ children }) {
