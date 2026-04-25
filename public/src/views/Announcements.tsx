@@ -32,6 +32,8 @@ const ANNOUNCEMENT_SEED: AnnouncementSeed[] = [
     title: 'Prenatal consultation hours moved to Friday morning',
     body:
       'Starting April 15, 2026, prenatal consultation at the San Nicolas I Barangay Health Station will begin at 8:00 AM every Friday instead of 1:00 PM.\n\nPatients scheduled for blood pressure monitoring, fetal heart tone assessment, or routine prenatal follow-up are advised to arrive at least 15 minutes early and bring their maternal record booklet for faster triage.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&w=1200&q=80',
   },
   {
     id: 'ann-002',
@@ -50,6 +52,8 @@ const ANNOUNCEMENT_SEED: AnnouncementSeed[] = [
     title: 'Saturday catch-up immunization drive this April 18',
     body:
       'A catch-up immunization event will be held on April 18, 2026 from 8:30 AM to 2:30 PM at the Santa Fe covered court.\n\nChildren with incomplete routine vaccines may receive missed doses after screening by station staff. Please bring the child health card, drinking water, and a small towel. Priority lanes will be available for children under two years old and families from nearby puroks.',
+    image_url:
+      'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&w=1200&q=80',
   },
   {
     id: 'ann-004',
@@ -407,6 +411,7 @@ export function Announcements() {
               const visibleBody = isExpanded || !isLongPost
                 ? announcement.body
                 : `${announcement.body.slice(0, PREVIEW_LIMIT).trimEnd()}...`;
+              const postImage = getPostImage(announcement);
 
               return (
                 <article
@@ -471,6 +476,18 @@ export function Announcements() {
 
                   <div className="mt-4 border-t border-emerald-100 pt-4">
                     <h2 className="font-main text-lg font-semibold leading-snug text-[#052410]">{announcement.title}</h2>
+
+                    {postImage ? (
+                      <div className="mt-4 overflow-hidden rounded-2xl border border-emerald-100 bg-emerald-50">
+                        <img
+                          src={postImage}
+                          alt={announcement.title}
+                          className="h-60 w-full object-cover sm:h-72"
+                          loading="lazy"
+                        />
+                      </div>
+                    ) : null}
+
                     <p className="font-main mt-3 whitespace-pre-line text-[15px] leading-7 text-emerald-950/80">{visibleBody}</p>
                     {isLongPost ? (
                       <button

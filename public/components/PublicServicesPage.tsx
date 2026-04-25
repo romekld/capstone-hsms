@@ -3,12 +3,18 @@
 import { useEffect, useState } from "react";
 import {
   Apple,
+  CalendarDays,
+  CircleAlert,
   ChevronRight,
+  Clock3,
   Heart,
   Leaf,
+  MapPin,
   Shield,
+  Sparkles,
   Stethoscope,
   Syringe,
+  X,
 } from "lucide-react";
 
 import { healthPrograms } from "../src/lib/healthPrograms";
@@ -19,7 +25,67 @@ type ServiceItem = {
   slug: string;
   name: string;
   description: string;
+  category?: string;
+  contactInfo?: string;
+  operatingHours?: string;
+  extraDetails: string[];
 };
+
+const SERVICE_DETAIL_MAP: Record<string, string[]> = {
+  consultation: [
+    "Used for routine checkups, symptom assessment, and follow-up care.",
+    "Patients may ask for prescriptions, referrals, or basic health advice.",
+    "Walk-ins are typically accepted during regular operating hours.",
+  ],
+  "animal-bite": [
+    "Immediate wound care and exposure risk assessment are prioritized.",
+    "Please bring the time of bite and any details about the animal.",
+    "Rabies prevention guidance is time-sensitive, so same-day evaluation matters.",
+  ],
+  "lying-in": [
+    "Supports prenatal monitoring and maternal follow-up care.",
+    "Patients may be asked to bring maternal records and lab results.",
+    "This service focuses on safer pregnancy monitoring and referral support.",
+  ],
+  "family-planning": [
+    "Includes counseling, method selection, and follow-up for reproductive health.",
+    "Clients may discuss pills, injectables, implants, condoms, and postpartum options.",
+    "Privacy and informed choice are emphasized during each visit.",
+  ],
+  laboratory: [
+    "Provides routine screening and diagnostic testing requested by the station.",
+    "Common tests may include blood chemistry, urinalysis, and other routine checks.",
+    "Ask the front desk if fasting or other preparation is needed.",
+  ],
+  "tb-dots": [
+    "Focused on tuberculosis screening, treatment monitoring, and adherence support.",
+    "Regular follow-up visits help track progress and reduce treatment interruption.",
+    "Bring your schedule and medication information if available.",
+  ],
+  counseling: [
+    "For health coaching, emotional support, and family guidance.",
+    "May involve one-on-one discussion or referral when needed.",
+    "Confidentiality and supportive care are priorities.",
+  ],
+  "drug-rehab": [
+    "Supports referral, recovery planning, and reintegration guidance.",
+    "Often coordinated with community support and external partners.",
+    "A confidential intake discussion helps determine the safest next step.",
+  ],
+  immunization: [
+    "Provides vaccines for infants, children, adults, and priority groups.",
+    "Bring your immunization card or previous vaccination record when available.",
+    "Staff may screen for eligibility, timing, and needed catch-up doses.",
+  ],
+};
+
+function normalizeServiceKey(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 function fallbackServices(): ServiceItem[] {
   return healthPrograms.map((program) => ({
@@ -27,12 +93,14 @@ function fallbackServices(): ServiceItem[] {
     slug: program.id,
     name: program.title,
     description: program.description,
+    extraDetails: SERVICE_DETAIL_MAP[program.id] ?? ["Services are available during normal operating hours."],
   }));
 }
 
 export function PublicServicesPage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [services, setServices] = useState<ServiceItem[]>(fallbackServices());
+  const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -53,6 +121,13 @@ export function PublicServicesPage() {
                 slug: String(service.id),
                 name: service.name,
                 description: service.description,
+                category: service.category,
+                contactInfo: service.contact_info,
+                operatingHours: service.operating_hours,
+                extraDetails:
+                  SERVICE_DETAIL_MAP[normalizeServiceKey(service.name)] ??
+                  SERVICE_DETAIL_MAP[normalizeServiceKey(service.category ?? service.name)] ??
+                  ["Services are available during normal operating hours."],
               }))
             : fallbackServices()
         );
@@ -179,6 +254,8 @@ export function PublicServicesPage() {
                     </p>
 
                     <button
+                      type="button"
+                      onClick={() => setSelectedService(program)}
                       className="inline-flex items-center justify-center gap-2 px-4 py-3 text-white font-medium rounded-lg hover:shadow-lg active:scale-95 transition-all duration-200 group-hover:gap-3"
                       style={{
                         background:
@@ -310,6 +387,117 @@ export function PublicServicesPage() {
               </div>
             </div>
           </div>
+
+          {selectedService ? (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 px-4 py-6 backdrop-blur-sm"
+              onClick={() => setSelectedService(null)}
+            >
+              <div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="service-modal-title"
+                className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-[0_30px_100px_-30px_rgba(5,36,16,0.45)]"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <div className="flex items-start justify-between gap-4 border-b border-emerald-100 bg-gradient-to-r from-emerald-50 to-white px-6 py-5 sm:px-8">
+                  <div>
+                    <p className="font-main text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+                      Service details
+                    </p>
+                    <h2
+                      id="service-modal-title"
+                      className="mt-2 text-2xl font-bold text-[#052410] sm:text-3xl"
+                    >
+                      {selectedService.name}
+                    </h2>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedService(null)}
+                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-emerald-800 shadow-sm transition hover:bg-emerald-50 hover:text-emerald-900"
+                    aria-label="Close service details"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+
+                <div className="space-y-6 px-6 py-6 sm:px-8">
+                  <p className="text-sm leading-7 text-slate-700 sm:text-base">
+                    {selectedService.description}
+                  </p>
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
+                      <div className="flex items-center gap-2 text-emerald-800">
+                        <Sparkles className="h-4 w-4" />
+                        <span className="text-xs font-semibold uppercase tracking-[0.16em]">
+                          Program focus
+                        </span>
+                      </div>
+                      <p className="mt-2 text-sm font-medium text-[#052410]">
+                        {selectedService.category || "General public service"}
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
+                      <div className="flex items-center gap-2 text-emerald-800">
+                        <Clock3 className="h-4 w-4" />
+                        <span className="text-xs font-semibold uppercase tracking-[0.16em]">
+                          Operating hours
+                        </span>
+                      </div>
+                      <p className="mt-2 text-sm font-medium text-[#052410]">
+                        {selectedService.operatingHours || "Available during station hours"}
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
+                      <div className="flex items-center gap-2 text-emerald-800">
+                        <MapPin className="h-4 w-4" />
+                        <span className="text-xs font-semibold uppercase tracking-[0.16em]">
+                          Visit guidance
+                        </span>
+                      </div>
+                      <p className="mt-2 text-sm font-medium text-[#052410]">
+                        Walk-ins are accepted unless station staff advise a different schedule.
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
+                      <div className="flex items-center gap-2 text-emerald-800">
+                        <CalendarDays className="h-4 w-4" />
+                        <span className="text-xs font-semibold uppercase tracking-[0.16em]">
+                          Contact
+                        </span>
+                      </div>
+                      <p className="mt-2 text-sm font-medium text-[#052410]">
+                        {selectedService.contactInfo || "Ask the front desk for referral details."}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-emerald-100 bg-white p-5">
+                    <p className="mb-3 flex items-center gap-2 text-emerald-800">
+                      <CircleAlert className="h-4 w-4" />
+                      <span className="text-xs font-semibold uppercase tracking-[0.16em]">
+                        Additional details
+                      </span>
+                    </p>
+                    <ul className="space-y-3 text-sm leading-7 text-slate-700">
+                      {selectedService.extraDetails.map((detail) => (
+                        <li key={detail} className="flex gap-3">
+                          <span className="mt-2 h-2 w-2 rounded-full bg-emerald-600" />
+                          <span>{detail}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
   );

@@ -14,8 +14,13 @@ import {
 
 import { AppSelect } from "../src/components/ui/app-select";
 import { BARANGAY_OPTIONS } from "../src/lib/barangays";
+import {
+  PUBLIC_ANNOUNCEMENT_FEED,
+  getPublicAnnouncementImage,
+  getPublicAnnouncementSummary,
+} from "../src/lib/publicAnnouncementsFeed";
 import { healthPrograms } from "../src/lib/healthPrograms";
-import type { Announcement, Service } from "../src/types/announcement";
+import type { Service } from "../src/types/announcement";
 import { publicApi } from "../lib/api";
 
 const HOME_BARANGAY_OPTIONS = [
@@ -27,40 +32,9 @@ const HOME_BARANGAY_OPTIONS = [
 ];
 
 export function PublicHomePage() {
-  const [featuredAnnouncements, setFeaturedAnnouncements] = useState<Announcement[]>([]);
   const [featuredServices, setFeaturedServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedBarangay, setSelectedBarangay] = useState("all");
-
-  const fallbackAnnouncements = [
-    {
-      id: 901,
-      title: "Quarterly Polio Vaccination Drive",
-      summary:
-        "Health workers will run a barangay-wide vaccination drive this week for children below five years old.",
-      date: "March 18, 2026",
-      image:
-        "https://images.unsplash.com/photo-1631815589968-fdb09a223b1e?auto=format&fit=crop&w=600&q=80",
-    },
-    {
-      id: 902,
-      title: "Dengue Prevention Week",
-      summary:
-        "Free fogging and mosquito habitat checks will be conducted in priority zones with high case counts.",
-      date: "March 11, 2026",
-      image:
-        "https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=600&q=80",
-    },
-    {
-      id: 903,
-      title: "Free Optical Mission",
-      summary:
-        "Residents may register for eye screening and reading glasses distribution at the CHO outreach desk.",
-      date: "March 6, 2026",
-      image:
-        "https://images.unsplash.com/photo-1580281657527-47f249e8f4df?auto=format&fit=crop&w=600&q=80",
-    },
-  ];
 
   const serviceIcons = [Activity, Heart, Shield, Clock, MapPin, Phone];
 
@@ -87,10 +61,8 @@ export function PublicHomePage() {
   useEffect(() => {
     const loadHomeData = async () => {
       try {
-        const announcementsResponse = await publicApi.getAnnouncements(1, 3);
         const servicesResponse = await publicApi.getServices();
 
-        setFeaturedAnnouncements(announcementsResponse.data.slice(0, 3));
         setFeaturedServices(servicesResponse.data.slice(0, 6));
       } catch (error) {
         console.error("Error loading home data:", error);
@@ -132,19 +104,13 @@ export function PublicHomePage() {
           description: program.description,
         }));
 
-  const announcementRows =
-    featuredAnnouncements.length > 0
-      ? featuredAnnouncements.map((announcement, index) => ({
-          id: announcement.id,
-          title: announcement.title,
-          summary:
-            announcement.summary || `${announcement.content.slice(0, 110)}...`,
-          date: formatPublishedDate(announcement.published_at),
-          image:
-            announcement.image_url ||
-            fallbackAnnouncements[index % fallbackAnnouncements.length].image,
-        }))
-      : fallbackAnnouncements;
+  const announcementRows = PUBLIC_ANNOUNCEMENT_FEED.slice(0, 3).map((announcement) => ({
+    id: announcement.id,
+    title: announcement.title,
+    summary: getPublicAnnouncementSummary(announcement),
+    date: formatPublishedDate(announcement.postedAt),
+    image: getPublicAnnouncementImage(announcement),
+  }));
 
   return (
     <div className="min-h-screen bg-[#edf2f3]">
@@ -312,12 +278,18 @@ export function PublicHomePage() {
                   href={`/announcements#announcement-${announcement.id}`}
                   className="group flex gap-3 rounded-xl bg-white/90 p-3 shadow-sm shadow-emerald-900/10 transition hover:bg-white hover:shadow-md"
                 >
-                  <img
-                    src={announcement.image}
-                    alt={announcement.title}
-                    className="h-16 w-16 rounded-lg object-cover"
-                    loading="lazy"
-                  />
+                  {announcement.image ? (
+                    <img
+                      src={announcement.image}
+                      alt={announcement.title}
+                      className="h-16 w-16 rounded-lg object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-100 to-cyan-100 text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-700">
+                      CHO2
+                    </div>
+                  )}
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700/75">
                       {announcement.date}
