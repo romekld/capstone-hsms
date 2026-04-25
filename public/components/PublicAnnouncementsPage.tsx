@@ -461,6 +461,21 @@ export function PublicAnnouncementsPage() {
                         {announcement.title}
                       </h2>
 
+                      <div className="mt-3">
+                        <p className="font-main whitespace-pre-line text-[15px] leading-7 text-emerald-950/80">
+                          {visibleBody}
+                          {isLongPost ? (
+                            <button
+                              type="button"
+                              onClick={() => toggleExpanded(announcement.id)}
+                              className="font-main ml-1 inline-flex align-baseline text-sm font-semibold text-emerald-700 transition hover:text-emerald-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-100"
+                            >
+                              {isExpanded ? "See less" : "See more"}
+                            </button>
+                          ) : null}
+                        </p>
+                      </div>
+
                       {postImage ? (
                         <div className="mt-4 overflow-hidden rounded-2xl border border-emerald-100 bg-emerald-50">
                           <img
@@ -470,19 +485,6 @@ export function PublicAnnouncementsPage() {
                             loading="lazy"
                           />
                         </div>
-                      ) : null}
-
-                      <p className="font-main mt-3 whitespace-pre-line text-[15px] leading-7 text-emerald-950/80">
-                        {visibleBody}
-                      </p>
-                      {isLongPost ? (
-                        <button
-                          type="button"
-                          onClick={() => toggleExpanded(announcement.id)}
-                          className="font-main mt-3 text-sm font-semibold text-emerald-700 transition hover:text-emerald-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-100"
-                        >
-                          {isExpanded ? "See less" : "See more"}
-                        </button>
                       ) : null}
                     </div>
                   </article>

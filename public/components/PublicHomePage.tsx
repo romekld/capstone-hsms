@@ -144,7 +144,7 @@ export function PublicHomePage() {
                       htmlFor="service-category"
                       className="font-main text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800/75"
                     >
-                      Select Barangay
+                      Covered Barangays
                     </label>
                     <AppSelect
                       id="service-category"

@@ -1,14 +1,9 @@
-"use client";
+import { PublicSiteSearch } from "../../components/PublicSiteSearch";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-export default function Page() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace("/announcements#announcement-search");
-  }, [router]);
-
-  return null;
+export default function Page({
+  searchParams,
+}: {
+  searchParams?: { q?: string };
+}) {
+  return <PublicSiteSearch mode="page" initialQuery={searchParams?.q ?? ""} />;
 }

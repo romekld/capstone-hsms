@@ -2,15 +2,22 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Menu, Phone, Search, X } from "lucide-react";
 
 import { Cho2Logo } from "../src/components/Cho2Logo";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../src/components/ui/dialog";
+import { PublicSiteSearch } from "./PublicSiteSearch";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
 
   const navigation = [
     { name: "Home", path: "/" },
@@ -23,20 +30,7 @@ export function Navbar() {
 
   function handleSearchClick() {
     setIsMenuOpen(false);
-
-    if (pathname === "/announcements") {
-      const input = document.getElementById(
-        "announcement-search"
-      ) as HTMLInputElement | null;
-
-      if (input) {
-        input.focus();
-        input.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-      return;
-    }
-
-    router.push("/announcements#announcement-search");
+    setIsSearchOpen(true);
   }
 
   return (
@@ -80,7 +74,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={handleSearchClick}
-              aria-label="Search announcements"
+              aria-label="Search the site"
               className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               <Search className="h-5 w-5" />
@@ -143,6 +137,22 @@ export function Navbar() {
           </div>
         )}
       </div>
+
+      <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
+        <DialogContent
+          className="w-[min(96vw,72rem)] max-w-none border-0 bg-transparent p-0 shadow-none"
+          showCloseButton={false}
+        >
+          <DialogHeader className="sr-only">
+            <DialogTitle>Search the site</DialogTitle>
+          </DialogHeader>
+          <PublicSiteSearch
+            mode="dialog"
+            onClose={() => setIsSearchOpen(false)}
+            onNavigate={() => setIsSearchOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </nav>
   );
 }
