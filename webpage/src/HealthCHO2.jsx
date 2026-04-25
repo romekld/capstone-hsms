@@ -31,6 +31,7 @@ const BARANGAYS = [
 ];
 
 const BARANGAY_OPTIONS = ["All Barangays", ...BARANGAYS];
+const POSTS_STORAGE_KEY = "cho2-webpage-posts-v1";
 
 const SAMPLE_POSTS = [
   {
@@ -40,7 +41,8 @@ const SAMPLE_POSTS = [
     title:"Monthly Immunization Schedule — April 2026",
     content:"Regular immunization services will be conducted every Tuesday and Thursday at all barangay health centers under CHO 2. Please bring your child's immunization card. Vaccines available: BCG, HepB, DPT-HepB-Hib, OPV, IPV, PCV, and MMR.\n\nParents are advised to arrive early to avoid long queues. Free service for all qualified beneficiaries.",
     imageUrl:"https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=700&q=80",
-    createdAt: new Date(Date.now()-3600000*2).toISOString(),
+    createdAt:"2026-04-25T08:00:00+08:00",
+    updatedAt:null,
   },
   {
     id:"p2", category:"TB DOTS",
@@ -49,7 +51,8 @@ const SAMPLE_POSTS = [
     title:"TB DOTS Program: Free Testing and Medication Available",
     content:"The City Health Office 2 is continuously offering FREE TB testing and DOTS (Directly Observed Treatment, Short-course) services. Any resident experiencing persistent cough for 2 weeks or more is encouraged to visit the nearest CHO 2 health facility for sputum examination.\n\nAll medications are provided free of charge courtesy of the DOH.",
     imageUrl:null,
-    createdAt: new Date(Date.now()-3600000*10).toISOString(),
+    createdAt:"2026-04-24T16:00:00+08:00",
+    updatedAt:null,
   },
   {
     id:"p3", category:"Animal Bite",
@@ -58,16 +61,55 @@ const SAMPLE_POSTS = [
     title:"Animal Bite Treatment Center — Updated Operating Hours",
     content:"The Animal Bite Treatment Center under CHO 2 is now open Monday to Saturday, 7:00 AM – 5:00 PM. Anti-rabies vaccine and RIG are available. Patients who have been bitten by animals (dogs, cats, bats, etc.) must report immediately for wound cleaning and vaccination.\n\nDo not wait — early treatment is critical.",
     imageUrl:"https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=700&q=80",
-    createdAt: new Date(Date.now()-3600000*26).toISOString(),
+    createdAt:"2026-04-23T09:00:00+08:00",
+    updatedAt:null,
   },
 ];
 
 const genId   = () => Math.random().toString(36).slice(2,9);
-const formatPostDate = iso => new Date(iso).toLocaleDateString("en-PH", {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-});
+const FALLBACK_POSTS = SAMPLE_POSTS.map(post => ({ ...post }));
+const normalizePost = post => {
+  const createdAt = typeof post?.createdAt === "string" && post.createdAt
+    ? post.createdAt
+    : new Date().toISOString();
+
+  return {
+    ...post,
+    createdAt,
+    updatedAt: typeof post?.updatedAt === "string" && post.updatedAt ? post.updatedAt : null,
+  };
+};
+
+const loadStoredPosts = () => {
+  const fallback = FALLBACK_POSTS.map(normalizePost);
+  if (typeof window === "undefined") return fallback;
+
+  try {
+    const raw = window.localStorage.getItem(POSTS_STORAGE_KEY);
+    if (!raw) return fallback;
+
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.map(normalizePost) : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+const getPostActivityAt = post => post.updatedAt || post.createdAt;
+const formatPostTimestamp = iso => {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return "";
+
+  const manilaTime = new Date(date.getTime() + (8 * 60 * 60 * 1000));
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const minutes = String(manilaTime.getUTCMinutes()).padStart(2, "0");
+  const rawHours = manilaTime.getUTCHours();
+  const hours = rawHours % 12 || 12;
+  const suffix = rawHours >= 12 ? "PM" : "AM";
+
+  return `${months[manilaTime.getUTCMonth()]} ${manilaTime.getUTCDate()}, ${manilaTime.getUTCFullYear()}, ${hours}:${minutes} ${suffix}`;
+};
+const getPostTimestampLabel = post => post.updatedAt ? "Edited" : "Posted";
 
 function SvgIcon({ children, size = 14, strokeWidth = 2, style, ...props }) {
   return (
@@ -807,7 +849,14 @@ function PostDetailModal({ post, onClose, onEdit, onDelete, profilePic }) {
             <AdminAvatar src={profilePic} size={34} label={`${ADMIN.name} profile`}/>
             <div style={{textAlign:"left",lineHeight:1.2}}>
               <p style={{fontSize:12.5,fontWeight:700,color:"var(--g800)"}}>{ADMIN.name}</p>
-              <p style={{fontSize:12,color:"var(--gray-400)",marginTop:2}}>{formatPostDate(post.createdAt)}</p>
+              <p style={{fontSize:12,color:"var(--gray-400)",marginTop:2}}>
+                {getPostTimestampLabel(post)} {formatPostTimestamp(getPostActivityAt(post))}
+              </p>
+              {post.updatedAt && (
+                <p style={{fontSize:11,color:"var(--gray-400)",marginTop:2}}>
+                  Originally posted {formatPostTimestamp(post.createdAt)}
+                </p>
+              )}
             </div>
           </div>
           {post.imageUrl&&(
@@ -901,7 +950,9 @@ function PostCard({ post, onView, onEdit, onDelete, idx, profilePic }) {
           <AdminAvatar src={profilePic} size={38} label={`${ADMIN.name} profile`}/>
           <div style={{textAlign:"left",lineHeight:1.15}}>
             <div style={{fontSize:13,fontWeight:700,color:"var(--g800)"}}>{ADMIN.name}</div>
-            <div style={{fontSize:11,color:"var(--gray-400)",marginTop:1}}>{formatPostDate(post.createdAt)}</div>
+            <div style={{fontSize:11,color:"var(--gray-400)",marginTop:1}}>
+              {getPostTimestampLabel(post)} {formatPostTimestamp(getPostActivityAt(post))}
+            </div>
           </div>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap",justifyContent:"flex-end"}}>
@@ -1078,7 +1129,8 @@ export default function App() {
   const [loggedIn,     setLoggedIn]     = useState(false);
   const [logo,         setLogo]         = useState(null);   // base64 data URL or null
   const [profilePic,   setProfilePic]   = useState(null);
-  const [posts,        setPosts]        = useState(SAMPLE_POSTS);
+  const [posts,        setPosts]        = useState(() => FALLBACK_POSTS.map(normalizePost));
+  const [postsLoaded,  setPostsLoaded]  = useState(false);
   const [activeFilter, setActiveFilter] = useState(null);
   const [search,       setSearch]       = useState("");
   const [barangaySearch, setBarangaySearch] = useState("");
@@ -1094,6 +1146,16 @@ export default function App() {
     document.addEventListener("mousedown", closeOnOutside);
     return () => document.removeEventListener("mousedown", closeOnOutside);
   }, []);
+
+  useEffect(() => {
+    setPosts(loadStoredPosts());
+    setPostsLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !postsLoaded) return;
+    window.localStorage.setItem(POSTS_STORAGE_KEY, JSON.stringify(posts));
+  }, [posts, postsLoaded]);
 
   if (!loggedIn) return (
     <>
@@ -1119,14 +1181,37 @@ export default function App() {
       const mSrc = !search || p.title.toLowerCase().includes(search.toLowerCase()) || p.content.toLowerCase().includes(search.toLowerCase());
       return mCat && mSrc;
     })
-    .sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+    .sort((a,b)=>new Date(getPostActivityAt(b))-new Date(getPostActivityAt(a)));
 
   const filteredBarangays = BARANGAYS.filter(b =>
     b.toLowerCase().includes(barangaySearch.toLowerCase().trim())
   );
 
-  const handleCreate = form => { setPosts(p=>[{id:genId(),...form,createdAt:new Date().toISOString()},...p]); setModal(null); };
-  const handleEdit   = form => { setPosts(p=>p.map(x=>x.id===modal.post.id?{...x,...form}:x)); setModal(null); };
+  const handleCreate = form => {
+    const timestamp = new Date().toISOString();
+    setPosts(p=>[{id:genId(),...form,createdAt:timestamp,updatedAt:null},...p]);
+    setModal(null);
+  };
+  const handleEdit   = form => {
+    const postId = modal.post.id;
+
+    setPosts(p=>p.map(x=>{
+      if (x.id !== postId) return x;
+
+      const hasChanges = (
+        x.title !== form.title ||
+        x.content !== form.content ||
+        x.category !== form.category ||
+        x.postType !== form.postType ||
+        x.barangay !== form.barangay ||
+        x.imageUrl !== form.imageUrl
+      );
+
+      return hasChanges ? {...x,...form,updatedAt:new Date().toISOString()} : x;
+    }));
+
+    setModal(null);
+  };
   const handleDelete = ()   => { setPosts(p=>p.filter(x=>x.id!==modal.post.id)); setModal(null); };
 
   return (
