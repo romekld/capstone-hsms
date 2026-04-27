@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Health Programs | Government Health Office</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: scaleX(0);
+            }
+            to {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.7s ease-out forwards;
+        }
+
+        .service-card {
+            animation: fadeInUp 0.7s ease-out forwards;
+        }
+
+        .service-card:nth-child(1) { animation-delay: 0ms; }
+        .service-card:nth-child(2) { animation-delay: 100ms; }
+        .service-card:nth-child(3) { animation-delay: 200ms; }
+        .service-card:nth-child(4) { animation-delay: 300ms; }
+        .service-card:nth-child(5) { animation-delay: 400ms; }
+        .service-card:nth-child(6) { animation-delay: 500ms; }
+
+        .card-hover-line {
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+
+        .service-card:hover .card-hover-line {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+
+        .service-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .service-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: rgb(16, 185, 129);
+        }
+
+        .icon-container {
+            transition: transform 0.3s ease-out;
+        }
+
+        .service-card:hover .icon-container {
+            transform: scale(1.1);
+        }
+
+        .learn-more-btn {
+            background: linear-gradient(135deg, #059669, #047857);
+            transition: all 0.3s ease;
+        }
+
+        .learn-more-btn:hover {
+            box-shadow: 0 20px 25px -5px rgba(5, 150, 105, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .learn-more-btn:active {
+            transform: scale(0.95);
+        }
+
+        .emergency-section {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .emergency-btn {
+            background: white;
+            color: #dc2626;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .emergency-btn:hover {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .emergency-btn:active {
+            transform: scale(0.95);
+        }
+
+        .gradient-emerald {
+            background: linear-gradient(135deg, #769382, #6a8375);
+        }
+
+        .gradient-pink {
+            background: linear-gradient(135deg, #769382, #6a8375);
+        }
+
+        .gradient-amber {
+            background: linear-gradient(135deg, #769382, #c0c3b9);
+        }
+
+        .gradient-blue {
+            background: linear-gradient(135deg, #769382, #6a8375);
+        }
+
+        .gradient-green {
+            background: linear-gradient(135deg, #769382, #6a8375);
+        }
+
+        .gradient-indigo {
+            background: linear-gradient(135deg, #769382, #6a8375);
+        }
+
+        .pattern-bg {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0icGF0dGVybiIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyIiBmaWxsPSJ3aGl0ZSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjcGF0dGVybikiLz48L3N2Zz4=');
+            background-repeat: repeat;
+        }
+
+        .header-backdrop {
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b" style="background: linear-gradient(to bottom, #f3efe3, #f3efe3);">
+    <!-- Navigation (Optional) -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm" style="border-color: #e8dcc4;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gradient-emerald rounded-lg flex items-center justify-center text-white font-bold">
+                        ✓
+                    </div>
+                    <span class="text-xl font-bold" style="color: #769382;">Health Office</span>
+                </div>
+                <div class="hidden sm:flex gap-8">
+                    <a href="#" class="text-slate-600 hover:text-emerald-600 transition font-medium" style="color: #c0c3b9;">Home</a>
+                    <a href="#" class="font-medium" style="color: #769382;">Services</a>
+                    <a href="#" class="text-slate-600 hover:text-emerald-600 transition font-medium" style="color: #c0c3b9;">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden" style="background-color: #fefbf7;">
+        <div class="absolute inset-0 bg-gradient-to-br from-emerald-50 to-transparent opacity-50 pointer-events-none"></div>
+        <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+            <div class="text-center fade-in-up">
+                <div class="inline-flex items-center justify-center mb-4">
+                    <span class="px-4 py-2 text-sm font-semibold rounded-full" style="background-color: #e8dcc4; color: #769382;">
+                        ✓ Comprehensive Care
+                    </span>
+                </div>
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black mb-6 leading-tight tracking-tight w-full" style="color: #769382;">
+                    Our Health Programs
+                </h1>
+                <p class="text-lg max-w-2xl mx-auto leading-relaxed" style="color: #c0c3b9;">
+                    Delivering quality healthcare services to our community through evidence-based programs and professional medical expertise.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Grid Section -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <!-- Service Card 1: Immunization -->
+            <div class="group service-card">
+                <article class="relative h-full rounded-2xl overflow-hidden border shadow-sm hover:shadow-lg transition-all duration-300" style="background-color: #fefbf7; border-color: #e8dcc4;">
+                    <!-- Icon Background -->
+                    <div class="h-24 relative overflow-hidden" style="background: linear-gradient(135deg, #769382 0%, #c0c3b9 100%);">
+                        <div class="absolute inset-0 opacity-10">
+                            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0icGF0dGVybiIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyIiBmaWxsPSJ3aGl0ZSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjcGF0dGVybikiLz48L3N2Zz4=')] bg-repeat" />
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center icon-container">
+                            <div class="p-3 rounded-xl text-white" style="background-color: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px);">
+                                <i class="fas fa-syringe" style="font-size: 32px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                    <div class="p-6 sm:p-7 flex flex-col h-full">
+                        <h3 class="text-xl font-semibold mb-3 group-hover:transition-colors line-clamp-2 duration-300" style="color: #769382;">
+                            Immunization Program
+                        </h3>
+                        <p class="text-sm leading-relaxed mb-6 line-clamp-4 flex-grow" style="color: #c0c3b9;">
+                            Comprehensive vaccination services for children and adults, protecting against preventable diseases and ensuring community health.
+                        </p>
+                        <button class="inline-flex items-center justify-center gap-2 px-4 py-3 text-white font-medium rounded-lg hover:shadow-lg active:scale-95 transition-all duration-200 group-hover:gap-3" style="background: linear-gradient(135deg, #769382 0%, #6a8375 100%);">
+                            Learn More
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+                    </div>
+                    <!-- Hover Line -->
+                    <div class="absolute top-0 left-0 w-full h-1 card-hover-line" style="background: linear-gradient(to right, #e8dcc4, #c0c3b9, transparent);"></div>
+                </article>
+            </div>
+
+            <!-- Service Card 2: Maternal & Child Care -->
+            <div class="group service-card">
+                <article class="relative h-full rounded-2xl overflow-hidden border shadow-sm hover:shadow-lg transition-all duration-300" style="background-color: #fefbf7; border-color: #e8dcc4;">
+                    <div class="h-24 relative overflow-hidden" style="background: linear-gradient(135deg, #769382 0%, #c0c3b9 100%);">
+                        <div class="absolute inset-0 opacity-10">
+                            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0icGF0dGVybiIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyIiBmaWxsPSJ3aGl0ZSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjcGF0dGVybikiLz48L3N2Zz4=')] bg-repeat" />
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center icon-container">
+                            <div class="p-3 rounded-xl text-white" style="background-color: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px);">
+                                <i class="fas fa-heart" style="font-size: 32px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 sm:p-7 flex flex-col h-full">
+                        <h3 class="text-xl font-semibold mb-3 group-hover:transition-colors line-clamp-2 duration-300" style="color: #769382;">
+                            Maternal & Child Care
+                        </h3>
+                        <p class="text-sm leading-relaxed mb-6 line-clamp-4 flex-grow" style="color: #c0c3b9;">
+                            Prenatal care, safe delivery services, and postnatal support for mothers and newborns to ensure healthy families.
+                        </p>
+                        <button class="inline-flex items-center justify-center gap-2 px-4 py-3 text-white font-medium rounded-lg hover:shadow-lg active:scale-95 transition-all duration-200 group-hover:gap-3" style="background: linear-gradient(135deg, #769382 0%, #6a8375 100%);">
+                            Learn More
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+                    </div>
+                    <div class="absolute top-0 left-0 w-full h-1 card-hover-line" style="background: linear-gradient(to right, #e8dcc4, #c0c3b9, transparent);"></div>
+                </article>
+            </div>
+
+            <!-- Service Card 3: Nutrition Program -->
+            <div class="group service-card">
+                <article class="relative h-full rounded-2xl overflow-hidden border shadow-sm hover:shadow-lg transition-all duration-300" style="background-color: #fefbf7; border-color: #e8dcc4;">
+                    <div class="h-24 relative overflow-hidden" style="background: linear-gradient(135deg, #769382 0%, #c0c3b9 100%);">
+                        <div class="absolute inset-0 opacity-10">
+                            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0icGF0dGVybiIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyIiBmaWxsPSJ3aGl0ZSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjcGF0dGVybikiLz48L3N2Zz4=')] bg-repeat" />
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center icon-container">
+                            <div class="p-3 rounded-xl text-white" style="background-color: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px);">
+                                <i class="fas fa-apple-alt" style="font-size: 32px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 sm:p-7 flex flex-col h-full">
+                        <h3 class="text-xl font-semibold mb-3 group-hover:transition-colors line-clamp-2 duration-300" style="color: #769382;">
+                            Nutrition Program
+                        </h3>
+                        <p class="text-sm leading-relaxed mb-6 line-clamp-4 flex-grow" style="color: #c0c3b9;">
+                            Nutritional counseling and dietary guidance to promote healthy eating habits and prevent lifestyle-related diseases.
+                        </p>
+                        <button class="inline-flex items-center justify-center gap-2 px-4 py-3 text-white font-medium rounded-lg hover:shadow-lg active:scale-95 transition-all duration-200 group-hover:gap-3" style="background: linear-gradient(135deg, #769382 0%, #6a8375 100%);">
+                            Learn More
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+                    </div>
+                    <div class="absolute top-0 left-0 w-full h-1 card-hover-line" style="background: linear-gradient(to right, #e8dcc4, #c0c3b9, transparent);"></div>
+                </article>
+            </div>
+
+            <!-- Service Card 4: Disease Prevention -->
+            <div class="group service-card">
+                <article class="relative h-full rounded-2xl overflow-hidden border shadow-sm hover:shadow-lg transition-all duration-300" style="background-color: #fefbf7; border-color: #e8dcc4;">
+                    <div class="h-24 relative overflow-hidden" style="background: linear-gradient(135deg, #769382 0%, #c0c3b9 100%);">
+                        <div class="absolute inset-0 opacity-10">
+                            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0icGF0dGVybiIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyIiBmaWxsPSJ3aGl0ZSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjcGF0dGVybikiLz48L3N2Zz4=')] bg-repeat" />
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center icon-container">
+                            <div class="p-3 rounded-xl text-white" style="background-color: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px);">
+                                <i class="fas fa-shield-alt" style="font-size: 32px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 sm:p-7 flex flex-col h-full">
+                        <h3 class="text-xl font-semibold mb-3 group-hover:transition-colors line-clamp-2 duration-300" style="color: #769382;">
+                            Disease Prevention & Control
+                        </h3>
+                        <p class="text-sm leading-relaxed mb-6 line-clamp-4 flex-grow" style="color: #c0c3b9;">
+                            Disease surveillance, outbreak management, and prevention strategies to protect public health and minimize epidemic risks.
+                        </p>
+                        <button class="inline-flex items-center justify-center gap-2 px-4 py-3 text-white font-medium rounded-lg hover:shadow-lg active:scale-95 transition-all duration-200 group-hover:gap-3" style="background: linear-gradient(135deg, #769382 0%, #6a8375 100%);">
+                            Learn More
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+                    </div>
+                    <div class="absolute top-0 left-0 w-full h-1 card-hover-line" style="background: linear-gradient(to right, #e8dcc4, #c0c3b9, transparent);"></div>
+                </article>
+            </div>
+
+            <!-- Service Card 5: Environmental Health -->
+            <div class="group service-card">
+                <article class="relative h-full rounded-2xl overflow-hidden border shadow-sm hover:shadow-lg transition-all duration-300" style="background-color: #fefbf7; border-color: #e8dcc4;">
+                    <div class="h-24 relative overflow-hidden" style="background: linear-gradient(135deg, #769382 0%, #c0c3b9 100%);">
+                        <div class="absolute inset-0 opacity-10">
+                            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0icGF0dGVybiIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyIiBmaWxsPSJ3aGl0ZSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjcGF0dGVybikiLz48L3N2Zz4=')] bg-repeat" />
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center icon-container">
+                            <div class="p-3 rounded-xl text-white" style="background-color: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px);">
+                                <i class="fas fa-leaf" style="font-size: 32px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 sm:p-7 flex flex-col h-full">
+                        <h3 class="text-xl font-semibold mb-3 group-hover:transition-colors line-clamp-2 duration-300" style="color: #769382;">
+                            Environmental Health Services
+                        </h3>
+                        <p class="text-sm leading-relaxed mb-6 line-clamp-4 flex-grow" style="color: #c0c3b9;">
+                            Water quality monitoring, sanitation inspection, and pollution control to ensure safe and healthy living environments.
+                        </p>
+                        <button class="inline-flex items-center justify-center gap-2 px-4 py-3 text-white font-medium rounded-lg hover:shadow-lg active:scale-95 transition-all duration-200 group-hover:gap-3" style="background: linear-gradient(135deg, #769382 0%, #6a8375 100%);">
+                            Learn More
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+                    </div>
+                    <div class="absolute top-0 left-0 w-full h-1 card-hover-line" style="background: linear-gradient(to right, #e8dcc4, #c0c3b9, transparent);"></div>
+                </article>
+            </div>
+
+            <!-- Service Card 6: Medical Consultations -->
+            <div class="group service-card">
+                <article class="relative h-full rounded-2xl overflow-hidden border shadow-sm hover:shadow-lg transition-all duration-300" style="background-color: #fefbf7; border-color: #e8dcc4;">
+                    <div class="h-24 relative overflow-hidden" style="background: linear-gradient(135deg, #769382 0%, #c0c3b9 100%);">
+                        <div class="absolute inset-0 opacity-10">
+                            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0icGF0dGVybiIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyIiBmaWxsPSJ3aGl0ZSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjcGF0dGVybikiLz48L3N2Zz4=')] bg-repeat" />
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center icon-container">
+                            <div class="p-3 rounded-xl text-white" style="background-color: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px);">
+                                <i class="fas fa-stethoscope" style="font-size: 32px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 sm:p-7 flex flex-col h-full">
+                        <h3 class="text-xl font-semibold mb-3 group-hover:transition-colors line-clamp-2 duration-300" style="color: #769382;">
+                            Medical Consultations
+                        </h3>
+                        <p class="text-sm leading-relaxed mb-6 line-clamp-4 flex-grow" style="color: #c0c3b9;">
+                            Professional medical advice and diagnostic services provided by experienced healthcare practitioners for various health concerns.
+                        </p>
+                        <button class="inline-flex items-center justify-center gap-2 px-4 py-3 text-white font-medium rounded-lg hover:shadow-lg active:scale-95 transition-all duration-200 group-hover:gap-3" style="background: linear-gradient(135deg, #769382 0%, #6a8375 100%);">
+                            Learn More
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+                    </div>
+                    <div class="absolute top-0 left-0 w-full h-1 card-hover-line" style="background: linear-gradient(to right, #e8dcc4, #c0c3b9, transparent);"></div>
+                </article>
+            </div>
+        </div>
+
+        <!-- Additional Info Boxes -->
+        <div class="mt-20 pt-16 border-t border-slate-200" style="border-color: #e8dcc4;">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Quality & Safety Box -->
+                <div class="rounded-2xl p-8 border fade-in-up" style="background-color: #fefbf7; border-color: #e8dcc4; animation-delay: 600ms;">
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 text-white rounded-lg shrink-0" style="background-color: #769382;">
+                            <i class="fas fa-shield-alt" style="font-size: 24px;"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2" style="color: #769382;">
+                                Quality & Safety
+                            </h3>
+                            <p class="leading-relaxed" style="color: #c0c3b9;">
+                                All programs are conducted by trained healthcare professionals following international health standards and best practices.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Community Focused Box -->
+                <div class="rounded-2xl p-8 border fade-in-up" style="background-color: #fefbf7; border-color: #e8dcc4; animation-delay: 700ms;">
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 text-white rounded-lg shrink-0" style="background-color: #c0c3b9;">
+                            <i class="fas fa-heart" style="font-size: 24px;"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2" style="color: #769382;">
+                                Community Focused
+                            </h3>
+                            <p class="leading-relaxed" style="color: #c0c3b9;">
+                                We prioritize accessible, affordable healthcare services designed to meet the unique needs of our community.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Section -->
+        <div class="mt-20 relative fade-in-up" style="animation-delay: 800ms;">
+            <div class="rounded-2xl overflow-hidden shadow-2xl" style="background: linear-gradient(135deg, #769382 0%, #6a8375 100%);">
+                <div class="absolute inset-0 opacity-20 pattern-bg"></div>
+                <div class="relative px-6 sm:px-12 py-12">
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center p-3 backdrop-blur-sm rounded-full mb-6" style="background-color: rgba(255, 255, 255, 0.2);">
+                            <i class="fas fa-heart text-white" style="font-size: 32px;"></i>
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+                            Need Emergency Care?
+                        </h2>
+                        <p class="max-w-xl mx-auto mb-8 text-lg text-white" style="opacity: 0.9;">
+                            Available 24/7 for medical emergencies. Our dedicated team is ready to help you.
+                        </p>
+                        <button class="inline-flex items-center gap-2 px-8 py-4 font-bold rounded-lg hover:shadow-2xl active:scale-95 transition-all duration-200 text-lg" style="background-color: #f3efe3; color: #769382;">
+                            Call Emergency Hotline
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white mt-20" style="background-color: #3d3d3d;">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-emerald rounded-lg flex items-center justify-center font-bold">✓</div>
+                        <span class="text-xl font-bold">Health Office</span>
+                    </div>
+                    <p class="text-slate-400 leading-relaxed" style="color: rgba(192, 195, 185, 0.8);">Providing quality healthcare services to our community with compassion and professionalism.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2" style="color: rgba(192, 195, 185, 0.8);">
+                        <li><a href="#" class="hover:transition" style="color: rgba(192, 195, 185, 0.8);">About Us</a></li>
+                        <li><a href="#" class="hover:transition" style="color: rgba(192, 195, 185, 0.8);">Services</a></li>
+                        <li><a href="#" class="hover:transition" style="color: rgba(192, 195, 185, 0.8);">Contact</a></li>
+                        <li><a href="#" class="hover:transition" style="color: rgba(192, 195, 185, 0.8);">Appointments</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <p class="mb-2" style="color: rgba(192, 195, 185, 0.8);"><i class="fas fa-phone mr-2"></i>(046) 123-4567</p>
+                    <p class="mb-2" style="color: rgba(192, 195, 185, 0.8);"><i class="fas fa-envelope mr-2"></i>info@healthoffice.gov</p>
+                    <p style="color: rgba(192, 195, 185, 0.8);"><i class="fas fa-map-marker-alt mr-2"></i>City Health Center, Main St.</p>
+                </div>
+            </div>
+            <div class="border-t pt-8 text-center" style="border-color: rgba(192, 195, 185, 0.2); color: rgba(192, 195, 185, 0.8);">
+                <p>&copy; 2024 Government Health Office. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Trigger animations on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Just let the CSS animations handle it
+        });
+    </script>
+</body>
+</html>
